@@ -1,23 +1,24 @@
-<?php
-session_start();
-$mensagem = $_SESSION['mensagem'] ?? null;
-$tipo    = $_SESSION['tipo']    ?? null;
-unset($_SESSION['mensagem'], $_SESSION['tipo']);
-?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Bibliotech</title>
+
+  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- FontAwesome Free for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pzw1ZT3dW2v9Vfkz0fP1+gQJr+eQh7Q9IuT1dE+VtoEuK5+W9eDtYI1+6r6G6YrQlXBiDJxbPxW1YhaxP+j1yw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <style>
     body {
       background-color: rgb(216, 107, 107);
       margin: 0;
       overflow-x: hidden;
       padding-bottom: 80px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     .wrapper {
@@ -65,21 +66,25 @@ unset($_SESSION['mensagem'], $_SESSION['tipo']);
 
     .nav-links li {
       padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
     }
 
     .nav-links li a {
       color: white;
       font-weight: bold;
       text-decoration: none;
-      display: block;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links li a i {
+      margin-right: 8px;
+      font-size: 1.2rem;
     }
 
     .nav-links li a:hover {
       color: #ffcc00;
-    }
-
-    .logout-btn {
-      /* não usado nesta página */
     }
 
     .show-sidebar-btn {
@@ -105,25 +110,30 @@ unset($_SESSION['mensagem'], $_SESSION['tipo']);
       padding: 2rem;
       flex: 1;
       transition: margin-left 0.3s;
+      text-align: center;
     }
 
     .sidebar.hidden ~ .content {
       margin-left: 0;
     }
 
-    .mission, .services {
-      background: rgba(255,255,255,0.85);
+    .content img {
+      width: 60%;
+      max-width: 600px;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3)) grayscale(20%);
       border-radius: 8px;
-      padding: 1.5rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
     }
 
-    h2 {
-      color: #1c0e3f;
+    .content img:hover {
+      transform: scale(1.05);
     }
 
-    p, li {
-      color: #333;
+    .tagline {
+      margin-top: 1rem;
+      font-size: 1.25rem;
+      color: #fff;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
     }
 
     footer {
@@ -139,10 +149,20 @@ unset($_SESSION['mensagem'], $_SESSION['tipo']);
       .content {
         margin-left: 0 !important;
       }
+      .content img {
+        width: 80%;
+      }
     }
   </style>
 </head>
 <body>
+
+<?php
+session_start();
+$mensagem = $_SESSION['mensagem'] ?? null;
+$tipo    = $_SESSION['tipo']    ?? null;
+unset($_SESSION['mensagem'], $_SESSION['tipo']);
+?>
 
 <div class="wrapper">
   <!-- Sidebar -->
@@ -150,8 +170,8 @@ unset($_SESSION['mensagem'], $_SESSION['tipo']);
     <div class="sidebar-header">Bibliotech</div>
     <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">Recolher ☰</button>
     <ul class="nav-links">
-      <li><a href="login.php">Realizar Login</a></li>
-      <li><a href="cadastroUsuario.php">Cadastrar Usuário</a></li>
+      <li><a href="login.php"><i class="fa-solid fa-right-to-bracket"></i> Realizar Login</a></li>
+      <li><a href="cadastroUsuario.php"><i class="fa-solid fa-user-plus"></i> Cadastrar Usuário</a></li>
     </ul>
   </nav>
 
@@ -173,41 +193,11 @@ unset($_SESSION['mensagem'], $_SESSION['tipo']);
       }
     </script>
 
-    <!-- Logo Central -->
-    <div class="container mt-5 text-center">
-      <img src="fxd.jpg" alt="Logo da Bibliotech" class="img-fluid mb-4" style="max-width: 400px;">
+    <!-- Logo Central com efeito -->
+    <div class="container mt-5">
+      <img src="fxd2.jpg" alt="Logo da Bibliotech" class="img-fluid">
+      <div class="tagline">Seu portal para descobrir e gerenciar livros com facilidade.</div>
     </div>
-
-    <!-- Missão e Serviços -->
-    <div class="container mb-5">
-      <div class="row">
-        <div class="col-md-6 mb-4">
-          <div class="mission">
-            <h2>Nossa Missão</h2>
-            <p style="text-align: justify;">
-              A nossa missão é fornecer um gerenciamento claro e preciso de livros à disposição
-              para empréstimos, assim como mostrar clientes inadimplentes com a maior eficiência
-              possível para melhor atendê-los.
-            </p>
-          </div>
-        </div>
-        <div class="col-md-6 mb-4">
-          <div class="services">
-            <h2>Nossos Serviços</h2>
-            <ul>
-              <li>Cadastro de Livros</li>
-              <li>Cadastro de Clientes</li>
-              <li>Controle de Disponibilidade</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Footer -->
-    <footer>
-      <span class="text-muted">© 2024 Bibliotech. Todos os direitos reservados.</span>
-    </footer>
   </div>
 </div>
 

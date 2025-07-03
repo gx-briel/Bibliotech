@@ -7,21 +7,20 @@ if (!isset($_SESSION['id'])) {
 
 require_once 'conexao.php';
 
-  $sql = "SELECT COUNT(*) AS totalLivros FROM livros";
-  $res = mysqli_query($conexao, $sql);
-  $row = mysqli_fetch_assoc($res);
-  $totalLivros = $row['totalLivros'] ?? 0;
+$sql = "SELECT COUNT(*) AS totalLivros FROM livros";
+$res = mysqli_query($conexao, $sql);
+$row = mysqli_fetch_assoc($res);
+$totalLivros = $row['totalLivros'] ?? 0;
 
-  $sqlemprestimo = "SELECT COUNT(*) AS totalEmprestimos from emprestimo";
-  $res2 = mysqli_query($conexao, $sqlemprestimo);
-  $row2 = mysqli_fetch_assoc($res2);
-  $totalEmp = $row2['totalEmprestimos'] ?? 0;
+$sqlemprestimo = "SELECT COUNT(*) AS totalEmprestimos from emprestimo where ativo = '1'";
+$res2 = mysqli_query($conexao, $sqlemprestimo);
+$row2 = mysqli_fetch_assoc($res2);
+$totalEmp = $row2['totalEmprestimos'] ?? 0;
 
-  $sqlvencido = "SELECT COUNT(*) AS totalVencido from emprestimo where vencimento < curdate()";
-  $res3 = mysqli_query($conexao, $sqlvencido);
-  $row3 = mysqli_fetch_assoc($res3);
-  $totalVenc = $row3['totalVencido'] ?? 0;
-
+$sqlvencido = "SELECT COUNT(*) AS totalVencido from emprestimo where vencimento < curdate() AND ativo = '1'";
+$res3 = mysqli_query($conexao, $sqlvencido);
+$row3 = mysqli_fetch_assoc($res3);
+$totalVenc = $row3['totalVencido'] ?? 0;
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -142,6 +141,16 @@ require_once 'conexao.php';
         margin-left: 0 !important;
       }
     }
+
+    /* Estilo harmonizado para a imagem */
+    .img-harmonizada {
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      padding: 1rem;
+      background-color: #fff;
+      max-width: 900px;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
@@ -175,7 +184,7 @@ require_once 'conexao.php';
     <div class="container-fluid">
       <div class="row text-center">
         <div class="col-md-4 mb-4">
-          <div class="card bg-primary text-white">
+          <div class="card bg-primary text-white" style="cursor: pointer;" onclick="window.location.href='acervo.php'">
             <div class="card-body">
               <h5 class="card-title">Total de Livros</h5>
               <p class="card-text display-4"><?= $totalLivros; ?></p>
@@ -183,15 +192,15 @@ require_once 'conexao.php';
           </div>
         </div>
         <div class="col-md-4 mb-4">
-          <div class="card bg-success text-white">
+          <div class="card bg-success text-white" style="cursor: pointer;" onclick="window.location.href='listaEmprestimoAtivo.php'">
             <div class="card-body">
-              <h5 class="card-title">Empréstimos</h5>
+              <h5 class="card-title">Empréstimos Ativos</h5>
               <p class="card-text display-4"><?= $totalEmp; ?></p>
             </div>
           </div>
         </div>
         <div class="col-md-4 mb-4">
-          <div class="card bg-danger text-white">
+          <div class="card bg-danger text-white" style="cursor: pointer;" onclick="window.location.href='emprestimoVencido.php'">
             <div class="card-body">
               <h5 class="card-title">Vencidos</h5>
               <p class="card-text display-4"><?= $totalVenc; ?></p>
@@ -202,7 +211,11 @@ require_once 'conexao.php';
 
       <div class="row justify-content-center mt-4">
         <div class="col-md-6 text-center">
-          <img src="fxd.jpg" alt="Logo Bibliotech" class="img-fluid" style="max-width: 300px;">
+          <img
+            src="fxd2.jpg"
+            alt="Logo Bibliotech"
+            class="img-fluid img-harmonizada"
+          >
         </div>
       </div>
     </div>
