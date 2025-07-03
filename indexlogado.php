@@ -159,8 +159,7 @@ $totalVenc = $row3['totalVencido'] ?? 0;
   <!-- Sidebar -->
   <nav id="sidebar" class="sidebar">
     <div class="sidebar-header">Bibliotech</div>
-    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">Recolher ☰</button>
-
+    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">← Recolher</button>
     <ul class="nav-links">
       <li><a href="cadastroCliente.php">Cadastrar Cliente</a></li>
       <li><a href="cadastroLivro.php">Cadastrar Livro</a></li>
@@ -177,7 +176,7 @@ $totalVenc = $row3['totalVencido'] ?? 0;
   </nav>
 
   <!-- Botão para mostrar sidebar -->
-  <button id="showSidebarBtn" class="show-sidebar-btn" onclick="showSidebar()">☰</button>
+  <button id="showSidebarBtn" class="show-sidebar-btn" style="position: fixed; left: 4px; top: 18px; right: auto; cursor: pointer; z-index: 1000;">☰</button>
 
   <!-- Conteúdo principal -->
   <div class="content">
@@ -233,6 +232,9 @@ $totalVenc = $row3['totalVencido'] ?? 0;
     document.getElementById('sidebar').classList.remove('hidden');
     document.getElementById('showSidebarBtn').style.display = 'none';
   }
+
+  // Clique simples para abrir a sidebar
+  document.getElementById('showSidebarBtn').addEventListener('click', showSidebar);
 </script>
 </body>
 </html>

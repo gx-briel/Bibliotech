@@ -167,7 +167,7 @@ unset($_SESSION['mensagem'], $_SESSION['tipo']);
 <div class="wrapper">
   <!-- Sidebar -->
   <nav id="sidebar" class="sidebar">
-    <div class="sidebar-header">Bibliotech</div>
+    <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;">Bibliotech</a></div>
     <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">Recolher ☰</button>
     <ul class="nav-links">
       <li><a href="login.php"><i class="fa-solid fa-right-to-bracket"></i> Realizar Login</a></li>

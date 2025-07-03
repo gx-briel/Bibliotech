@@ -1,12 +1,10 @@
+
 <?php
 session_start(); 
-
 if (!isset($_SESSION['id'])) {
-
     header('Location: index.php');
     exit; 
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -16,106 +14,217 @@ if (!isset($_SESSION['id'])) {
   <title>Relatórios</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
-
     body {
-      background-color: rgb(214, 218, 255);
+      background-color: rgb(238, 255, 235);
+      margin: 0;
+      overflow-x: hidden;
     }
-
-    .navbar {
+    .wrapper {
+      display: flex;
+    }
+    .sidebar {
+      width: 250px;
       background-color: #1c0e3f;
+      color: white;
+      min-height: 100vh;
+      transition: transform 0.3s ease;
+      position: fixed;
+      z-index: 999;
     }
-    .navbar-brand, .nav-link {
-      color: white !important;
-      font-weight: bold;
+    .sidebar.hidden {
+      transform: translateX(-100%);
     }
-    .navbar-nav .nav-link:hover {
-      color: #ffcc00 !important;
-    }
-
-    .img-logo {
-      max-width: 100%;
-      height: auto;
-      max-height: 240px;
-    }
-
-    h2 {
-      color: #1c0e3f;
+    .sidebar .sidebar-header {
+      padding: 1rem;
       font-size: 1.5rem;
+      font-weight: bold;
+      background-color: #150a2c;
+      text-align: center;
     }
-
-    .left-align {
+    .nav-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .nav-links li {
+      padding: 0.75rem 1rem;
+    }
+    .nav-links li a {
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      display: block;
+    }
+    .nav-links li a:hover {
+      color: #ffcc00;
+    }
+    .toggle-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.1rem;
+      padding: 0.5rem 1rem;
       text-align: left;
+      width: 100%;
+      cursor: pointer;
     }
-
-    .content-section {
-      margin-bottom: 30px;
+    .logout-btn {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      right: 1rem;
     }
-
-    @media (max-width: 767px) {
-      .content-section {
-        margin-bottom: 20px;
-      }
-      .col-md-6 {
-        margin-bottom: 20px;
-      }
-      .img-logo {
-        width: 100%;
+    .show-sidebar-btn {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      z-index: 1000;
+      background-color: #1c0e3f;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      font-size: 1.2rem;
+      display: none;
+    }
+    .sidebar.hidden ~ .show-sidebar-btn {
+      display: block;
+    }
+    .content {
+      margin-left: 250px;
+      padding: 2rem;
+      flex: 1;
+      transition: margin-left 0.3s;
+    }
+    .sidebar.hidden ~ .content {
+      margin-left: 0;
+    }
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    @media (max-width: 768px) {
+      .content {
+        margin-left: 0 !important;
       }
     }
-
   </style>
 </head>
 <body>
-
-<nav class="navbar navbar-expand-lg">
-  <a class="navbar-brand" href="indexlogado.php">Bibliotech</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-    <span class="navbar-toggler-icon text-white">&#9776;</span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-        <a class="nav-link" href="todosEmprestimos.php">| Todos Empréstimos</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="listaEmprestimoAtivo.php">| Empréstimos Ativos</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="emprestimoVence.php">| Empréstimos à Vencer</a>
-      </li>  
-      <li class="nav-item">
-        <a class="nav-link" href="emprestimoVencido.php">| Empréstimos Atrasados</a>
-      </li>
+<div class="wrapper">
+  <!-- Sidebar -->
+  <nav id="sidebar" class="sidebar">
+    <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;">Bibliotech</a></div>
+    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">← Recolher</button>
+    <ul class="nav-links">
+      <li><a href="todosEmprestimos.php">Todos Empréstimos</a></li>
+      <li><a href="listaEmprestimoAtivo.php">Empréstimos Ativos</a></li>
+      <li><a href="emprestimoVence.php">Empréstimos à Vencer</a></li>
+      <li><a href="emprestimoVencido.php">Empréstimos Atrasados</a></li>
     </ul>
-  </div>
-</nav>
-
-<div class="container mt-5">
-  <div class="row">
-    <div class="col-md-6 offset-md-3 text-center">
-      <img src="fxd.jpg" alt="logo Bibliotech" class="img-logo">
+    <div class="logout-btn">
+      <a href="logout.php" class="btn btn-danger w-100">🚪 Sair</a>
     </div>
-  </div>
+  </nav>
+  <button id="showSidebarBtn" class="show-sidebar-btn" style="left: 4px; top: 18px; right: auto; cursor: pointer;">☰</button>
+  <!-- Conteúdo principal -->
+  <div class="content">
+    <div class="container">
+      <div class="row">
+        <?php
+        require_once 'conexao.php';
+        // Usa a variável $conexao definida em conexao.php
+        // Total de empréstimos
+        $sqlTodos = "SELECT COUNT(*) as total FROM emprestimo";
+        $resTodos = mysqli_query($conexao, $sqlTodos);
+        $qtdTodos = ($resTodos && $row = mysqli_fetch_assoc($resTodos)) ? $row['total'] : 0;
 
-  <div class="row content-section">
-    <div class="col-md-6">
-      <h2>Nossa Missão</h2>
-      <p style="text-align: justify;">A nossa missão é fornecer um gerenciamento claro e preciso de livros à disposição para empréstimos, assim como mostrar clientes inadimplentes com maior eficiência possível para lhes bem atender.</p>
-    </div>
-    <div class="col-md-6">
-      <h2>Nossos Serviços</h2>
-      <ul>
-        <li>Cadastro de Livros</li>
-        <li>Cadastro de Clientes</li>
-        <li>Controle de Disponibilidade</li>
-      </ul>
+        // Empréstimos ativos
+        $sqlAtivos = "SELECT COUNT(*) as total FROM emprestimo WHERE ativo = '1'";
+        $resAtivos = mysqli_query($conexao, $sqlAtivos);
+        $qtdAtivos = ($resAtivos && $row = mysqli_fetch_assoc($resAtivos)) ? $row['total'] : 0;
+
+        // Empréstimos à vencer (exemplo: vencimento nos próximos 5 dias)
+        $sqlVencer = "SELECT COUNT(*) as total FROM emprestimo WHERE ativo = '1' AND vencimento BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 5 DAY)";
+        $resVencer = mysqli_query($conexao, $sqlVencer);
+        $qtdVencer = ($resVencer && $row = mysqli_fetch_assoc($resVencer)) ? $row['total'] : 0;
+
+        // Empréstimos atrasados
+        $sqlAtrasados = "SELECT COUNT(*) as total FROM emprestimo WHERE ativo = '1' AND vencimento < CURDATE()";
+        $resAtrasados = mysqli_query($conexao, $sqlAtrasados);
+        $qtdAtrasados = ($resAtrasados && $row = mysqli_fetch_assoc($resAtrasados)) ? $row['total'] : 0;
+        ?>
+        <div class="col-md-3 mb-4">
+          <a href="todosEmprestimos.php" style="text-decoration:none;">
+            <div class="card text-white bg-primary h-100">
+              <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                <h5 class="card-title">Todos Empréstimos</h5>
+                <span style="font-size:2.2rem;font-weight:bold;">
+                  <?= $qtdTodos ?>
+                </span>
+                <small>Total de registros</small>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-3 mb-4">
+          <a href="listaEmprestimoAtivo.php" style="text-decoration:none;">
+            <div class="card text-white bg-success h-100">
+              <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                <h5 class="card-title">Empréstimos Ativos</h5>
+                <span style="font-size:2.2rem;font-weight:bold;">
+                  <?= $qtdAtivos ?>
+                </span>
+                <small>Atualmente em aberto</small>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-3 mb-4">
+          <a href="emprestimoVence.php" style="text-decoration:none;">
+            <div class="card text-white bg-warning h-100">
+              <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                <h5 class="card-title">À Vencer</h5>
+                <span style="font-size:2.2rem;font-weight:bold;">
+                  <?= $qtdVencer ?>
+                </span>
+                <small>Vencem em até 5 dias</small>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-md-3 mb-4">
+          <a href="emprestimoVencido.php" style="text-decoration:none;">
+            <div class="card text-white bg-danger h-100">
+              <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                <h5 class="card-title">Atrasados</h5>
+                <span style="font-size:2.2rem;font-weight:bold;">
+                  <?= $qtdAtrasados ?>
+                </span>
+                <small>Já passaram do prazo</small>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+<script>
+  function hideSidebar() {
+    document.getElementById('sidebar').classList.add('hidden');
+    document.getElementById('showSidebarBtn').style.display = 'block';
+  }
+  function showSidebar() {
+    document.getElementById('sidebar').classList.remove('hidden');
+    document.getElementById('showSidebarBtn').style.display = 'none';
+  }
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+  // Clique simples para abrir a sidebar
+  document.getElementById('showSidebarBtn').addEventListener('click', showSidebar);
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
