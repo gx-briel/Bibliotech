@@ -42,12 +42,13 @@ $totalVenc = $row3['totalVencido'] ?? 0;
 
     .sidebar {
       width: 250px;
-      background-color: #1c0e3f;
+      background: linear-gradient(180deg, #1c0e3f 60%, #e8f5e9 100%);
       color: white;
       min-height: 100vh;
       transition: transform 0.3s ease;
       position: fixed;
       z-index: 999;
+      box-shadow: 2px 0 8px rgba(28,14,63,0.08);
     }
 
     .sidebar.hidden {
@@ -81,6 +82,7 @@ $totalVenc = $row3['totalVencido'] ?? 0;
 
     .nav-links li a:hover {
       color: #ffcc00;
+      text-decoration: underline;
     }
 
     .toggle-btn {

@@ -15,11 +15,78 @@ $buscaCliente = mysqli_real_escape_string($conexao, $buscaCliente);
 $buscaLivro = mysqli_real_escape_string($conexao, $buscaLivro);
 
 // Consulta SQL com parâmetros para busca de cliente e livro
+
+// Ordenação dinâmica
+$orderColumns = [
+    'empId' => 'emp.id',
+    'nomeCliente' => 'cli.nomeCliente',
+    'titulo' => 'li.titulo',
+    'criadoEm' => 'emp.criadoEm',
+    'vencimento' => 'emp.vencimento',
+    'ativo' => 'emp.ativo'
+];
+
+// Ordenação padrão: id asc
+$order = isset($_GET['order']) && isset($orderColumns[$_GET['order']]) ? $_GET['order'] : 'empId';
+$dir = isset($_GET['dir']) && in_array(strtolower($_GET['dir']), ['asc', 'desc']) ? strtolower($_GET['dir']) : 'asc';
+
+
+// Paginação
+$defaultLimit = 50;
+$limit = isset($_GET['limit']) && is_numeric($_GET['limit']) && $_GET['limit'] > 0 ? (int)$_GET['limit'] : $defaultLimit;
+$offset = 0; // Sempre começa do início para paginação acumulativa
+
 $consulta = "SELECT emp.id as empId, cli.nomeCliente as nomeCliente, li.titulo, emp.criadoEm, li.ID as livroId, emp.ativo, emp.vencimento
              FROM emprestimo as emp 
              JOIN clientes as cli on emp.idCliente = cli.id 
              JOIN livros as li on emp.idLivro = li.ID
              WHERE cli.nomeCliente LIKE '%$buscaCliente%' AND li.titulo LIKE '%$buscaLivro%'";
+if ($order) {
+    $consulta .= " ORDER BY {$orderColumns[$order]} $dir";
+}
+$consulta .= " LIMIT $limit OFFSET $offset";
+
+// Exportação para Excel (xlsx) deve ser processada antes de qualquer saída HTML
+if (isset($_POST['export_excel'])) {
+    require __DIR__ . '/vendor/autoload.php';
+    // Monta a consulta SEM LIMIT/OFFSET para exportar todos os itens filtrados
+    $exportConsulta = "SELECT emp.id as empId, cli.nomeCliente as nomeCliente, li.titulo, emp.criadoEm, li.ID as livroId, emp.ativo, emp.vencimento
+             FROM emprestimo as emp 
+             JOIN clientes as cli on emp.idCliente = cli.id 
+             JOIN livros as li on emp.idLivro = li.ID
+             WHERE cli.nomeCliente LIKE '%$buscaCliente%' AND li.titulo LIKE '%$buscaLivro%'";
+    if ($order) {
+        $exportConsulta .= " ORDER BY {$orderColumns[$order]} $dir";
+    }
+    $exportResult = mysqli_query($conexao, $exportConsulta);
+    if ($exportResult) {
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        // Cabeçalhos
+        $sheet->fromArray([
+            'ID', 'Cliente', 'Livro', 'Data de Criação', 'Data para Devolução', 'Ativo'
+        ], NULL, 'A1');
+        $rowNum = 2;
+        while ($row = mysqli_fetch_assoc($exportResult)) {
+            $sheet->setCellValue('A' . $rowNum, $row['empId']);
+            $sheet->setCellValue('B' . $rowNum, $row['nomeCliente']);
+            $sheet->setCellValue('C' . $rowNum, $row['titulo']);
+            $sheet->setCellValue('D' . $rowNum, date('d/m/Y', strtotime($row['criadoEm'])));
+            $sheet->setCellValue('E' . $rowNum, date('d/m/Y', strtotime($row['vencimento'])));
+            $sheet->setCellValue('F' . $rowNum, $row['ativo'] == 0 ? 'Não' : 'Sim');
+            $rowNum++;
+        }
+        // Ajusta largura automática
+        foreach (range('A', 'F') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="emprestimos.xlsx"');
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
+}
 
 $executaConsulta = mysqli_query($conexao, $consulta);
 ?>
@@ -42,7 +109,7 @@ $executaConsulta = mysqli_query($conexao, $consulta);
     }
     .sidebar {
       width: 250px;
-      background-color: #1c0e3f;
+      background: linear-gradient(180deg, #1c0e3f 60%, #e8f5e9 100%);
       color: white;
       min-height: 100vh;
       transition: transform 0.3s ease;
@@ -75,6 +142,7 @@ $executaConsulta = mysqli_query($conexao, $consulta);
     }
     .nav-links li a:hover {
       color: #ffcc00;
+      text-decoration: underline;
     }
     .toggle-btn {
       background: none;
@@ -110,9 +178,18 @@ $executaConsulta = mysqli_query($conexao, $consulta);
     }
     .content {
       margin-left: 250px;
-      padding: 2rem;
       flex: 1;
       transition: margin-left 0.3s;
+    }
+    .container, .container-fluid {
+      max-width: 1100px;
+      margin: 40px auto 0 auto;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    h2, h2.text-center {
+      text-align: center;
+      margin-bottom: 2rem;
     }
     .sidebar.hidden ~ .content {
       margin-left: 0;
@@ -135,16 +212,15 @@ $executaConsulta = mysqli_query($conexao, $consulta);
 <body>
 <div class="wrapper">
   <!-- Sidebar -->
+   <!-- Sidebar -->
   <nav id="sidebar" class="sidebar">
     <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;">Bibliotech</a></div>
     <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">← Recolher</button>
     <ul class="nav-links">
-      <li><a href="cadastroCliente.php">Cadastrar Cliente</a></li>
-      <li><a href="cadastroLivro.php">Cadastrar Livro</a></li>
-      <li><a href="acervo.php">Acervo de Livros</a></li>
-      <li><a href="listaCliente.php">Lista Clientes</a></li>
-      <li><a href="criaEmprestimo.php">Criar Empréstimo</a></li>
-      <li><a href="relatorios.php">Empréstimos</a></li>
+      <li><a href="todosEmprestimos.php">Todos Empréstimos</a></li>
+      <li><a href="listaEmprestimoAtivo.php">Empréstimos Ativos</a></li>
+      <li><a href="emprestimoVence.php">Empréstimos à Vencer</a></li>
+      <li><a href="emprestimoVencido.php">Empréstimos Atrasados</a></li>
     </ul>
     <div class="logout-btn">
       <a href="logout.php" class="btn btn-danger w-100">🚪 Sair</a>
@@ -153,8 +229,8 @@ $executaConsulta = mysqli_query($conexao, $consulta);
     <button id="showSidebarBtn" class="show-sidebar-btn" style="position: fixed; left: 4px; top: 18px; right: auto; cursor: pointer; z-index: 1000;">☰</button>
   <!-- Conteúdo principal -->
   <div class="content">
-    <div class="container-fluid">
-      <h2 class="mb-4">Listagem de Empréstimos</h2>
+    <div class="container mt-5">
+      <h2 class="text-center mb-4">Listagem de Empréstimos</h2>
       <form method="GET" action="" class="form-row">
         <div class="form-group col-md-4">
           <input type="text" class="form-control" name="cliente" placeholder="Buscar Cliente">
@@ -167,20 +243,47 @@ $executaConsulta = mysqli_query($conexao, $consulta);
         </div>
       </form>
       <div class="table-responsive mt-4">
-        <table class="table table-striped">
+        <table class="table table-striped mb-0">
           <thead class="thead-dark">
             <tr>
-              <th>ID</th>
-              <th>Cliente</th>
-              <th>Livro</th>
-              <th>Data de Criação</th>
-              <th>Data para Devolução</th>
-              <th>Ativo</th>
+              <?php
+                // Função para gerar links de ordenação
+                function sortLink($label, $col, $order, $dir) {
+                  $nextDir = 'asc';
+                  $icon = '';
+                  if ($order === $col) {
+                    if ($dir === 'asc') {
+                      $nextDir = 'desc';
+                      $icon = ' ▲';
+                    } elseif ($dir === 'desc') {
+                      $nextDir = '';
+                      $icon = ' ▼';
+                    }
+                  }
+                  $params = $_GET;
+                  if ($order === $col && $dir === 'desc') {
+                    unset($params['order'], $params['dir']);
+                    $url = '?' . http_build_query($params);
+                  } else {
+                    $params['order'] = $col;
+                    $params['dir'] = $nextDir;
+                    $url = '?' . http_build_query($params);
+                  }
+                  return "<a href='$url' style='color:inherit;text-decoration:none;'>$label$icon</a>";
+                }
+              ?>
+              <th><?= sortLink('ID', 'empId', $order, $dir) ?></th>
+              <th><?= sortLink('Cliente', 'nomeCliente', $order, $dir) ?></th>
+              <th><?= sortLink('Livro', 'titulo', $order, $dir) ?></th>
+              <th><?= sortLink('Data de Criação', 'criadoEm', $order, $dir) ?></th>
+              <th><?= sortLink('Data para Devolução', 'vencimento', $order, $dir) ?></th>
+              <th><?= sortLink('Ativo', 'ativo', $order, $dir) ?></th>
             </tr>
           </thead>
           <tbody>
             <?php
-            if (mysqli_num_rows($executaConsulta) > 0) {
+            $numRows = mysqli_num_rows($executaConsulta);
+            if ($numRows > 0) {
                 while ($emprestimos = mysqli_fetch_assoc($executaConsulta)) {
             ?>
               <tr>
@@ -199,6 +302,20 @@ $executaConsulta = mysqli_query($conexao, $consulta);
             ?>
           </tbody>
         </table>
+        <div class="d-flex justify-content-between align-items-center mt-2 mb-4">
+          <form method="post" action="" style="margin-bottom:0;">
+            <button type="submit" name="export_excel" class="btn btn-success">Exportar Excel</button>
+          </form>
+          <?php
+            // Botão mostrar mais 50
+            if ($numRows === $limit) {
+              $params = $_GET;
+              $params['limit'] = $limit + $defaultLimit;
+              $url = '?' . http_build_query($params) . '#tabela';
+              echo '<a href="' . $url . '" class="btn btn-primary" id="mostrarMais50">Mostrar mais 50</a>';
+            }
+          ?>
+        </div>
       </div>
     </div>
   </div>
@@ -212,11 +329,23 @@ $executaConsulta = mysqli_query($conexao, $consulta);
     document.getElementById('sidebar').classList.remove('hidden');
     document.getElementById('showSidebarBtn').style.display = 'none';
   }
-
-  // Clique simples para abrir a sidebar
   document.getElementById('showSidebarBtn').addEventListener('click', showSidebar);
 </script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $(document).on('click', '#mostrarMais50', function() {
+      sessionStorage.setItem('scrollPosEmpTodos', window.scrollY);
+    });
+    if (sessionStorage.getItem('scrollPosEmpTodos')) {
+      var pos = parseInt(sessionStorage.getItem('scrollPosEmpTodos'), 10);
+      setTimeout(function() {
+        window.scrollTo({top: pos, behavior: 'auto'});
+        sessionStorage.removeItem('scrollPosEmpTodos');
+      }, 100);
+    }
+  });
+</script>
 </body>
 </html>

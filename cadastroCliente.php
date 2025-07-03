@@ -15,89 +15,191 @@ if (!isset($_SESSION['id'])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Cadastro de Clientes</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-    body {
-      background-color: rgb(238, 255, 235);
-      padding-bottom: 60px;
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+  body {
+    background-color: rgb(238, 255, 235);
+    margin: 0;
+    overflow-x: hidden;
+  }
+  .wrapper {
+    display: flex;
+  }
+  .sidebar {
+    width: 250px;
+    background: linear-gradient(180deg, #1c0e3f 60%, #e8f5e9 100%);
+    color: white;
+    min-height: 100vh;
+    transition: transform 0.3s ease;
+    position: fixed;
+    z-index: 999;
+    box-shadow: 2px 0 8px rgba(28,14,63,0.08);
+  }
+  .sidebar.hidden {
+    transform: translateX(-100%);
+  }
+  .sidebar .sidebar-header {
+    padding: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    background-color: #150a2c;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+  .nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .nav-links li {
+    padding: 0.75rem 1rem;
+  }
+  .nav-links li a {
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    display: block;
+    transition: color 0.2s;
+  }
+  .nav-links li a:hover {
+    color: #ffcc00;
+    text-decoration: underline;
+  }
+  .toggle-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+  }
+  .logout-btn {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+  }
+  .show-sidebar-btn {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1000;
+    background-color: #1c0e3f;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 1.2rem;
+    display: none;
+  }
+  .sidebar.hidden ~ .show-sidebar-btn {
+    display: block;
+  }
+  .content {
+    margin-left: 250px;
+    padding: 2rem 0;
+    flex: 1;
+    transition: margin-left 0.3s;
+    min-height: 100vh;
+  }
+  .sidebar.hidden ~ .content {
+    margin-left: 0;
+  }
+  @media (max-width: 768px) {
+    .content {
+      margin-left: 0 !important;
     }
-        .navbar {
-      background-color: #1c0e3f;
+    .sidebar {
+      width: 200px;
     }
-    .navbar-brand, .nav-link {
-      color: white !important;
-      font-weight: bold;
-    }
-    .navbar-nav .nav-link:hover {
-      color: #ffcc00 !important;
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg">
-  <a class="navbar-brand" href="indexlogado.php">Bibliotech</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-    <span class="navbar-toggler-icon text-white">&#9776;</span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item"><a class="nav-link" href="listaCliente.php">Visualizar Clientes</a></li>
-      <li class="nav-item"><a class="nav-link" href="cadastroLivro.php">Cadastrar Livro</a></li>
-      <li class="nav-item"><a class="nav-link" href="criaEmprestimo.php">Criar Empréstimo</a></li>
+<div class="wrapper">
+  <!-- Sidebar -->
+  <nav id="sidebar" class="sidebar">
+<div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;">Bibliotech</a></div>    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">← Recolher</button>
+    <ul class="nav-links">
+      <li><a href="listaCliente.php">Visualizar Clientes</a></li>
+      <li><a href="cadastroLivro.php">Cadastrar Livro</a></li>
+      <li><a href="criaEmprestimo.php">Criar Empréstimo</a></li>
     </ul>
-  </div>
-</nav>
+    <div class="logout-btn">
+      <a href="logout.php" class="btn btn-danger w-100">🚪 Sair</a>
+    </div>
+  </nav>
+  <button id="showSidebarBtn" class="show-sidebar-btn">☰</button>
+  <div class="content">
 
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8 col-sm-12">
-      <h2>Cadastro de Clientes</h2>
-      <br><br>
-      <form method="POST" action="insereCliente.php">
-        <div class="form-group">
-          <label for="nomeCliente">Nome do Cliente:</label>
-          <input type="text" class="form-control" id="nomeCliente" name="nome" required>
+
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-md-8 col-sm-12">
+          <div class="card shadow p-4">
+            <h2 class="mb-4 text-center">Cadastro de Clientes</h2>
+            <form method="POST" action="insereCliente.php">
+              <div class="form-group">
+                <label for="nomeCliente">Nome do Cliente:</label>
+                <input type="text" class="form-control" id="nomeCliente" name="nome" required>
+              </div>
+              <div class="form-group">
+                <label for="cpf">CPF:</label>
+                <input type="text" class="form-control" id="cpf" name="cpf" maxlength="14" oninput="formatarCPF(this)" required>
+              </div>
+              <div class="form-group">
+                <label for="cep">CEP:</label>
+                <input type="text" class="form-control" id="cep" name="cep" maxlength="9" onblur="buscarCEP()" required>
+              </div>
+              <div class="form-group">
+                <label for="rua">Rua:</label>
+                <input type="text" class="form-control" id="rua" name="rua" required>
+              </div>
+              <div class="form-group">
+                <label for="numero">Número:</label>
+                <input type="text" class="form-control" id="numero" name="numero" required>
+              </div>
+              <div class="form-group">
+                <label for="bairro">Bairro:</label>
+                <input type="text" class="form-control" id="bairro" name="bairro" required>
+              </div>
+              <div class="form-group">
+                <label for="cidade">Cidade:</label>
+                <input type="text" class="form-control" id="cidade" name="cidade" required>
+              </div>
+              <div class="form-group">
+                <label for="estado">Estado:</label>
+                <input type="text" class="form-control" id="estado" name="estado" required>
+              </div>
+              <div class="form-group">
+                <label for="telefone">Telefone:</label>
+                <input type="text" class="form-control" id="telefone" name="telefone" oninput="formatarTelefone(this)" maxlength="15" required>
+              </div>
+              <button type="submit" class="btn btn-info btn-block">Cadastrar Cliente</button>
+            </form>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="cpf">CPF:</label>
-          <input type="text" class="form-control" id="cpf" name="cpf" maxlength="14" oninput="formatarCPF(this)" required>
-        </div>
-        <div class="form-group">
-          <label for="cep">CEP:</label>
-          <input type="text" class="form-control" id="cep" name="cep" maxlength="9" onblur="buscarCEP()" required>
-        </div>
-        <div class="form-group">
-          <label for="rua">Rua:</label>
-          <input type="text" class="form-control" id="rua" name="rua" required>
-        </div>
-        <div class="form-group">
-          <label for="numero">Número:</label>
-          <input type="text" class="form-control" id="numero" name="numero" required>
-        </div>
-        <div class="form-group">
-          <label for="bairro">Bairro:</label>
-          <input type="text" class="form-control" id="bairro" name="bairro" required>
-        </div>
-        <div class="form-group">
-          <label for="cidade">Cidade:</label>
-          <input type="text" class="form-control" id="cidade" name="cidade" required>
-        </div>
-        <div class="form-group">
-          <label for="estado">Estado:</label>
-          <input type="text" class="form-control" id="estado" name="estado" required>
-        </div>
-        <div class="form-group">
-          <label for="telefone">Telefone:</label>
-          <input type="text" class="form-control" id="telefone" name="telefone" oninput="formatarTelefone(this)" maxlength="15" required>
-        </div>
-        <button type="submit" class="btn btn-info btn-block">Cadastrar Cliente</button>
-      </form>
+      </div>
     </div>
   </div>
 </div>
 
+
 <script>
+  function hideSidebar() {
+    document.getElementById('sidebar').classList.add('hidden');
+    document.getElementById('showSidebarBtn').style.display = 'block';
+  }
+  function showSidebar() {
+    document.getElementById('sidebar').classList.remove('hidden');
+    document.getElementById('showSidebarBtn').style.display = 'none';
+  }
+  document.getElementById('showSidebarBtn').addEventListener('click', showSidebar);
+
   function formatarTelefone(input) {
     let telefone = input.value.replace(/\D/g, '');
     if (telefone.length <= 2) {
@@ -109,7 +211,6 @@ if (!isset($_SESSION['id'])) {
     }
     input.setAttribute('data-raw', telefone);
   }
-
   function formatarCPF(input) {
     let cpf = input.value.replace(/\D/g, '');
     if (cpf.length <= 3) {
@@ -122,15 +223,12 @@ if (!isset($_SESSION['id'])) {
       input.value = cpf.slice(0, 3) + '.' + cpf.slice(3, 6) + '.' + cpf.slice(6, 9) + '-' + cpf.slice(9, 11);
     }
   }
-
   function buscarCEP() {
     let cep = document.getElementById('cep').value.replace(/\D/g, '');
-    
     if (cep.length != 8) {
       alert("CEP inválido!");
       return;
     }
-
     fetch(`https://viacep.com.br/ws/${cep}/json/`)
       .then(response => response.json())
       .then(data => {

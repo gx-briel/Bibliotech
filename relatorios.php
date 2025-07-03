@@ -24,7 +24,7 @@ if (!isset($_SESSION['id'])) {
     }
     .sidebar {
       width: 250px;
-      background-color: #1c0e3f;
+      background: linear-gradient(180deg, #1c0e3f 60%, #e8f5e9 100%);
       color: white;
       min-height: 100vh;
       transition: transform 0.3s ease;
@@ -57,6 +57,7 @@ if (!isset($_SESSION['id'])) {
     }
     .nav-links li a:hover {
       color: #ffcc00;
+      text-decoration: underline;
     }
     .toggle-btn {
       background: none;
