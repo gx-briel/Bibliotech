@@ -153,7 +153,23 @@ $totalVenc = $row3['totalVencido'] ?? 0;
       background-color: #fff;
       max-width: 900px;
       width: 100%;
+      transition: transform 0.3s ease;
     }
+
+    /* Ajuste responsivo para a imagem não ficar muito para baixo em mobile */
+    .img-container-mobile-fix {
+      min-height: 70vh;
+    }
+    @media (max-width: 768px) {
+      .img-container-mobile-fix {
+        min-height: 0;
+        margin-top: 1.5rem;
+        margin-bottom: 2rem;
+        align-items: flex-start !important;
+      }
+    }
+    }
+    
   </style>
 </head>
 <body>
@@ -211,13 +227,15 @@ $totalVenc = $row3['totalVencido'] ?? 0;
         </div>
       </div>
 
-      <div class="row justify-content-center mt-4">
-        <div class="col-md-6 text-center">
+      <div class="row justify-content-center mt-0">
+        <div class="d-flex justify-content-center align-items-center img-container-mobile-fix">
           <img
             src="fxd2.jpg"
             alt="Logo Bibliotech"
             class="img-fluid img-harmonizada"
+            onmouseenter="document.getElementById('audioHover').play()"
           >
+        </div>
         </div>
       </div>
     </div>
@@ -226,18 +244,33 @@ $totalVenc = $row3['totalVencido'] ?? 0;
 
 <!-- Scripts -->
 <script>
+  // Salva o estado da sidebar no localStorage
   function hideSidebar() {
     document.getElementById('sidebar').classList.add('hidden');
     document.getElementById('showSidebarBtn').style.display = 'block';
+    localStorage.setItem('sidebarState', 'hidden');
   }
 
   function showSidebar() {
     document.getElementById('sidebar').classList.remove('hidden');
     document.getElementById('showSidebarBtn').style.display = 'none';
+    localStorage.setItem('sidebarState', 'visible');
   }
 
   // Clique simples para abrir a sidebar
   document.getElementById('showSidebarBtn').addEventListener('click', showSidebar);
+
+  // Ao carregar a página, restaura o estado salvo
+  window.addEventListener('DOMContentLoaded', function() {
+    var sidebarState = localStorage.getItem('sidebarState');
+    if (sidebarState === 'hidden') {
+      document.getElementById('sidebar').classList.add('hidden');
+      document.getElementById('showSidebarBtn').style.display = 'block';
+    } else {
+      document.getElementById('sidebar').classList.remove('hidden');
+      document.getElementById('showSidebarBtn').style.display = 'none';
+    }
+  });
 </script>
 </body>
 </html>

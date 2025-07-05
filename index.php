@@ -27,7 +27,7 @@
 
     .sidebar {
       width: 250px;
-      background-color: #1c0e3f;
+      background: linear-gradient(180deg, #1c0e3f 60%, #e8f5e9 100%);
       color: white;
       min-height: 100vh;
       transition: transform 0.3s ease;
@@ -118,15 +118,13 @@
     }
 
     .content img {
-      width: 60%;
-      max-width: 600px;
-      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3)) grayscale(20%);
-      border-radius: 8px;
+      max-width: 900px;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      padding: 1rem;
+      background-color: #fff;
       transition: transform 0.3s ease;
-    }
-
-    .content img:hover {
-      transform: scale(1.05);
     }
 
     .tagline {
@@ -193,24 +191,49 @@ unset($_SESSION['mensagem'], $_SESSION['tipo']);
       }
     </script>
 
-    <!-- Logo Central com efeito -->
-    <div class="container mt-5">
-      <img src="fxd2.jpg" alt="Logo da Bibliotech" class="img-fluid">
-      <div class="tagline">Seu portal para descobrir e gerenciar livros com facilidade.</div>
+    <!-- Centralização vertical absoluta -->
+    <div style="position: relative; min-height: 80vh;">
+      <div style="position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%); width: 100%;">
+        <div class="text-center">
+          <img
+            src="fxd2.jpg"
+            alt="Logo Bibliotech"
+            class="img-fluid"
+          >
+          <div class="tagline">Seu portal para descobrir e gerenciar livros com facilidade.</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- Scripts -->
 <script>
+  // Salva o estado da sidebar no localStorage
   function hideSidebar() {
     document.getElementById('sidebar').classList.add('hidden');
     document.getElementById('showSidebarBtn').style.display = 'block';
+    localStorage.setItem('sidebarState', 'hidden');
   }
   function showSidebar() {
     document.getElementById('sidebar').classList.remove('hidden');
     document.getElementById('showSidebarBtn').style.display = 'none';
+    localStorage.setItem('sidebarState', 'visible');
   }
+
+  // Ao carregar a página, restaura o estado salvo
+  window.addEventListener('DOMContentLoaded', function() {
+    var sidebarState = localStorage.getItem('sidebarState');
+    if (sidebarState === 'hidden') {
+      document.getElementById('sidebar').classList.add('hidden');
+      document.getElementById('showSidebarBtn').style.display = 'block';
+    } else {
+      document.getElementById('sidebar').classList.remove('hidden');
+      document.getElementById('showSidebarBtn').style.display = 'none';
+    }
+    // Clique simples para abrir a sidebar (precisa estar dentro do DOMContentLoaded para garantir que o botão existe)
+    document.getElementById('showSidebarBtn').addEventListener('click', showSidebar);
+  });
 </script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

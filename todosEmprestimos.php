@@ -332,15 +332,32 @@ $executaConsulta = mysqli_query($conexao, $consulta);
   </div>
 </div>
 <script>
+  // Salva o estado da sidebar no localStorage
   function hideSidebar() {
     document.getElementById('sidebar').classList.add('hidden');
     document.getElementById('showSidebarBtn').style.display = 'block';
+    localStorage.setItem('sidebarState', 'hidden');
   }
   function showSidebar() {
     document.getElementById('sidebar').classList.remove('hidden');
     document.getElementById('showSidebarBtn').style.display = 'none';
+    localStorage.setItem('sidebarState', 'visible');
   }
+
+  // Clique simples para abrir a sidebar
   document.getElementById('showSidebarBtn').addEventListener('click', showSidebar);
+
+  // Ao carregar a página, restaura o estado salvo
+  window.addEventListener('DOMContentLoaded', function() {
+    var sidebarState = localStorage.getItem('sidebarState');
+    if (sidebarState === 'hidden') {
+      document.getElementById('sidebar').classList.add('hidden');
+      document.getElementById('showSidebarBtn').style.display = 'block';
+    } else {
+      document.getElementById('sidebar').classList.remove('hidden');
+      document.getElementById('showSidebarBtn').style.display = 'none';
+    }
+  });
 </script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
