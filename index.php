@@ -8,7 +8,7 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <!-- FontAwesome Free for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pzw1ZT3dW2v9Vfkz0fP1+gQJr+eQh7Q9IuT1dE+VtoEuK5+W9eDtYI1+6r6G6YrQlXBiDJxbPxW1YhaxP+j1yw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -167,10 +167,14 @@ unset($_SESSION['mensagem'], $_SESSION['tipo']);
 <div class="wrapper">
   <!-- Sidebar -->
   <nav id="sidebar" class="sidebar">
-    <div class="sidebar-header"><a href="index.php" style="color: #fff; text-decoration: none;">Bibliotech</a></div>
+    <div class="sidebar-header">
+      <a href="index.php" style="color: #fff; text-decoration: none;">
+        <i class="fa-solid fa-book-open-reader"></i> Bibliotech
+      </a>
+    </div>
     <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">← Recolher</button>
     <ul class="nav-links">
-      <li><a href="login.php"><i class="fa-solid fa-right-to-bracket"></i> Realizar Login</a></li>
+      <li><a href="login.php"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
       <li><a href="cadastroUsuario.php"><i class="fa-solid fa-user-plus"></i> Cadastrar Usuário</a></li>
     </ul>
   </nav>

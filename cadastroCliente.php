@@ -16,7 +16,8 @@ if (!isset($_SESSION['id'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Cadastro de Clientes</title>
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <style>
   body {
     background-color: rgb(238, 255, 235);
@@ -123,10 +124,12 @@ if (!isset($_SESSION['id'])) {
 <div class="wrapper">
   <!-- Sidebar -->
   <nav id="sidebar" class="sidebar">
-<div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;">Bibliotech</a></div>    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">← Recolher</button>
+<div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;"><i class="fa-solid fa-book-open-reader"></i> Bibliotech</a></div>    
+<button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">← Recolher</button>
     <ul class="nav-links">
       <li><a href="listaCliente.php">Visualizar Clientes</a></li>
       <li><a href="cadastroLivro.php">Cadastrar Livro</a></li>
+      <li><a href="acervo.php">Acervo de Livros</a></li>
       <li><a href="criaEmprestimo.php">Criar Empréstimo</a></li>
     </ul>
     <div class="logout-btn">
@@ -179,7 +182,7 @@ if (!isset($_SESSION['id'])) {
                 <label for="telefone">Telefone:</label>
                 <input type="text" class="form-control" id="telefone" name="telefone" oninput="formatarTelefone(this)" maxlength="15" required>
               </div>
-              <button type="submit" class="btn btn-info btn-block">Cadastrar Cliente</button>
+              <button type="submit" class="btn btn-info btn-block">Cadastrar Clientes</button>
             </form>
           </div>
         </div>

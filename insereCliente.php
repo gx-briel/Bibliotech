@@ -37,6 +37,6 @@ if ($operacaoSQL) {
     exit; 
 } else {
 
-    echo "<script>alert('Erro ao cadastrar cliente. Tente novamente!'); window.location.href='cadastroCliente.php';</script>";
+    echo "<script>alert('Erro ao Cadastrar Clientes. Tente novamente!'); window.location.href='cadastroCliente.php';</script>";
 }
 ?>
