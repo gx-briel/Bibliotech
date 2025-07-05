@@ -98,6 +98,7 @@ $executaConsulta = mysqli_query($conexao, $consulta);
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Listagem de Empréstimos</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     body {
       background-color: rgb(238, 255, 235);
@@ -214,9 +215,10 @@ $executaConsulta = mysqli_query($conexao, $consulta);
   <!-- Sidebar -->
    <!-- Sidebar -->
   <nav id="sidebar" class="sidebar">
-    <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;">Bibliotech</a></div>
+    <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;"><i class="fa-solid fa-book-open-reader"></i> Bibliotech</a></div>
     <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">← Recolher</button>
     <ul class="nav-links">
+      <li><a href="relatorios.php">Dashboard</a></li>
       <li><a href="todosEmprestimos.php">Todos Empréstimos</a></li>
       <li><a href="listaEmprestimoAtivo.php">Empréstimos Ativos</a></li>
       <li><a href="emprestimoVence.php">Empréstimos à Vencer</a></li>

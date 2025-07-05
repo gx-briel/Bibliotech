@@ -9,8 +9,6 @@ if (!isset($_SESSION['id'])) {
 }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($_POST["emprestimoId"])) {
-        echo '<pre>POST recebido: '; var_dump($_POST); echo '</pre>';
-        // exit; // Removido para permitir o processamento completo
         $emprestimoId = intval($_POST["emprestimoId"]);
         // Busca empréstimo ativo
         $queryInfo = "SELECT idLivro, ativo FROM emprestimo WHERE id = ? LIMIT 1";
@@ -27,17 +25,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $queryAtivo = "UPDATE emprestimo SET ativo = '0' WHERE id = $emprestimoId";
 
             if (mysqli_query($conexao, $queryLivro) && mysqli_query($conexao, $queryEmprestimo) && mysqli_query($conexao, $queryAtivo)) {
-                header("Location: listaEmprestimoAtivo.php");
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'success' => true,
+                    'message' => 'O livro foi devolvido com sucesso!'
+                ]);
                 exit();
             } else {
-                echo "Erro ao devolver livro: " . mysqli_error($conexao);
+                header('Content-Type: application/json');
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Erro ao devolver livro: ' . mysqli_error($conexao)
+                ]);
+                exit();
             }
         } else {
-            echo "Empréstimo não encontrado ou já devolvido.";
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => 'Empréstimo não encontrado ou já devolvido.'
+            ]);
+            exit();
         }
     } else {
-        echo "Empréstimo não encontrado";
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'message' => 'Empréstimo não encontrado'
+        ]);
+        exit();
     }
 } else {
-    echo "Método de requisição inválido.";
+    header('Content-Type: application/json');
+    echo json_encode([
+        'success' => false,
+        'message' => 'Método de requisição inválido.'
+    ]);
+    exit();
 }

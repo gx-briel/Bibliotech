@@ -29,6 +29,7 @@ $totalVenc = $row3['totalVencido'] ?? 0;
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dashboard - Bibliotech</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     body {
       background-color: rgb(238, 255, 235);
@@ -160,15 +161,15 @@ $totalVenc = $row3['totalVencido'] ?? 0;
 <div class="wrapper">
   <!-- Sidebar -->
   <nav id="sidebar" class="sidebar">
-    <div class="sidebar-header">Bibliotech</div>
+    <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;"><i class="fa-solid fa-book-open-reader" style="margin-right:8px;"></i><span style="letter-spacing:1px;">Bibliotech</span></a></div>
     <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">← Recolher</button>
     <ul class="nav-links">
-      <li><a href="cadastroCliente.php">Cadastrar Cliente</a></li>
+      <li><a href="cadastroCliente.php">Cadastrar Clientes</a></li>
       <li><a href="cadastroLivro.php">Cadastrar Livro</a></li>
       <li><a href="acervo.php">Acervo de Livros</a></li>
       <li><a href="listaCliente.php">Lista Clientes</a></li>
       <li><a href="criaEmprestimo.php">Criar Empréstimo</a></li>
-      <li><a href="relatorios.php">Empréstimos</a></li>
+      <li><a href="relatorios.php">Relatórios</a></li>
     </ul>
 
     <!-- Botão de logout no rodapé -->

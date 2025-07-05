@@ -100,6 +100,7 @@ $executaConsulta = mysqli_query($conexao, $consulta);
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Empréstimos Atrasados</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     body {
       background-color: rgb(238, 255, 235);
@@ -200,6 +201,9 @@ $executaConsulta = mysqli_query($conexao, $consulta);
     .btn-info, .btn-warning, .btn-danger {
       color: white;
     }
+    .ff2 {
+      color: #212529;
+    }
     @media (max-width: 768px) {
       .content {
         margin-left: 0 !important;
@@ -218,9 +222,10 @@ $executaConsulta = mysqli_query($conexao, $consulta);
 <div class="wrapper">
   <!-- Sidebar -->
   <nav id="sidebar" class="sidebar">
-    <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;">Bibliotech</a></div>
+    <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;"><i class="fa-solid fa-book-open-reader"></i> Bibliotech</a></div>
     <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">← Recolher</button>
     <ul class="nav-links">
+      <li><a href="relatorios.php">Dashboard</a></li>
       <li><a href="todosEmprestimos.php">Todos Empréstimos</a></li>
       <li><a href="listaEmprestimoAtivo.php">Empréstimos Ativos</a></li>
       <li><a href="emprestimoVence.php">Empréstimos à Vencer</a></li>
@@ -234,7 +239,7 @@ $executaConsulta = mysqli_query($conexao, $consulta);
   <!-- Conteúdo principal -->
   <div class="content">
     <div class="container mt-5">
-      <h2 class="text-center mb-4">Listagem de Empréstimos Atrasados</h2>
+      <h2 class="text-center mb-4">Empréstimos Atrasados</h2>
       <form method="GET" action="" class="form-row">
         <div class="form-group col-md-4">
           <input type="text" class="form-control" name="cliente" placeholder="Buscar Cliente" value="<?= htmlspecialchars($clienteBusca ?? '', ENT_QUOTES, 'UTF-8'); ?>">
@@ -302,7 +307,7 @@ $executaConsulta = mysqli_query($conexao, $consulta);
                   <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalDevolucao" data-empid="<?= $emprestimos['empId']; ?>">Devolver</button>
                 </td>
                 <td>
-                  <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalRenovacao" data-empid="<?= $emprestimos['empId']; ?>">Renovar</button>
+                  <button class="btn btn-warning btn-sm ff2" data-toggle="modal" data-target="#modalRenovacao" data-empid="<?= $emprestimos['empId']; ?>">Renovar</button>
                 </td>
               </tr>
             <?php
@@ -355,12 +360,14 @@ $executaConsulta = mysqli_query($conexao, $consulta);
 <!-- MODAL DEVOLUÇÃO -->
 <div class="modal fade" id="modalDevolucao" tabindex="-1" role="dialog" aria-labelledby="modalDevolucaoLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
-    <form method="POST" action="devolveLivro.php" id="formDevolucao">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Confirmar Devolução</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span>&times;</span></button>
-        </div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalDevolucaoLabel">Confirmação de Devolução</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="formDevolucao" autocomplete="off">
         <div class="modal-body">
           <p>Deseja realmente devolver este livro?</p>
           <input type="hidden" name="emprestimoId" id="emprestimoIdDevolucao">
@@ -377,26 +384,29 @@ $executaConsulta = mysqli_query($conexao, $consulta);
 <!-- MODAL RENOVAÇÃO -->
 <div class="modal fade" id="modalRenovacao" tabindex="-1" role="dialog" aria-labelledby="modalRenovacaoLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
-    <form method="POST" action="renovaEmprestimo.php">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Confirmar Renovação</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span>&times;</span></button>
-        </div>
-        <div class="modal-body">
-          <p>Deseja renovar este empréstimo?</p>
-          <input type="hidden" name="emprestimoId" id="emprestimoIdRenovacao">
-          <div class="form-group">
-            <label>Nova Data de Devolução</label>
-            <input type="date" name="novaDataRenovacao" class="form-control" required>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-warning">Confirmar</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-        </div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalRenovacaoLabel">Confirmação de Renovação</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-    </form>
+      <div class="modal-body">
+        <p>Informe a nova data de devolução:</p>
+        <form method="POST" action="renovaEmprestimo.php" id="formRenovacao">
+          <input type="hidden" name="emprestimoId" id="emprestimoIdRenovacao">
+          <div class="input-group">
+            <input type="date" name="novaDataRenovacao" class="form-control" required id="novaDataRenovacao">
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-warning ff2">Confirmar Renovação</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -440,12 +450,64 @@ $executaConsulta = mysqli_query($conexao, $consulta);
     $('#modalDevolucao').on('hidden.bs.modal', function(event) {
       $(this).find('#emprestimoIdDevolucao').val('');
     });
-    $('#formDevolucao').on('submit', function() {
+    // Envio AJAX do formulário de devolução
+    $(document).off('submit', '#formDevolucao');
+    $(document).on('submit', '#formDevolucao', function(e) {
+      e.preventDefault();
       var val = $('#emprestimoIdDevolucao').val();
       if (!val) {
         alert('Erro: ID do empréstimo não definido!');
         return false;
       }
+      var $btn = $(this).find('button[type="submit"]');
+      if ($btn.prop('disabled')) return false;
+      $btn.prop('disabled', true);
+      $.ajax({
+        url: 'devolveLivro.php',
+        type: 'POST',
+        data: { emprestimoId: val },
+        dataType: 'json',
+        success: function(resp) {
+          if (resp && resp.success) {
+            $('#modalDevolucao').modal('hide');
+            if ($('#modalDevolucaoSucesso').length === 0) {
+              $('body').append(`
+                <div class="modal fade" id="modalDevolucaoSucesso" tabindex="-1" role="dialog" aria-labelledby="modalDevolucaoSucessoLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title" id="modalDevolucaoSucessoLabel">Devolução realizada</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Fechar">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <p id="msgDevolucaoSucesso"></p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.reload()">OK</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `);
+            }
+            $('#msgDevolucaoSucesso').text(resp.message || 'O livro foi devolvido com sucesso!');
+            setTimeout(function() {
+              $('#modalDevolucaoSucesso').modal('show');
+            }, 400);
+          } else {
+            alert(resp && resp.message ? resp.message : 'Erro ao devolver livro.');
+          }
+        },
+        error: function(xhr) {
+          alert('Erro ao processar devolução.');
+        },
+        complete: function() {
+          $btn.prop('disabled', false);
+        }
+      });
+      return false;
     });
   });
 </script>

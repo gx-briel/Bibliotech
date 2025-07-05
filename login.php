@@ -57,120 +57,240 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        body {
-            background-color: rgb(238, 255, 235); /* Cor do fundo consistente com o resto do sistema */
-            font-family: 'Arial', sans-serif;
+      body {
+        background-color: rgb(216, 107, 107);
+        margin: 0;
+        overflow-x: hidden;
+        padding-bottom: 80px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .wrapper {
+        display: flex;
+      }
+      .sidebar {
+        width: 250px;
+        background-color: #1c0e3f;
+        color: white;
+        min-height: 100vh;
+        transition: transform 0.3s ease;
+        position: fixed;
+        z-index: 999;
+      }
+      .sidebar.hidden {
+        transform: translateX(-100%);
+      }
+      .sidebar .sidebar-header {
+        padding: 1rem;
+        font-size: 1.5rem;
+        font-weight: bold;
+        background-color: #150a2c;
+        text-align: center;
+      }
+      .toggle-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.1rem;
+        padding: 0.5rem 1rem;
+        text-align: left;
+        width: 100%;
+        cursor: pointer;
+      }
+      .nav-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .nav-links li {
+        padding: 0.75rem 1rem;
+        display: flex;
+        align-items: center;
+      }
+      .nav-links li a {
+        color: white;
+        font-weight: bold;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+      }
+      .nav-links li a i {
+        margin-right: 8px;
+        font-size: 1.2rem;
+      }
+      .nav-links li a:hover {
+        color: #ffcc00;
+      }
+      .show-sidebar-btn {
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 1000;
+        background-color: #1c0e3f;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px;
+        font-size: 1.2rem;
+        display: none;
+      }
+      .sidebar.hidden ~ .show-sidebar-btn {
+        display: block;
+      }
+      .content {
+        margin-left: 250px;
+        padding: 2rem;
+        flex: 1;
+        transition: margin-left 0.3s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      .sidebar.hidden ~ .content {
+        margin-left: 0;
+      }
+      .login-card {
+        background-color: #fff;
+        padding: 40px 30px 30px 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        max-width: 400px;
+        width: 100%;
+      }
+      .login-card h1 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+        color: #1c0e3f;
+        font-weight: bold;
+      }
+      .form-control {
+        border-radius: 8px;
+        box-shadow: none;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        padding: 12px;
+      }
+      .btn {
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+      .btn-primary {
+        background-color: #1c0e3f;
+        border: none;
+      }
+      .btn-primary:hover {
+        background-color: #28a745 !important; /* verde Bootstrap */
+        color: #fff !important;
+      }
+      .modal-content {
+        border-radius: 8px;
+      }
+      .modal-header {
+        background-color: #1c0e3f;
+        color: white;
+      }
+      .modal-footer .btn-secondary {
+        background-color: #ddd;
+      }
+      @media (max-width: 768px) {
+        .content {
+          margin-left: 0 !important;
         }
-
-        .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Alinha a parte superior da tela */
-            min-height: 80vh; /* Ajusta a altura para que a área de login fique mais para cima */
-            padding-top: 100px; /* Adiciona um espaço extra no topo */
-        }
-
         .login-card {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
-            width: 100%;
+          padding: 30px 10px;
         }
-
-        .login-card h1 {
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            color: #333;
-            font-weight: bold;
-        }
-
-        .form-control {
-            border-radius: 8px;
-            box-shadow: none;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            padding: 12px;
-        }
-
-        /* Adicionando transições suaves para os botões */
-        .btn {
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px); /* Leve elevação no hover */
-        }
-
-        .btn-info:hover {
-            background-color: #17a2b8;
-        }
-
-        .btn-secondary:hover {
-            background-color: #6c757d;
-        }
-
-        .btn-danger:hover {
-            background-color: #dc3545;
-        }
-
-        .modal-content {
-            border-radius: 8px;
-        }
-
-        .modal-header {
-            background-color: #1c0e3f;
-            color: white;
-        }
-
-        .modal-footer .btn-secondary {
-            background-color: #ddd;
-        }
-
-    .navbar {
-      background-color: #1c0e3f;
-    }
-    .navbar-brand, .nav-link {
-      color: white !important;
-      font-weight: bold;
-    }
-    .navbar-nav .nav-link:hover {
-      color: #ffcc00 !important;
-    }
-
+      }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg">
-  <a class="navbar-brand" href="indexlogado.php">Bibliotech</a>
 
-</nav>
-
-<div class="login-container">
-    <div class="login-card">
-        <h1 class="text-center">Acesse sua conta</h1>
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="usuario">Usuário</label>
-                <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Informe seu usuário" maxlength="4" required>
-            </div>
-            <div class="form-group">
-                <label for="senha">Senha</label>
-                <input type="password" class="form-control" id="senha" name="senha" placeholder="Informe sua senha" maxlength="20" required>
-
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Entrar</button>
-        </form>
-        <!-- Botões adicionais -->
-        <div class="mt-3 text-center">
-            <button type="button" class="btn btn-link" onclick="window.history.back()">Voltar</button>
-            <button type="button" class="btn btn-link" onclick="window.location.href = 'cadastroUsuario.php';">Criar Usuário</button>
-        </div>
+<div class="wrapper">
+  <!-- Sidebar -->
+  <nav id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <a href="index.php" style="color: #fff; text-decoration: none;">
+        <i class="fa-solid fa-book-open-reader"></i> Bibliotech
+      </a>
     </div>
+    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">← Recolher</button>
+    <ul class="nav-links">
+      <li><a href="login.php"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+      <li><a href="cadastroUsuario.php"><i class="fa-solid fa-user-plus"></i> Cadastrar Usuário</a></li>
+    </ul>
+  </nav>
+  <!-- Botão para mostrar sidebar -->
+  <button id="showSidebarBtn" class="show-sidebar-btn" onclick="showSidebar()">☰</button>
+  <!-- Conteúdo principal -->
+  <div class="content">
+    <div class="login-card">
+      <h1 class="text-center">Acesse sua conta</h1>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="usuario">Usuário</label>
+          <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Informe seu usuário" maxlength="4" required>
+        </div>
+        <div class="form-group">
+          <label for="senha">Senha</label>
+          <div style="position: relative;">
+            <input type="password" class="form-control" id="senha" name="senha" placeholder="Informe sua senha" maxlength="20" required style="padding-right: 40px;">
+            <span class="toggle-password" style="position: absolute; right: 16px; top: 0; bottom: 0; display: flex; align-items: center; cursor: pointer; color: #888; z-index: 10;">
+              <i class="fa-solid fa-eye"></i>
+            </span>
+          </div>
+        </div>
+<script>
+  function hideSidebar() {
+    document.getElementById('sidebar').classList.add('hidden');
+    document.getElementById('showSidebarBtn').style.display = 'block';
+  }
+  function showSidebar() {
+    document.getElementById('sidebar').classList.remove('hidden');
+    document.getElementById('showSidebarBtn').style.display = 'none';
+  }
+
+  // Alternar visibilidade da senha (ícone dentro do campo)
+  document.addEventListener('DOMContentLoaded', function() {
+    var toggleBtn = document.querySelector('.toggle-password');
+    var pwdInput = document.getElementById('senha');
+    var icon = toggleBtn.querySelector('i');
+    toggleBtn.addEventListener('click', function() {
+      if (pwdInput.type === 'password') {
+        pwdInput.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        pwdInput.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    });
+  });
+</script>
+        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+      </form>
+      <div class="mt-3 text-center">
+        <button type="button" class="btn btn-link" onclick="window.history.back()">Voltar</button>
+        <button type="button" class="btn btn-link" onclick="window.location.href = 'cadastroUsuario.php';">Criar Usuário</button>
+      </div>
+    </div>
+  </div>
 </div>
+<script>
+  function hideSidebar() {
+    document.getElementById('sidebar').classList.add('hidden');
+    document.getElementById('showSidebarBtn').style.display = 'block';
+  }
+  function showSidebar() {
+    document.getElementById('sidebar').classList.remove('hidden');
+    document.getElementById('showSidebarBtn').style.display = 'none';
+  }
+</script>
 
 
 <!-- Modal de erro para usuário vazio -->

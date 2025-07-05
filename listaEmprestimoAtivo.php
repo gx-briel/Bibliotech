@@ -1,4 +1,3 @@
-
 <?php
 require 'conexao.php';
 session_start(); 
@@ -100,6 +99,7 @@ $executaConsulta = mysqli_query($conexao, $consulta);
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Listagem de Empréstimos Ativos</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <style>
     body {
@@ -232,9 +232,10 @@ $executaConsulta = mysqli_query($conexao, $consulta);
 <div class="wrapper">
   <!-- Sidebar -->
   <nav id="sidebar" class="sidebar">
-    <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;">Bibliotech</a></div>
+    <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;"><i class="fa-solid fa-book-open-reader"></i> Bibliotech</a></div>
     <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">← Recolher</button>
     <ul class="nav-links">
+      <li><a href="relatorios.php">Dashboard</a></li>
       <li><a href="todosEmprestimos.php">Todos Empréstimos</a></li>
       <li><a href="listaEmprestimoAtivo.php">Empréstimos Ativos</a></li>
       <li><a href="emprestimoVence.php">Empréstimos à Vencer</a></li>
@@ -250,7 +251,7 @@ $executaConsulta = mysqli_query($conexao, $consulta);
 
 
     <div class="container mt-5">
-      <h2 class="text-center mb-4">Listagem de Empréstimos (Ativos)</h2>
+      <h2 class="text-center mb-4">Empréstimos Ativos</h2>
       <form method="GET" action="" class="form-row">
         <div class="form-group col-md-4">
           <input type="text" class="form-control" name="cliente" placeholder="Buscar Cliente">
@@ -358,7 +359,7 @@ $executaConsulta = mysqli_query($conexao, $consulta);
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form method="POST" action="devolveLivro.php" id="formDevolucao">
+      <form id="formDevolucao" autocomplete="off">
         <div class="modal-body">
           <p>Tem certeza que deseja devolver o empréstimo?</p>
         </div>
@@ -372,6 +373,25 @@ $executaConsulta = mysqli_query($conexao, $consulta);
   </div>
 </div>
 <!-- Fim do modal de devolução -->
+<!-- Modal de sucesso da devolução -->
+<div class="modal fade" id="modalDevolucaoSucesso" tabindex="-1" role="dialog" aria-labelledby="modalDevolucaoSucessoLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="modalDevolucaoSucessoLabel">Devolução realizada</h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="msgDevolucaoSucesso">O livro foi devolvido com sucesso!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.reload()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -386,7 +406,7 @@ $executaConsulta = mysqli_query($conexao, $consulta);
         </button>
       </div>
       <div class="modal-body">
-        <p>Tem certeza que deseja renovar o empréstimo?</p>
+        <p>Informe a nova data de devolução:</p>
         <form method="POST" action="renovaEmprestimo.php" id="formRenovacao">
           <input type="hidden" name="emprestimoId" id="emprestimoIdRenovacao">
           <div class="input-group">
@@ -460,16 +480,61 @@ $executaConsulta = mysqli_query($conexao, $consulta);
     $('#modalDevolucao').on('hidden.bs.modal', function(event) {
       $(this).find('#emprestimoIdDevolucao').val('');
     });
-    // Validação no submit de qualquer form que tenha o campo hidden
-    $('#formDevolucao').on('submit', function(e) {
+    // Envio AJAX robusto do formulário de devolução
+    $(document).off('submit', '#formDevolucao');
+    $(document).on('submit', '#formDevolucao', function(e) {
+      e.preventDefault();
       var val = $('#emprestimoIdDevolucao').val();
-      console.log('Tentando enviar formDevolucao, valor do emprestimoId:', val);
-      if (!val) {
-        e.preventDefault();
-        return false;
-      }
-      // Permite submit, mas loga
-      console.log('Enviando devolução para emprestimoId:', val);
+      if (!val) return false;
+      var $btn = $(this).find('button[type="submit"]');
+      if ($btn.prop('disabled')) return false;
+      $btn.prop('disabled', true);
+      $.ajax({
+        url: 'devolveLivro.php',
+        type: 'POST',
+        data: { emprestimoId: val },
+        dataType: 'json',
+        success: function(resp) {
+          if (resp && resp.success) {
+            $('#modalDevolucao').modal('hide');
+            if ($('#modalDevolucaoSucesso').length === 0) {
+              $('body').append(`
+                <div class="modal fade" id="modalDevolucaoSucesso" tabindex="-1" role="dialog" aria-labelledby="modalDevolucaoSucessoLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title" id="modalDevolucaoSucessoLabel">Devolução realizada</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Fechar">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <p id="msgDevolucaoSucesso"></p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.reload()">OK</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `);
+            }
+            $('#msgDevolucaoSucesso').text(resp.message || 'O livro foi devolvido com sucesso!');
+            setTimeout(function() {
+              $('#modalDevolucaoSucesso').modal('show');
+            }, 400);
+          } else {
+            alert(resp && resp.message ? resp.message : 'Erro ao devolver livro.');
+          }
+        },
+        error: function(xhr) {
+          alert('Erro ao processar devolução.');
+        },
+        complete: function() {
+          $btn.prop('disabled', false);
+        }
+      });
+      return false;
     });
     // Log global para qualquer submit
     $(document).on('submit', 'form', function(e) {
