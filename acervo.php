@@ -220,6 +220,7 @@ $resultado = mysqli_stmt_get_result($stmt);
               <th>ISBN</th>
               <th>Editora</th>
               <th>Lançamento</th>
+              <th>Disponível</th>
               <th>Editar</th>
               <th>Remover</th>
             </tr>
@@ -240,6 +241,7 @@ $resultado = mysqli_stmt_get_result($stmt);
                     echo $data ? $data->format('d/m/Y') : '';
                     ?>
                   </td>
+                  <td><?= $livros['disponivel'] ? 'Sim' : 'Não'; ?></td>
                   <td>
                     <a href="editarLivro.php?id=<?= $livros['ID']; ?>" class="btn btn-warning btn-sm mb-1">Editar</a>
                   </td>

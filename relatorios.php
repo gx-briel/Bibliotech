@@ -103,12 +103,44 @@ if (!isset($_SESSION['id'])) {
     }
     .card {
       border: none;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+      margin-bottom: 6px;
+      width: 100%;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .dashboard-card-title {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #fff;
+      width: 100%;
+      text-align: center;
+      word-break: break-word;
+    }
+    .dashboard-card-value {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #fff;
+    }
+    .dashboard-card-desc {
+      font-size: 1.15rem;
+      color: #fff;
     }
     @media (max-width: 768px) {
       .content {
         margin-left: 0 !important;
+      }
+      .dashboard-card-title {
+        font-size: 1.3rem;
+        text-align: center;
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .card-body {
+        padding: 1.2rem 0.5rem !important;
       }
     }
   </style>
@@ -148,7 +180,7 @@ if (!isset($_SESSION['id'])) {
         $resAtivos = mysqli_query($conexao, $sqlAtivos);
         $qtdAtivos = ($resAtivos && $row = mysqli_fetch_assoc($resAtivos)) ? $row['total'] : 0;
 
-        // Empréstimos à vencer (exemplo: vencimento nos próximos 5 dias)
+        // Empréstimos à vencer
         $sqlVencer = "SELECT COUNT(*) as total FROM emprestimo WHERE ativo = '1' AND vencimento BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 5 DAY)";
         $resVencer = mysqli_query($conexao, $sqlVencer);
         $qtdVencer = ($resVencer && $row = mysqli_fetch_assoc($resVencer)) ? $row['total'] : 0;
@@ -158,74 +190,89 @@ if (!isset($_SESSION['id'])) {
         $resAtrasados = mysqli_query($conexao, $sqlAtrasados);
         $qtdAtrasados = ($resAtrasados && $row = mysqli_fetch_assoc($resAtrasados)) ? $row['total'] : 0;
         ?>
-        <div class="col-md-3 mb-4">
-          <a href="todosEmprestimos.php" style="text-decoration:none;">
-            <div class="card text-white bg-primary h-100">
-              <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                <h5 class="card-title">Todos Empréstimos</h5>
-                <span style="font-size:2.2rem;font-weight:bold;">
+        <div class="col-12" style="margin-bottom: 6px;">
+          <div class="card text-white bg-primary">
+            <a href="todosEmprestimos.php" style="text-decoration:none;display:block;width:100%;">
+              <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
+                <h5 class="card-title dashboard-card-title">Todos Empréstimos</h5>
+                <span class="dashboard-card-value">
                   <?= $qtdTodos ?>
                 </span>
-                <small>Total de registros</small>
+                <small class="dashboard-card-desc">Total de registros</small>
               </div>
-            </div>
-          </a>
+            </a>
+          </div>
         </div>
-        <div class="col-md-3 mb-4">
-          <a href="listaEmprestimoAtivo.php" style="text-decoration:none;">
-            <div class="card text-white bg-success h-100">
-              <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                <h5 class="card-title">Empréstimos Ativos</h5>
-                <span style="font-size:2.2rem;font-weight:bold;">
+        <div class="col-12" style="margin-bottom: 6px;">
+          <div class="card text-white bg-success">
+            <a href="listaEmprestimoAtivo.php" style="text-decoration:none;display:block;width:100%;">
+              <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
+                <h5 class="card-title dashboard-card-title">Empréstimos Ativos</h5>
+                <span class="dashboard-card-value">
                   <?= $qtdAtivos ?>
                 </span>
-                <small>Atualmente em aberto</small>
+                <small class="dashboard-card-desc">Atualmente em aberto</small>
               </div>
-            </div>
-          </a>
+            </a>
+          </div>
         </div>
-        <div class="col-md-3 mb-4">
-          <a href="emprestimoVence.php" style="text-decoration:none;">
-            <div class="card text-white bg-warning h-100">
-              <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                <h5 class="card-title">À Vencer</h5>
-                <span style="font-size:2.2rem;font-weight:bold;">
+        <div class="col-12" style="margin-bottom: 6px;">
+          <div class="card text-white bg-warning">
+            <a href="emprestimoVence.php" style="text-decoration:none;display:block;width:100%;">
+              <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
+                <h5 class="card-title dashboard-card-title">À Vencer</h5>
+                <span class="dashboard-card-value">
                   <?= $qtdVencer ?>
                 </span>
-                <small>Vencem em até 5 dias</small>
+                <small class="dashboard-card-desc">Vencem em até 5 dias</small>
               </div>
-            </div>
-          </a>
+            </a>
+          </div>
         </div>
-        <div class="col-md-3 mb-4">
-          <a href="emprestimoVencido.php" style="text-decoration:none;">
-            <div class="card text-white bg-danger h-100">
-              <div class="card-body d-flex flex-column justify-content-center align-items-center">
-                <h5 class="card-title">Atrasados</h5>
-                <span style="font-size:2.2rem;font-weight:bold;">
+        <div class="col-12" style="margin-bottom: 6px;">
+          <div class="card text-white bg-danger">
+            <a href="emprestimoVencido.php" style="text-decoration:none;display:block;width:100%;">
+              <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
+                <h5 class="card-title dashboard-card-title">Atrasados</h5>
+                <span class="dashboard-card-value">
                   <?= $qtdAtrasados ?>
                 </span>
-                <small>Já passaram do prazo</small>
+                <small class="dashboard-card-desc">Já passaram do prazo</small>
               </div>
-            </div>
-          </a>
+            </a>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 <script>
+  // Salva o estado da sidebar no localStorage
   function hideSidebar() {
     document.getElementById('sidebar').classList.add('hidden');
     document.getElementById('showSidebarBtn').style.display = 'block';
+    localStorage.setItem('sidebarState', 'hidden');
   }
   function showSidebar() {
     document.getElementById('sidebar').classList.remove('hidden');
     document.getElementById('showSidebarBtn').style.display = 'none';
+    localStorage.setItem('sidebarState', 'visible');
   }
 
   // Clique simples para abrir a sidebar
   document.getElementById('showSidebarBtn').addEventListener('click', showSidebar);
+
+  // Ao carregar a página, restaura o estado salvo
+  window.addEventListener('DOMContentLoaded', function() {
+    var sidebarState = localStorage.getItem('sidebarState');
+    if (sidebarState === 'hidden') {
+      document.getElementById('sidebar').classList.add('hidden');
+      document.getElementById('showSidebarBtn').style.display = 'block';
+    } else {
+      document.getElementById('sidebar').classList.remove('hidden');
+      document.getElementById('showSidebarBtn').style.display = 'none';
+    }
+  });
 </script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>

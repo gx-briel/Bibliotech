@@ -34,7 +34,7 @@ $novoUsuario = str_pad($ultimoUsuario + 1, 4, '0', STR_PAD_LEFT); // Gera o pró
     }
     .sidebar {
       width: 250px;
-      background-color: #1c0e3f;
+      background: linear-gradient(180deg, #1c0e3f 60%, #e8f5e9 100%);
       color: white;
       min-height: 100vh;
       transition: transform 0.3s ease;
@@ -212,14 +212,31 @@ $novoUsuario = str_pad($ultimoUsuario + 1, 4, '0', STR_PAD_LEFT); // Gera o pró
 </div>
 
 <script>
+  // Salva o estado da sidebar no localStorage
   function hideSidebar() {
     document.getElementById('sidebar').classList.add('hidden');
     document.getElementById('showSidebarBtn').style.display = 'block';
+    localStorage.setItem('sidebarState', 'hidden');
   }
   function showSidebar() {
     document.getElementById('sidebar').classList.remove('hidden');
     document.getElementById('showSidebarBtn').style.display = 'none';
+    localStorage.setItem('sidebarState', 'visible');
   }
+
+  // Ao carregar a página, restaura o estado salvo
+  window.addEventListener('DOMContentLoaded', function() {
+    var sidebarState = localStorage.getItem('sidebarState');
+    if (sidebarState === 'hidden') {
+      document.getElementById('sidebar').classList.add('hidden');
+      document.getElementById('showSidebarBtn').style.display = 'block';
+    } else {
+      document.getElementById('sidebar').classList.remove('hidden');
+      document.getElementById('showSidebarBtn').style.display = 'none';
+    }
+    // Clique simples para abrir a sidebar (precisa estar dentro do DOMContentLoaded para garantir que o botão existe)
+    document.getElementById('showSidebarBtn').addEventListener('click', showSidebar);
+  });
 
   // Alternar visibilidade da senha (ícone dentro do campo)
   document.addEventListener('DOMContentLoaded', function() {
