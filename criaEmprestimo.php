@@ -260,11 +260,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   document.getElementById('showSidebarBtn').addEventListener('click', showSidebar);
 </script>
 
-<footer class="footer bg-light mt-5">
-  <div class="container text-center">
-    <span class="text-muted">© 2024 Bibliotech. Todos os direitos reservados.</span>
-  </div>
-</footer>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

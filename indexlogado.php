@@ -165,9 +165,9 @@ $totalVenc = $row3['totalVencido'] ?? 0;
     <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">← Recolher</button>
     <ul class="nav-links">
       <li><a href="cadastroCliente.php">Cadastrar Clientes</a></li>
+      <li><a href="listaCliente.php">Listar Clientes</a></li>
       <li><a href="cadastroLivro.php">Cadastrar Livro</a></li>
       <li><a href="acervo.php">Acervo de Livros</a></li>
-      <li><a href="listaCliente.php">Lista Clientes</a></li>
       <li><a href="criaEmprestimo.php">Criar Empréstimo</a></li>
       <li><a href="relatorios.php">Relatórios</a></li>
     </ul>

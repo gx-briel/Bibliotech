@@ -34,6 +34,17 @@ $resultado = mysqli_stmt_get_result($stmt);
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
+    /* Garante que a tabela seja rolável horizontalmente em telas pequenas */
+    @media (max-width: 768px) {
+      .table-container {
+        width: 100vw;
+        min-width: 600px;
+        overflow-x: auto;
+      }
+      .table {
+        min-width: 600px;
+      }
+    }
     body {
       background-color: rgb(238, 255, 235);
       margin: 0;
@@ -136,8 +147,20 @@ $resultado = mysqli_stmt_get_result($stmt);
       background-color: #16254a;
       border-color: #16254a;
     }
-    table th, table td {
+    .table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    table {
+      width: 100%;
+    }
+    .table-striped tbody tr:nth-of-type(odd) {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+    .table th, .table td {
       border: 1px solid #ccc !important;
+      vertical-align: middle;
+      padding: 12px 15px;
     }
     .table thead th {
       background-color: #343a40;
@@ -188,15 +211,17 @@ $resultado = mysqli_stmt_get_result($stmt);
           </div>
         </div>
       </form>
-      <div class="table-responsive">
-        <table class="table table-striped">
+      <div class="table-container table-responsive mt-4">
+        <table class="table table-striped mb-0">
           <thead>
             <tr>
+              <th>ID</th>
               <th>Título</th>
               <th>ISBN</th>
               <th>Editora</th>
               <th>Lançamento</th>
-              <th>Ações</th>
+              <th>Editar</th>
+              <th>Remover</th>
             </tr>
           </thead>
           <tbody>
@@ -205,6 +230,7 @@ $resultado = mysqli_stmt_get_result($stmt);
               while ($livros = mysqli_fetch_assoc($resultado)) {
             ?>
                 <tr>
+                  <td><?= htmlspecialchars($livros['ID']); ?></td>
                   <td><?= htmlspecialchars($livros['titulo']); ?></td>
                   <td><?= htmlspecialchars($livros['isbn']); ?></td>
                   <td><?= htmlspecialchars($livros['editora']); ?></td>
@@ -216,34 +242,35 @@ $resultado = mysqli_stmt_get_result($stmt);
                   </td>
                   <td>
                     <a href="editarLivro.php?id=<?= $livros['ID']; ?>" class="btn btn-warning btn-sm mb-1">Editar</a>
-                    <a href="#" class="btn btn-danger btn-sm mb-1" data-toggle="modal" data-target="#removerModal<?= $livros['ID']; ?>">Remover</a>
                   </td>
-                </tr>
-
-                <!-- Modal de confirmação -->
-                <div class="modal fade" id="removerModal<?= $livros['ID']; ?>" tabindex="-1" role="dialog" aria-labelledby="removerModalLabel<?= $livros['ID']; ?>" aria-hidden="true">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="removerModalLabel<?= $livros['ID']; ?>">Confirmar Remoção</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        Tem certeza de que deseja remover este livro? A data de remoção será registrada.
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <a href="removerLivro.php?id=<?= $livros['ID']; ?>" class="btn btn-danger">Confirmar Remoção</a>
+                  <td>
+                    <a href="#" class="btn btn-danger btn-sm mb-1" data-toggle="modal" data-target="#removerModal<?= $livros['ID']; ?>">Remover</a>
+                    <!-- Modal de confirmação -->
+                    <div class="modal fade" id="removerModal<?= $livros['ID']; ?>" tabindex="-1" role="dialog" aria-labelledby="removerModalLabel<?= $livros['ID']; ?>" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="removerModalLabel<?= $livros['ID']; ?>">Confirmar Remoção</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            Tem certeza de que deseja remover este livro? A data de remoção será registrada.
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <a href="removerLivro.php?id=<?= $livros['ID']; ?>" class="btn btn-danger">Confirmar Remoção</a>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
+                  </td>
+                </tr>
             <?php
               }
             } else {
-              echo "<tr><td colspan='5' class='text-center'>Nenhum Livro Cadastrado.</td></tr>";
+              echo "<tr><td colspan='6' class='text-center'>Nenhum Livro Cadastrado.</td></tr>";
             }
             ?>
           </tbody>
