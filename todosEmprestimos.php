@@ -308,15 +308,24 @@ $executaConsulta = mysqli_query($conexao, $consulta);
           <form method="post" action="" style="margin-bottom:0;">
             <button type="submit" name="export_excel" class="btn btn-success">Exportar Excel</button>
           </form>
+          <div>
           <?php
             // Botão mostrar mais 50
             if ($numRows === $limit) {
               $params = $_GET;
               $params['limit'] = $limit + $defaultLimit;
               $url = '?' . http_build_query($params) . '#tabela';
-              echo '<a href="' . $url . '" class="btn btn-primary" id="mostrarMais50">Mostrar mais 50</a>';
+              echo '<a href="' . $url . '" class="btn btn-primary mr-2" id="mostrarMais50">Mostrar mais 50</a>';
+            }
+            // Botão mostrar menos
+            if ($limit > $defaultLimit) {
+              $params = $_GET;
+              $params['limit'] = $defaultLimit;
+              $url = '?' . http_build_query($params) . '#tabela';
+              echo '<a href="' . $url . '" class="btn btn-secondary" id="mostrarMenos">Mostrar menos</a>';
             }
           ?>
+          </div>
         </div>
       </div>
     </div>

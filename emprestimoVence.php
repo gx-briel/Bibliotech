@@ -334,7 +334,13 @@ $executaConsulta = mysqli_query($conexao, $consulta);
               $params = $_GET;
               $params['limit'] = $limit + $defaultLimit;
               $url = '?' . http_build_query($params) . '#tabela';
-              echo '<a href="' . $url . '" class="btn btn-primary" id="mostrarMais50">Mostrar mais 50</a>';
+              echo '<a href="' . $url . '" class="btn btn-primary mr-2" id="mostrarMais50">Mostrar mais 50</a>';
+            }
+            if ($limit > $defaultLimit) {
+              $params = $_GET;
+              $params['limit'] = $defaultLimit;
+              $url = '?' . http_build_query($params) . '#tabela';
+              echo '<a href="' . $url . '" class="btn btn-secondary" id="mostrarMenos">Mostrar menos</a>';
             }
           ?>
           </div>
