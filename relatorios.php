@@ -117,17 +117,17 @@ if (!isset($_SESSION['id'])) {
 <div class="wrapper">
   <!-- Sidebar -->
   <nav id="sidebar" class="sidebar">
-    <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;"><i class="fa-solid fa-book-open-reader"></i> Bibliotech</a></div>
-    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">← Recolher</button>
+    <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;"><i class="fa-solid fa-book-open-reader" style="margin-right:8px;"></i><span style="letter-spacing:1px;">Bibliotech</span></a></div>
+    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()" style="font-weight: bold; font-size: 1rem;"><i class="fa-solid fa-angles-left mr-2"></i> Recolher Menu</button>
     <ul class="nav-links">
-      <li><a href="relatorios.php">Dashboard</a></li>
-      <li><a href="todosEmprestimos.php">Todos Empréstimos</a></li>
-      <li><a href="listaEmprestimoAtivo.php">Empréstimos Ativos</a></li>
-      <li><a href="emprestimoVence.php">Empréstimos à Vencer</a></li>
-      <li><a href="emprestimoVencido.php">Empréstimos Atrasados</a></li>
+      <li><a href="relatorios.php"><i class="fa-solid fa-chart-bar mr-2"></i>Dashboard</a></li>
+      <li><a href="todosEmprestimos.php"><i class="fa-solid fa-list mr-2"></i>Todos Empréstimos</a></li>
+      <li><a href="listaEmprestimoAtivo.php"><i class="fa-solid fa-check-circle mr-2"></i>Empréstimos Ativos</a></li>
+      <li><a href="emprestimoVence.php"><i class="fa-solid fa-hourglass-half mr-2"></i>Empréstimos à Vencer</a></li>
+      <li><a href="emprestimoVencido.php"><i class="fa-solid fa-exclamation-triangle mr-2"></i>Empréstimos Atrasados</a></li>
     </ul>
     <div class="logout-btn">
-      <a href="logout.php" class="btn btn-danger w-100">🚪 Sair</a>
+      <a href="logout.php" class="btn btn-danger w-100"><i class="fa-solid fa-right-from-bracket mr-2"></i> Sair</a>
     </div>
   </nav>
   <button id="showSidebarBtn" class="show-sidebar-btn" style="left: 4px; top: 18px; right: auto; cursor: pointer;">☰</button>

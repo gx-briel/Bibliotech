@@ -198,15 +198,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="wrapper">
   <!-- Sidebar -->
   <nav id="sidebar" class="sidebar">
-    <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;"><i class="fa-solid fa-book-open-reader"></i> Bibliotech</a></div>
-    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">← Recolher</button>
+    <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;"><i class="fa-solid fa-book-open-reader" style="margin-right:8px;"></i><span style="letter-spacing:1px;">Bibliotech</span></a></div>
+    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()" style="font-weight: bold; font-size: 1rem;"><i class="fa-solid fa-angles-left mr-2"></i> Recolher Menu</button>
     <ul class="nav-links">
-      <li><a href="cadastroCliente.php">Cadastrar Clientes</a></li>
-      <li><a href="cadastroLivro.php">Cadastrar Livro</a></li>
-      <li><a href="criaEmprestimo.php">Criar Empréstimo</a></li>
+      <li><a href="cadastroCliente.php"><i class="fa-solid fa-user-plus mr-2"></i>Cadastrar Clientes</a></li>
+      <li><a href="cadastroLivro.php"><i class="fa-solid fa-book-medical mr-2"></i>Cadastrar Livro</a></li>
+      <li><a href="criaEmprestimo.php"><i class="fa-solid fa-arrow-right-arrow-left mr-2"></i>Criar Empréstimo</a></li>
     </ul>
     <div class="logout-btn">
-      <a href="logout.php" class="btn btn-danger w-100">🚪 Sair</a>
+      <a href="logout.php" class="btn btn-danger w-100"><i class="fa-solid fa-right-from-bracket mr-2"></i> Sair</a>
     </div>
   </nav>
   <button id="showSidebarBtn" class="show-sidebar-btn">☰</button>

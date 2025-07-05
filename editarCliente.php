@@ -139,14 +139,15 @@ $cliente = mysqli_fetch_assoc($resultado);
   <!-- Sidebar -->
   <nav id="sidebar" class="sidebar">
     <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;"><i class="fa-solid fa-book-open-reader" style="margin-right:8px;"></i><span style="letter-spacing:1px;">Bibliotech</span></a></div>
-    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">← Recolher</button>
+    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()" style="font-weight: bold; font-size: 1rem;"><i class="fa-solid fa-angles-left mr-2"></i> Recolher Menu</button>
     <ul class="nav-links">
-      <li><a href="cadastroCliente.php">Cadastrar Clientes</a></li>
-      <li><a href="listaCliente.php">Lista Clientes</a></li>
-      <li><a href="acervo.php">Acervo de Livros</a></li>
+      <li><a href="cadastroCliente.php"><i class="fa-solid fa-user-plus mr-2"></i>Cadastrar Clientes</a></li>
+      <li><a href="listaCliente.php"><i class="fa-solid fa-users mr-2"></i>Lista Clientes</a></li>
+      <li><a href="cadastroLivro.php"><i class="fa-solid fa-book-medical mr-2"></i>Cadastrar Livro</a></li>
+      <li><a href="acervo.php"><i class="fa-solid fa-book mr-2"></i>Acervo de Livros</a></li>
     </ul>
     <div class="logout-btn">
-      <a href="logout.php" class="btn btn-danger w-100">🚪 Sair</a>
+      <a href="logout.php" class="btn btn-danger w-100"><i class="fa-solid fa-right-from-bracket mr-2"></i> Sair</a>
     </div>
   </nav>
   <!-- Botão para mostrar sidebar -->
