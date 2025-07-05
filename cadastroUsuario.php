@@ -153,9 +153,7 @@ $novoUsuario = str_pad($ultimoUsuario + 1, 4, '0', STR_PAD_LEFT); // Gera o pró
     }
   </style>
 </head>
-
 <body>
-
 <div class="wrapper">
   <!-- Sidebar -->
   <nav id="sidebar" class="sidebar">
@@ -256,20 +254,6 @@ $novoUsuario = str_pad($ultimoUsuario + 1, 4, '0', STR_PAD_LEFT); // Gera o pró
     });
   });
 </script>
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <input type="email" class="form-control" id="email" name="email" maxlength="100">
-        </div>
-        <div class="form-group">
-          <label for="nascimento">Data de Nascimento:</label>
-          <input type="date" class="form-control" id="nascimento" name="nascimento">
-        </div>
-        <button type="submit" class="btn btn-info btn-block">Cadastrar Usuário</button>
-        <a href="index.php" class="btn btn-secondary btn-block mt-2">Voltar</a>
-      </form>
-    </div>
-  </div>
-</div>
 
 <script>
   function hideSidebar() {
@@ -281,8 +265,6 @@ $novoUsuario = str_pad($ultimoUsuario + 1, 4, '0', STR_PAD_LEFT); // Gera o pró
     document.getElementById('showSidebarBtn').style.display = 'none';
   }
 </script>
-
-
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -296,6 +278,5 @@ $novoUsuario = str_pad($ultimoUsuario + 1, 4, '0', STR_PAD_LEFT); // Gera o pró
     });
   </script>
 <?php endif; ?>
-
 </body>
 </html>
