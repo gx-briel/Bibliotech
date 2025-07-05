@@ -45,7 +45,6 @@ $consulta .= " LIMIT $limit OFFSET $offset";
 
 // Exportação para Excel (xlsx) deve ser processada antes de qualquer saída HTML
 if (isset($_POST['export_excel'])) {
-    require __DIR__ . '/vendor/autoload.php';
     $exportConsulta = "SELECT emp.id as empId, cli.nomeCliente, li.titulo, emp.criadoEm, li.ID as livroId, emp.ativo, emp.vencimento
             FROM emprestimo as emp
             JOIN clientes as cli ON emp.idCliente = cli.id
@@ -62,28 +61,23 @@ if (isset($_POST['export_excel'])) {
     }
     $exportResult = mysqli_query($conexao, $exportConsulta);
     if ($exportResult) {
-        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->fromArray([
-            'ID', 'Cliente', 'Livro', 'Data de Criação', 'Data para Devolução', 'Ativo'
-        ], NULL, 'A1');
-        $rowNum = 2;
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename="emprestimos_a_vencer.csv"');
+        $output = fopen('php://output', 'w');
+        // Adiciona BOM UTF-8 para Excel reconhecer acentuação
+        fwrite($output, chr(0xEF).chr(0xBB).chr(0xBF));
+        fputcsv($output, ['ID', 'Cliente', 'Livro', 'Data de Criação', 'Data para Devolução', 'Ativo'], ';');
         while ($row = mysqli_fetch_assoc($exportResult)) {
-            $sheet->setCellValue('A' . $rowNum, $row['empId']);
-            $sheet->setCellValue('B' . $rowNum, $row['nomeCliente']);
-            $sheet->setCellValue('C' . $rowNum, $row['titulo']);
-            $sheet->setCellValue('D' . $rowNum, date('d/m/Y', strtotime($row['criadoEm'])));
-            $sheet->setCellValue('E' . $rowNum, date('d/m/Y', strtotime($row['vencimento'])));
-            $sheet->setCellValue('F' . $rowNum, $row['ativo'] == 0 ? 'Não' : 'Sim');
-            $rowNum++;
+            fputcsv($output, [
+                $row['empId'],
+                $row['nomeCliente'],
+                $row['titulo'],
+                date('d/m/Y', strtotime($row['criadoEm'])),
+                date('d/m/Y', strtotime($row['vencimento'])),
+                $row['ativo'] == 0 ? 'Não' : 'Sim'
+            ], ';');
         }
-        foreach (range('A', 'F') as $col) {
-            $sheet->getColumnDimension($col)->setAutoSize(true);
-        }
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="emprestimos_a_vencer.xlsx"');
-        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-        $writer->save('php://output');
+        fclose($output);
         exit;
     }
 }
