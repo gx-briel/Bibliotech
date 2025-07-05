@@ -33,6 +33,17 @@ $resultado = mysqli_stmt_get_result($stmt);
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
+    /* Ajuste de largura para colunas de CPF e Telefone */
+    .table th.cpf-col, .table td.cpf-col {
+      min-width: 140px;
+      max-width: 180px;
+      white-space: nowrap;
+    }
+    .table th.tel-col, .table td.tel-col {
+      min-width: 130px;
+      max-width: 170px;
+      white-space: nowrap;
+    }
     body {
       background-color: rgb(238, 255, 235);
       margin: 0;
@@ -124,8 +135,15 @@ $resultado = mysqli_stmt_get_result($stmt);
     .sidebar.hidden ~ .content {
       margin-left: 0;
     }
-    .table {
-      margin-top: 20px;
+    .table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    table {
+      width: 100%;
+    }
+    .table-striped tbody tr:nth-of-type(odd) {
+      background-color: rgba(0, 0, 0, 0.05);
     }
     .table th, .table td {
       border: 1px solid #ccc !important;
@@ -265,16 +283,17 @@ $resultado = mysqli_stmt_get_result($stmt);
           </div>
         </div>
       </form>
-      <div class="table-responsive">
-        <table class="table table-striped table-bordered">
+      <div class="table-container table-responsive mt-4">
+        <table class="table table-striped mb-0">
           <thead>
             <tr>
-              <th>Código</th>
+              <th>ID</th>
               <th>Nome Cliente</th>
-              <th>CPF</th>
-              <th>Telefone</th>
+              <th class="cpf-col">CPF</th>
+              <th class="tel-col">Telefone</th>
               <th>Endereço</th>
-              <th>Ações</th>
+              <th>Editar</th>
+              <th>Remover</th>
             </tr>
           </thead>
           <tbody>
@@ -285,8 +304,8 @@ $resultado = mysqli_stmt_get_result($stmt);
             <tr>
               <td><?= $clientes['id']; ?></td>
               <td><?= $clientes['nomeCliente']; ?></td>
-              <td class="cpf"><?= $clientes['cpf']; ?></td>
-              <td class="telefone"><?= $clientes['telefone']; ?></td>
+              <td class="cpf-col cpf"><?= $clientes['cpf']; ?></td>
+              <td class="tel-col telefone"><?= $clientes['telefone']; ?></td>
               <td>
                 <strong>Rua:</strong> <?= $clientes['rua']; ?>, Nº <?= $clientes['numero']; ?><br>
                 <strong>Bairro:</strong> <?= $clientes['bairro']; ?><br>
@@ -294,19 +313,30 @@ $resultado = mysqli_stmt_get_result($stmt);
                 <strong>CEP:</strong> <?= $clientes['cep']; ?>
               </td>
               <td>
-                <form id="formRemove<?= $clientes['id']; ?>" method="POST" action="removeCliente.php">
+                <a href="editarCliente.php?id=<?= $clientes['id']; ?>" class="btn btn-primary btn-sm text-dark">Editar</a>
+              </td>
+              <td>
+                <form id="formRemove<?= $clientes['id']; ?>" method="POST" action="removeCliente.php" style="display:inline;">
                   <input type="hidden" name="id" value="<?= $clientes['id']; ?>">
-                  <div class="btn-group">
-                    <a href="editarCliente.php?id=<?= $clientes['id']; ?>" class="btn btn-primary btn-sm text-dark">Editar</a>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="mostrarModal(<?= $clientes['id']; ?>)">Remover</button>
-                  </div>
+                  <button type="button" class="btn btn-danger btn-sm" onclick="mostrarModal(<?= $clientes['id']; ?>)">Remover</button>
                 </form>
+                <!-- Modal de confirmação -->
+                <div class="modal" id="modalRemover<?= $clientes['id']; ?>">
+                  <div class="modal-content">
+                    <div class="modal-header">Remover Cliente</div>
+                    <div class="modal-body">Tem certeza que deseja remover este cliente?</div>
+                    <div class="modal-footer">
+                      <button class="btn btn-secondary" onclick="fecharModal(<?= $clientes['id']; ?>)">Cancelar</button>
+                      <button class="btn btn-danger" onclick="confirmarRemocao(<?= $clientes['id']; ?>)">Remover</button>
+                    </div>
+                  </div>
+                </div>
               </td>
             </tr>
             <?php
               }
             } else {
-              echo "<tr><td colspan='6' class='text-center'>Nenhum Cliente Cadastrado.</td></tr>";
+              echo "<tr><td colspan='7' class='text-center'>Nenhum Cliente Cadastrado.</td></tr>";
             }
             ?>
           </tbody>

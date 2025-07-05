@@ -230,11 +230,7 @@ $cliente = mysqli_fetch_assoc($resultado);
   </div>
 </div>
 
-<footer class="footer bg-light mt-5">
-  <div class="container text-center">
-    <span class="text-muted">© 2024 Bibliotech. Todos os direitos reservados.</span>
-  </div>
-</footer>
+
 
 <script>
   function mostrarModal() {
