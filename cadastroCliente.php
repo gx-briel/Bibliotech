@@ -125,12 +125,12 @@ if (!isset($_SESSION['id'])) {
   <!-- Sidebar -->
 <nav id="sidebar" class="sidebar">
 <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;"><i class="fa-solid fa-book-open-reader" style="margin-right:8px;"></i><span style="letter-spacing:1px">Bibliotech</span></a></div>   
-<button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()">← Recolher</button>
+<button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()" style="font-weight: bold; font-size: 1rem;"><i class="fa-solid fa-angles-left mr-2"></i> Recolher Menu</button>
     <ul class="nav-links">
-      <li><a href="listaCliente.php">Visualizar Clientes</a></li>
-      <li><a href="cadastroLivro.php">Cadastrar Livro</a></li>
-      <li><a href="acervo.php">Acervo de Livros</a></li>
-      <li><a href="criaEmprestimo.php">Criar Empréstimo</a></li>
+      <li><a href="listaCliente.php"><i class="fa-solid fa-users mr-2"></i>Visualizar Clientes</a></li>
+      <li><a href="cadastroLivro.php"><i class="fa-solid fa-book-medical mr-2"></i>Cadastrar Livro</a></li>
+      <li><a href="acervo.php"><i class="fa-solid fa-book mr-2"></i>Acervo de Livros</a></li>
+      <li><a href="criaEmprestimo.php"><i class="fa-solid fa-arrow-right-arrow-left mr-2"></i>Criar Empréstimo</a></li>
     </ul>
     <div class="logout-btn">
       <a href="logout.php" class="btn btn-danger w-100"><i class="fa-solid fa-right-from-bracket mr-2"></i> Sair</a>
