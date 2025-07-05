@@ -146,7 +146,7 @@ $cliente = mysqli_fetch_assoc($resultado);
       <li><a href="acervo.php">Acervo de Livros</a></li>
     </ul>
     <div class="logout-btn">
-      <a href="logout.php" class="btn btn-danger w-100">🚪 Sair</a>
+      <a href="logout.php" class="btn btn-danger w-100"><i class="fa-solid fa-right-from-bracket mr-2"></i> Sair</a>
     </div>
   </nav>
   <!-- Botão para mostrar sidebar -->

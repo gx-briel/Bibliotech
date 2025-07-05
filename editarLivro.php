@@ -166,7 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <li><a href="listaCliente.php">Lista Clientes</a></li>
     </ul>
     <div class="logout-btn">
-      <a href="logout.php" class="btn btn-danger w-100">🚪 Sair</a>
+      <a href="logout.php" class="btn btn-danger w-100"><i class="fa-solid fa-right-from-bracket mr-2"></i> Sair</a>
     </div>
   </nav>
   <!-- Botão para mostrar sidebar -->

@@ -174,7 +174,7 @@ $totalVenc = $row3['totalVencido'] ?? 0;
 
     <!-- Botão de logout no rodapé -->
     <div class="logout-btn">
-      <a href="logout.php" class="btn btn-danger w-100">🚪 Sair</a>
+      <a href="logout.php" class="btn btn-danger w-100"><i class="fa-solid fa-right-from-bracket mr-2"></i> Sair</a>
     </div>
   </nav>
 
