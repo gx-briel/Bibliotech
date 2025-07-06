@@ -29,7 +29,8 @@ $defaultLimit = 50;
 $limit = isset($_GET['limit']) && is_numeric($_GET['limit']) && $_GET['limit'] > 0 ? (int)$_GET['limit'] : $defaultLimit;
 $offset = 0; // Sempre começa do início
 
-$consulta = "SELECT emp.id as empId, cli.nomeCliente, li.titulo, emp.criadoEm, li.ID as livroId, emp.ativo, emp.vencimento
+// Adiciona cálculo de dias em atraso
+$consulta = "SELECT emp.id as empId, cli.nomeCliente, li.titulo, emp.criadoEm, li.ID as livroId, emp.ativo, emp.vencimento, DATEDIFF(CURDATE(), emp.vencimento) as diasAtraso
              FROM emprestimo as emp 
              JOIN clientes as cli on emp.idCliente = cli.id 
              JOIN livros as li on emp.idLivro = li.ID 
@@ -47,7 +48,7 @@ $consulta .= " LIMIT $limit OFFSET $offset";
 
 // Exportação para Excel (xlsx) deve ser processada antes de qualquer saída HTML
 if (isset($_POST['export_excel'])) {
-    $exportConsulta = "SELECT emp.id as empId, cli.nomeCliente, li.titulo, emp.criadoEm, li.ID as livroId, emp.ativo, emp.vencimento
+    $exportConsulta = "SELECT emp.id as empId, cli.nomeCliente, li.titulo, emp.criadoEm, li.ID as livroId, emp.ativo, emp.vencimento, DATEDIFF(CURDATE(), emp.vencimento) as diasAtraso
              FROM emprestimo as emp 
              JOIN clientes as cli on emp.idCliente = cli.id 
              JOIN livros as li on emp.idLivro = li.ID 
@@ -68,7 +69,7 @@ if (isset($_POST['export_excel'])) {
         $output = fopen('php://output', 'w');
         // Adiciona BOM UTF-8 para Excel reconhecer acentuação
         fwrite($output, chr(0xEF).chr(0xBB).chr(0xBF));
-        fputcsv($output, ['ID', 'Cliente', 'Livro', 'Data de Criação', 'Data para Devolução', 'Ativo'], ';');
+        fputcsv($output, ['ID', 'Cliente', 'Livro', 'Data de Criação', 'Data para Devolução', 'Dias Atraso', 'Ativo'], ';');
         while ($row = mysqli_fetch_assoc($exportResult)) {
             fputcsv($output, [
                 $row['empId'],
@@ -76,6 +77,7 @@ if (isset($_POST['export_excel'])) {
                 $row['titulo'],
                 date('d/m/Y', strtotime($row['criadoEm'])),
                 date('d/m/Y', strtotime($row['vencimento'])),
+                $row['diasAtraso'],
                 $row['ativo'] == 0 ? 'Não' : 'Sim'
             ], ';');
         }
@@ -103,10 +105,10 @@ $executaConsulta = mysqli_query($conexao, $consulta);
       overflow-x: hidden;
     }
     .container, .container-fluid {
-      max-width: 1100px;
+      max-width: 100vw;
       margin: 40px auto 0 auto;
-      padding-left: 24px;
-      padding-right: 24px;
+      padding-left: 8px;
+      padding-right: 8px;
     }
     h2, h2.text-center {
       text-align: center;
@@ -208,6 +210,14 @@ $executaConsulta = mysqli_query($conexao, $consulta);
         z-index: 999;
       }
     }
+
+    /* Delimitador vertical para cada coluna da tabela */
+    .tabela-delimitada th, .tabela-delimitada td {
+      border-right: 2px solid #555;
+    }
+    .tabela-delimitada th:last-child, .tabela-delimitada td:last-child {
+      border-right: none;
+    }
   </style>
 </head>
 <body>
@@ -246,7 +256,7 @@ $executaConsulta = mysqli_query($conexao, $consulta);
         </div>
       </form>
       <div class="table-responsive mt-4">
-        <table class="table table-striped mb-0" id="tabela">
+        <table class="table table-striped mb-0 tabela-delimitada" id="tabela" style="width:100%; table-layout:auto;">
           <thead class="thead-dark">
             <tr>
               <?php
@@ -279,7 +289,7 @@ $executaConsulta = mysqli_query($conexao, $consulta);
               <th><?= sortLinkVencido('Livro', 'titulo', $order, $dir) ?></th>
               <th><?= sortLinkVencido('Data de Criação', 'criadoEm', $order, $dir) ?></th>
               <th><?= sortLinkVencido('Data para Devolução', 'vencimento', $order, $dir) ?></th>
-              <th><?= sortLinkVencido('Ativo', 'ativo', $order, $dir) ?></th>
+              <th>Dias Atraso</th>
               <th>Devolver</th>
               <th>Renovar</th>
             </tr>
@@ -290,13 +300,13 @@ $executaConsulta = mysqli_query($conexao, $consulta);
             if ($numRows > 0) {
                 while ($emprestimos = mysqli_fetch_assoc($executaConsulta)) {
             ?>
-              <tr>
+            <tr>
                 <td><?= $emprestimos['empId']; ?></td>
                 <td><?= $emprestimos['nomeCliente']; ?></td>
                 <td><?= $emprestimos['titulo']; ?></td>
                 <td><?= date('d/m/Y', strtotime($emprestimos['criadoEm'])); ?></td>
                 <td><?= date('d/m/Y', strtotime($emprestimos['vencimento'])); ?></td>
-                <td><?= $emprestimos['ativo'] == 0 ? 'Não' : 'Sim'; ?></td>
+                <td><?= $emprestimos['diasAtraso']; ?></td>
                 <td>
                   <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalDevolucao" data-empid="<?= $emprestimos['empId']; ?>">Devolver</button>
                 </td>
