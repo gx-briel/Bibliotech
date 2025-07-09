@@ -97,6 +97,9 @@ $executaConsulta = mysqli_query($conexao, $consulta);
   <title>Empréstimos Atrasados</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <?php include 'components/sidebar-style.php'; ?>
+  
   <style>
     body {
       background-color: rgb(238, 255, 235);
@@ -114,40 +117,6 @@ $executaConsulta = mysqli_query($conexao, $consulta);
       text-align: center;
       margin-bottom: 2rem;
     }
-    .wrapper {
-      display: flex;
-    }
-    .sidebar {
-      width: 250px;
-      background: linear-gradient(180deg, #1c0e3f 60%, #e8f5e9 100%);
-      color: white;
-      min-height: 100vh;
-      transition: transform 0.3s ease;
-      position: fixed;
-      z-index: 999;
-    }
-    .sidebar.hidden {
-      transform: translateX(-100%);
-    }
-    .sidebar .sidebar-header {
-      padding: 1rem;
-      font-size: 1.5rem;
-      font-weight: bold;
-      background-color: #150a2c;
-      text-align: center;
-    }
-    .nav-links {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .nav-links li {
-      padding: 0.75rem 1rem;
-    }
-    .nav-links li a {
-      color: white;
-      font-weight: bold;
-      text-decoration: none;
       display: block;
     }
     .nav-links li a:hover {
@@ -178,37 +147,11 @@ $executaConsulta = mysqli_query($conexao, $consulta);
       background-color: #1c0e3f;
       color: white;
       border: none;
-      border-radius: 4px;
-      padding: 8px 12px;
-      font-size: 1.2rem;
-      display: none;
-    }
-    .sidebar.hidden ~ .show-sidebar-btn {
-      display: block;
-    }
-    .content {
-      margin-left: 250px;
-      flex: 1;
-      transition: margin-left 0.3s;
-    }
-    .sidebar.hidden ~ .content {
-      margin-left: 0;
-    }
     .btn-info, .btn-warning, .btn-danger {
       color: white;
     }
     .ff2 {
       color: #212529;
-    }
-    @media (max-width: 768px) {
-      .content {
-        margin-left: 0 !important;
-      }
-      .sidebar {
-        position: fixed;
-        min-height: 100vh;
-        z-index: 999;
-      }
     }
 
     /* Delimitador vertical para cada coluna da tabela */
@@ -222,24 +165,8 @@ $executaConsulta = mysqli_query($conexao, $consulta);
 </head>
 <body>
 
+<?php include 'components/sidebar-logado.php'; ?>
 
-<div class="wrapper">
-  <!-- Sidebar -->
-  <nav id="sidebar" class="sidebar">
-    <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;"><i class="fa-solid fa-book-open-reader" style="margin-right:8px;"></i><span style="letter-spacing:1px;">Bibliotech</span></a></div>
-    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()" style="font-weight: bold; font-size: 1rem;"><i class="fa-solid fa-angles-left mr-2"></i> Recolher Menu</button>
-    <ul class="nav-links">
-      <li><a href="relatorios.php"><i class="fa-solid fa-chart-bar mr-2"></i>Dashboard</a></li>
-      <li><a href="todosEmprestimos.php"><i class="fa-solid fa-list mr-2"></i>Todos Empréstimos</a></li>
-      <li><a href="listaEmprestimoAtivo.php"><i class="fa-solid fa-check-circle mr-2"></i>Empréstimos Ativos</a></li>
-      <li><a href="emprestimoVence.php"><i class="fa-solid fa-hourglass-half mr-2"></i>Empréstimos à Vencer</a></li>
-      <li><a href="emprestimoVencido.php"><i class="fa-solid fa-exclamation-triangle mr-2"></i>Empréstimos Atrasados</a></li>
-    </ul>
-    <div class="logout-btn">
-      <a href="logout.php" class="btn btn-danger w-100"><i class="fa-solid fa-right-from-bracket mr-2"></i> Sair</a>
-    </div>
-  </nav>
-  <button id="showSidebarBtn" class="show-sidebar-btn" style="left: 4px; top: 18px; right: auto; cursor: pointer;">☰</button>
   <!-- Conteúdo principal -->
   <div class="content">
     <div class="container mt-5">
@@ -349,17 +276,6 @@ $executaConsulta = mysqli_query($conexao, $consulta);
     </div>
   </div>
 </div>
-<script>
-  function hideSidebar() {
-    document.getElementById('sidebar').classList.add('hidden');
-    document.getElementById('showSidebarBtn').style.display = 'block';
-  }
-  function showSidebar() {
-    document.getElementById('sidebar').classList.remove('hidden');
-    document.getElementById('showSidebarBtn').style.display = 'none';
-  }
-  document.getElementById('showSidebarBtn').addEventListener('click', showSidebar);
-</script>
 
 <!-- MODAL DEVOLUÇÃO -->
 <div class="modal fade" id="modalDevolucao" tabindex="-1" role="dialog" aria-labelledby="modalDevolucaoLabel" aria-hidden="true">
@@ -515,6 +431,8 @@ $executaConsulta = mysqli_query($conexao, $consulta);
     });
   });
 </script>
+
+<?php include 'components/sidebar-script.php'; ?>
 
 </body>
 </html>

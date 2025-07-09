@@ -32,6 +32,9 @@ $resultado = mysqli_stmt_get_result($stmt);
   <title>Listagem de Clientes</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <?php include 'components/sidebar-style.php'; ?>
+  
   <style>
     /* Ajuste de largura para colunas de CPF e Telefone */
     .table th.cpf-col, .table td.cpf-col {
@@ -52,78 +55,6 @@ $resultado = mysqli_stmt_get_result($stmt);
     }
     .wrapper {
       display: flex;
-    }
-    .sidebar {
-      width: 250px;
-      background: linear-gradient(180deg, #1c0e3f 60%, #e8f5e9 100%);
-      color: white;
-      min-height: 100vh;
-      transition: transform 0.3s ease;
-      position: fixed;
-      z-index: 999;
-      box-shadow: 2px 0 8px rgba(28,14,63,0.08);
-    }
-    .sidebar.hidden {
-      transform: translateX(-100%);
-    }
-    .sidebar .sidebar-header {
-      padding: 1rem;
-      font-size: 1.5rem;
-      font-weight: bold;
-      background-color: #150a2c;
-      text-align: center;
-      letter-spacing: 1px;
-    }
-    .nav-links {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .nav-links li {
-      padding: 0.75rem 1rem;
-    }
-    .nav-links li a {
-      color: white;
-      font-weight: bold;
-      text-decoration: none;
-      display: block;
-      transition: color 0.2s;
-    }
-    .nav-links li a:hover {
-      color: #ffcc00;
-      text-decoration: underline;
-    }
-    .toggle-btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.1rem;
-      padding: 0.5rem 1rem;
-      text-align: left;
-      width: 100%;
-      cursor: pointer;
-    }
-    .logout-btn {
-      position: absolute;
-      bottom: 1rem;
-      left: 1rem;
-      right: 1rem;
-    }
-    .show-sidebar-btn {
-      position: fixed;
-      top: 15px;
-      left: 15px;
-      z-index: 1000;
-      background-color: #1c0e3f;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 8px 12px;
-      font-size: 1.2rem;
-      display: none;
-    }
-    .sidebar.hidden ~ .show-sidebar-btn {
-      display: block;
     }
     .content {
       margin-left: 250px;
@@ -208,9 +139,6 @@ $resultado = mysqli_stmt_get_result($stmt);
       .content {
         margin-left: 0 !important;
       }
-      .sidebar {
-        width: 200px;
-      }
       .table-responsive {
         overflow-x: auto;
       }
@@ -256,22 +184,9 @@ $resultado = mysqli_stmt_get_result($stmt);
 <body>
 
 
-<div class="wrapper">
-  <!-- Sidebar -->
-  <nav id="sidebar" class="sidebar">
-    <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;"><i class="fa-solid fa-book-open-reader" style="margin-right:8px;"></i><span style="letter-spacing:1px;">Bibliotech</span></a></div>
-    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()" style="font-weight: bold; font-size: 1rem;"><i class="fa-solid fa-angles-left mr-2"></i> Recolher Menu</button>
-    <ul class="nav-links">
-      <li><a href="cadastroCliente.php"><i class="fa-solid fa-user-plus mr-2"></i>Cadastrar Clientes</a></li>
-      <li><a href="cadastroLivro.php"><i class="fa-solid fa-book-medical mr-2"></i>Cadastrar Livro</a></li>
-      <li><a href="acervo.php"><i class="fa-solid fa-book mr-2"></i>Acervo de Livros</a></li>
-      <li><a href="criaEmprestimo.php"><i class="fa-solid fa-arrow-right-arrow-left mr-2"></i>Criar Empréstimo</a></li>
-    </ul>
-    <div class="logout-btn">
-      <a href="logout.php" class="btn btn-danger w-100"><i class="fa-solid fa-right-from-bracket mr-2"></i> Sair</a>
-    </div>
-  </nav>
-  <button id="showSidebarBtn" class="show-sidebar-btn">☰</button>
+<?php include 'components/sidebar-logado.php'; ?>
+
+  <!-- Conteúdo principal -->
   <div class="content">
     <div class="container mt-5">
       <h2 class="mb-4">Listagem de Clientes</h2>
@@ -346,17 +261,7 @@ $resultado = mysqli_stmt_get_result($stmt);
   </div>
 </div>
 
-<script>
-  function hideSidebar() {
-    document.getElementById('sidebar').classList.add('hidden');
-    document.getElementById('showSidebarBtn').style.display = 'block';
-  }
-  function showSidebar() {
-    document.getElementById('sidebar').classList.remove('hidden');
-    document.getElementById('showSidebarBtn').style.display = 'none';
-  }
-  document.getElementById('showSidebarBtn').addEventListener('click', showSidebar);
-</script>
+<?php include 'components/sidebar-script.php'; ?>
 
 <div id="modal" class="modal">
   <div class="modal-content">

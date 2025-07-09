@@ -95,6 +95,9 @@ $executaConsulta = mysqli_query($conexao, $consulta);
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  
+  <?php include 'components/sidebar-style.php'; ?>
+  
   <style>
     body {
       background-color: rgb(238, 255, 235);
@@ -137,44 +140,6 @@ $executaConsulta = mysqli_query($conexao, $consulta);
     .sidebar.hidden {
       transform: translateX(-100%);
     }
-    .sidebar .sidebar-header {
-      padding: 1rem;
-      font-size: 1.5rem;
-      font-weight: bold;
-      background-color: #150a2c;
-      text-align: center;
-    }
-    .nav-links {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .nav-links li {
-      padding: 0.75rem 1rem;
-    }
-    .nav-links li a {
-      color: white;
-      font-weight: bold;
-      text-decoration: none;
-      display: block;
-    }
-    .nav-links li a:hover {
-      color: #ffcc00;
-      text-decoration: underline;
-    }
-    .toggle-btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.1rem;
-      padding: 0.5rem 1rem;
-      text-align: left;
-      width: 100%;
-      cursor: pointer;
-    }
-    .logout-btn {
-      position: absolute;
-      bottom: 1rem;
       left: 1rem;
       right: 1rem;
     }
@@ -222,25 +187,8 @@ $executaConsulta = mysqli_query($conexao, $consulta);
 </head>
 <body>
 
+<?php include 'components/sidebar-logado.php'; ?>
 
-<div class="wrapper">
-  <!-- Sidebar -->
-  <nav id="sidebar" class="sidebar">
-    <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;"><i class="fa-solid fa-book-open-reader" style="margin-right:8px;"></i><span style="letter-spacing:1px;">Bibliotech</span></a></div>
-    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()" style="font-weight: bold; font-size: 1rem;"><i class="fa-solid fa-angles-left mr-2"></i> Recolher Menu</button>
-    <ul class="nav-links">
-      <li><a href="relatorios.php"><i class="fa-solid fa-chart-bar mr-2"></i>Dashboard</a></li>
-      <li><a href="todosEmprestimos.php"><i class="fa-solid fa-list mr-2"></i>Todos Empréstimos</a></li>
-      <li><a href="listaEmprestimoAtivo.php"><i class="fa-solid fa-check-circle mr-2"></i>Empréstimos Ativos</a></li>
-      <li><a href="emprestimoVence.php"><i class="fa-solid fa-hourglass-half mr-2"></i>Empréstimos à Vencer</a></li>
-      <li><a href="emprestimoVencido.php"><i class="fa-solid fa-exclamation-triangle mr-2"></i>Empréstimos Atrasados</a></li>
-    </ul>
-    <div class="logout-btn">
-      <a href="logout.php" class="btn btn-danger w-100"><i class="fa-solid fa-right-from-bracket mr-2"></i> Sair</a>
-    </div>
-  </nav>
-  <button id="showSidebarBtn" class="show-sidebar-btn" style="left: 4px; top: 18px; right: auto; cursor: pointer;">☰</button>
-  <!-- Conteúdo principal -->
   <div class="content">
 
 
@@ -424,21 +372,10 @@ $executaConsulta = mysqli_query($conexao, $consulta);
   </div>
 </div>
 
-
-
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<?php include 'components/sidebar-script.php'; ?>
 <script>
-  function hideSidebar() {
-    document.getElementById('sidebar').classList.add('hidden');
-    document.getElementById('showSidebarBtn').style.display = 'block';
-  }
-  function showSidebar() {
-    document.getElementById('sidebar').classList.remove('hidden');
-    document.getElementById('showSidebarBtn').style.display = 'none';
-  }
-  document.getElementById('showSidebarBtn').addEventListener('click', showSidebar);
-
   $(document).ready(function() {
     $(document).on('click', '#mostrarMais50', function() {
       sessionStorage.setItem('scrollPosEmpAtivo', window.scrollY);

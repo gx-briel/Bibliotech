@@ -59,6 +59,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <?php include 'components/sidebar-style.php'; ?>
+    
     <style>
       body {
         background-color: rgb(216, 107, 107);
@@ -67,37 +70,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         padding-bottom: 80px;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       }
-      .wrapper {
+      
+      .content {
         display: flex;
-      }
-      .sidebar {
-        width: 250px;
-        background: linear-gradient(180deg, #1c0e3f 60%, #e8f5e9 100%);
-        color: white;
+        justify-content: center;
+        align-items: center;
         min-height: 100vh;
-        transition: transform 0.3s ease;
-        position: fixed;
-        z-index: 999;
       }
-      .sidebar.hidden {
-        transform: translateX(-100%);
-      }
-      .sidebar .sidebar-header {
-        padding: 1rem;
-        font-size: 1.5rem;
-        font-weight: bold;
-        background-color: #150a2c;
-        text-align: center;
-      }
-      .toggle-btn {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 1.1rem;
-        padding: 0.5rem 1rem;
-        text-align: left;
-        width: 100%;
-        cursor: pointer;
       }
       .nav-links {
         list-style: none;
@@ -123,35 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       .nav-links li a:hover {
         color: #ffcc00;
       }
-      .show-sidebar-btn {
-        position: fixed;
-        top: 15px;
-        left: 15px;
-        z-index: 1000;
-        background-color: #1c0e3f;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 8px 12px;
-        font-size: 1.2rem;
-        display: none;
-      }
-      .sidebar.hidden ~ .show-sidebar-btn {
-        display: block;
-      }
-      .content {
-        margin-left: 250px;
-        padding: 2rem;
-        flex: 1;
-        transition: margin-left 0.3s;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-      }
-      .sidebar.hidden ~ .content {
-        margin-left: 0;
-      }
+      
       .login-card {
         background-color: #fff;
         padding: 40px 30px 30px 30px;
@@ -210,15 +161,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
 
 
-<div class="wrapper">
-  <!-- Sidebar -->
-  <nav id="sidebar" class="sidebar">
-    <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;"><i class="fa-solid fa-book-open-reader" style="margin-right:8px;"></i><span style="letter-spacing:1px;">Bibliotech</span></a></div>
-    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()" style="font-weight: bold; font-size: 1rem;"><i class="fa-solid fa-angles-left mr-2"></i> Recolher Menu</button>
-    <ul class="nav-links">
-      <li><a href="login.php"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
-      <li><a href="cadastroUsuario.php"><i class="fa-solid fa-user-plus"></i> Cadastrar Usuário</a></li>
-    </ul>
+<?php include 'components/sidebar-logoff.php'; ?>
+
+  <!-- Conteúdo principal -->
+  <div class="content">
   </nav>
   <!-- Botão para mostrar sidebar -->
   <button id="showSidebarBtn" class="show-sidebar-btn" onclick="showSidebar()">☰</button>
@@ -411,9 +357,8 @@ $(document).ready(function() {
         });
     });
 });
-
-
 </script>
 
+<?php include 'components/sidebar-script.php'; ?>
 </body>
 </html>
