@@ -59,86 +59,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <?php include 'components/sidebar-style.php'; ?>
+    
     <style>
       body {
-        background-color: rgb(216, 107, 107);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         margin: 0;
-        overflow-x: hidden;
-        padding-bottom: 80px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      }
-      .wrapper {
-        display: flex;
-      }
-      .sidebar {
-        width: 250px;
-        background: linear-gradient(180deg, #1c0e3f 60%, #e8f5e9 100%);
-        color: white;
-        min-height: 100vh;
-        transition: transform 0.3s ease;
-        position: fixed;
-        z-index: 999;
-      }
-      .sidebar.hidden {
-        transform: translateX(-100%);
-      }
-      .sidebar .sidebar-header {
-        padding: 1rem;
-        font-size: 1.5rem;
-        font-weight: bold;
-        background-color: #150a2c;
-        text-align: center;
-      }
-      .toggle-btn {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 1.1rem;
-        padding: 0.5rem 1rem;
-        text-align: left;
-        width: 100%;
-        cursor: pointer;
-      }
-      .nav-links {
-        list-style: none;
         padding: 0;
-        margin: 0;
+        overflow: hidden;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        height: 100vh;
       }
-      .nav-links li {
-        padding: 0.75rem 1rem;
-        display: flex;
-        align-items: center;
-      }
-      .nav-links li a {
-        color: white;
-        font-weight: bold;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-      }
-      .nav-links li a i {
-        margin-right: 8px;
-        font-size: 1.2rem;
-      }
-      .nav-links li a:hover {
-        color: #ffcc00;
-      }
-      .show-sidebar-btn {
-        position: fixed;
-        top: 15px;
-        left: 15px;
-        z-index: 1000;
-        background-color: #1c0e3f;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 8px 12px;
-        font-size: 1.2rem;
-        display: none;
-      }
-      .sidebar.hidden ~ .show-sidebar-btn {
-        display: block;
-      }
+      
       .content {
         margin-left: 250px;
         padding: 2rem;
@@ -147,85 +79,227 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: 100vh;
+        height: 100vh;
+        width: calc(100vw - 250px);
       }
-      .sidebar.hidden ~ .content {
-        margin-left: 0;
+      
+      .content.sidebar-hidden {
+        margin-left: 0 !important;
+        width: 100vw !important;
+        transition: margin-left 0.3s ease, width 0.3s ease;
       }
+      
       .login-card {
-        background-color: #fff;
-        padding: 40px 30px 30px 30px;
-        border-radius: 10px;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-        max-width: 400px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 50px 40px;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        max-width: 450px;
         width: 100%;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.2);
       }
+  
+      .login-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #1c0e3f, #667eea, #764ba2);
+        border-radius: 20px 20px 0 0;
+      }
+      
       .login-card h1 {
-        font-size: 1.8em;
-        margin-bottom: 20px;
+        font-size: 2.2em;
+        margin-bottom: 30px;
         color: #1c0e3f;
-        font-weight: bold;
+        font-weight: 700;
+        text-align: center;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: relative;
       }
+      
+      .login-card h1::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, #1c0e3f, #667eea);
+        border-radius: 2px;
+      }
+      
+      .form-group {
+        margin-bottom: 25px;
+        position: relative;
+      }
+      
+      .form-group label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+        display: block;
+      }
+      
       .form-control {
-        border-radius: 8px;
+        border-radius: 12px;
         box-shadow: none;
-        margin-bottom: 20px;
-        border: 1px solid #ddd;
-        padding: 12px;
+        border: 2px solid #e9ecef;
+        padding: 15px 20px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.9);
       }
-      .btn {
-        transition: background-color 0.3s ease, transform 0.2s ease;
+      
+      .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        background: rgba(255, 255, 255, 1);
+        outline: none;
       }
-      .btn:hover {
-        transform: translateY(-2px);
-      }
+      
+      
       .btn-primary {
-        background-color: #1c0e3f;
+        background: linear-gradient(135deg, #1c0e3f, #667eea);
         border: none;
+        position: relative;
+        overflow: hidden;
       }
+      
+      .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        transition: left 0.5s;
+      }
+      
+      .btn-primary:hover::before {
+        left: 100%;
+      }
+      
       .btn-primary:hover {
-        background-color: #28a745 !important; /* verde Bootstrap */
-        color: #fff !important;
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: #fff;
       }
+      
+      .btn-link {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+      
+      .btn-link:hover {
+        color: #1c0e3f;
+        text-decoration: underline;
+      }
+      
+      .toggle-password {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #888;
+        z-index: 10;
+        transition: color 0.3s ease;
+      }
+      
+      .toggle-password:hover {
+        color: #667eea;
+      }
+      
+      .login-footer {
+        text-align: center;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+      }
+      
       .modal-content {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+      
+      .modal-header {
+        background: linear-gradient(135deg, #1c0e3f, #667eea);
+        color: white;
+        border-radius: 15px 15px 0 0;
+      }
+      
+      .modal-footer .btn-secondary {
+        background-color: #6c757d;
+        border: none;
         border-radius: 8px;
       }
-      .modal-header {
-        background-color: #1c0e3f;
-        color: white;
+      
+      /* Animação de entrada */
+      .login-card {
+        animation: slideUp 0.6s ease-out;
       }
-      .modal-footer .btn-secondary {
-        background-color: #ddd;
+      
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
+      
       @media (max-width: 768px) {
         .content {
           margin-left: 0 !important;
+          padding: 1rem;
+          width: 100vw !important;
         }
+        
+        .content.sidebar-hidden {
+          margin-left: 0 !important;
+          width: 100vw !important;
+        }
+        
         .login-card {
-          padding: 30px 10px;
+          padding: 40px 30px;
+          margin: 20px 0;
+          max-width: 100%;
+        }
+        
+        .login-card h1 {
+          font-size: 1.8em;
+        }
+        
+        .form-control {
+          padding: 12px 16px;
+        }
+        
+        .btn {
+          padding: 12px 24px;
+          font-size: 14px;
         }
       }
     </style>
 </head>
+
 <body>
+<?php include 'components/sidebar-logoff.php'; ?>
 
-
-<div class="wrapper">
-  <!-- Sidebar -->
-  <nav id="sidebar" class="sidebar">
-    <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;"><i class="fa-solid fa-book-open-reader" style="margin-right:8px;"></i><span style="letter-spacing:1px;">Bibliotech</span></a></div>
-    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()" style="font-weight: bold; font-size: 1rem;"><i class="fa-solid fa-angles-left mr-2"></i> Recolher Menu</button>
-    <ul class="nav-links">
-      <li><a href="login.php"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
-      <li><a href="cadastroUsuario.php"><i class="fa-solid fa-user-plus"></i> Cadastrar Usuário</a></li>
-    </ul>
-  </nav>
-  <!-- Botão para mostrar sidebar -->
-  <button id="showSidebarBtn" class="show-sidebar-btn" onclick="showSidebar()">☰</button>
-  <!-- Conteúdo principal -->
   <div class="content">
     <div class="login-card">
-      <h1 class="text-center">Acesse sua conta</h1>
+      <h1>Acesse sua conta</h1>
       <form id="loginForm">
         <div class="form-group">
           <label for="usuario">Usuário</label>
@@ -234,44 +308,86 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="form-group">
           <label for="senha">Senha</label>
           <div style="position: relative;">
-            <input type="password" class="form-control" id="senha" name="senha" placeholder="Informe sua senha" maxlength="20" required style="padding-right: 40px;">
-            <span class="toggle-password" style="position: absolute; right: 16px; top: 0; bottom: 0; display: flex; align-items: center; cursor: pointer; color: #888; z-index: 10;">
+            <input type="password" class="form-control" id="senha" name="senha" placeholder="Informe sua senha" maxlength="20" required>
+            <span class="toggle-password">
               <i class="fa-solid fa-eye"></i>
             </span>
           </div>
         </div>
+        <button type="submit" class="btn btn-primary btn-block">
+          <i class="fa-solid fa-sign-in-alt mr-2"></i>Entrar
+        </button>
+      </form>
+      <div class="login-footer">
+        <button type="button" class="btn btn-link" onclick="window.history.back()">
+          <i class="fa-solid fa-arrow-left mr-1"></i>Voltar
+        </button>
+        <button type="button" class="btn btn-link" onclick="window.location.href = 'cadastroUsuario.php';">
+          <i class="fa-solid fa-user-plus mr-1"></i>Criar Usuário
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript para controle da sidebar e funcionalidades -->
 <script>
   // Salva o estado da sidebar no localStorage
   function hideSidebar() {
-    document.getElementById('sidebar').classList.add('hidden');
-    document.getElementById('showSidebarBtn').style.display = 'block';
+    const sidebar = document.getElementById('sidebar');
+    const showBtn = document.getElementById('showSidebarBtn');
+    const content = document.querySelector('.content');
+    
+    sidebar.classList.add('hidden');
+    showBtn.style.display = 'block';
+    content.classList.add('sidebar-hidden');
     localStorage.setItem('sidebarState', 'hidden');
+    
+    console.log('Sidebar hidden - Content classes:', content.classList);
   }
+  
   function showSidebar() {
-    document.getElementById('sidebar').classList.remove('hidden');
-    document.getElementById('showSidebarBtn').style.display = 'none';
+    const sidebar = document.getElementById('sidebar');
+    const showBtn = document.getElementById('showSidebarBtn');
+    const content = document.querySelector('.content');
+    
+    sidebar.classList.remove('hidden');
+    showBtn.style.display = 'none';
+    content.classList.remove('sidebar-hidden');
     localStorage.setItem('sidebarState', 'visible');
+    
+    console.log('Sidebar visible - Content classes:', content.classList);
   }
 
   // Ao carregar a página, restaura o estado salvo
   window.addEventListener('DOMContentLoaded', function() {
-    var sidebarState = localStorage.getItem('sidebarState');
+    const sidebarState = localStorage.getItem('sidebarState');
+    const sidebar = document.getElementById('sidebar');
+    const showBtn = document.getElementById('showSidebarBtn');
+    const content = document.querySelector('.content');
+    
     if (sidebarState === 'hidden') {
-      document.getElementById('sidebar').classList.add('hidden');
-      document.getElementById('showSidebarBtn').style.display = 'block';
+      sidebar.classList.add('hidden');
+      showBtn.style.display = 'block';
+      content.classList.add('sidebar-hidden');
+      console.log('Page loaded - Sidebar hidden - Content classes:', content.classList);
     } else {
-      document.getElementById('sidebar').classList.remove('hidden');
-      document.getElementById('showSidebarBtn').style.display = 'none';
+      sidebar.classList.remove('hidden');
+      showBtn.style.display = 'none';
+      content.classList.remove('sidebar-hidden');
+      console.log('Page loaded - Sidebar visible - Content classes:', content.classList);
     }
-    // Clique simples para abrir a sidebar (precisa estar dentro do DOMContentLoaded para garantir que o botão existe)
-    document.getElementById('showSidebarBtn').addEventListener('click', showSidebar);
+    
+    // Abrir a sidebar
+    showBtn.addEventListener('click', showSidebar);
   });
 
-  // Alternar visibilidade da senha (ícone dentro do campo)
+  // Alternar visibilidade da senha
   document.addEventListener('DOMContentLoaded', function() {
     var toggleBtn = document.querySelector('.toggle-password');
     var pwdInput = document.getElementById('senha');
     var icon = toggleBtn.querySelector('i');
+    
     toggleBtn.addEventListener('click', function() {
       if (pwdInput.type === 'password') {
         pwdInput.type = 'text';
@@ -285,28 +401,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     });
   });
 </script>
-        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
-      </form>
-      <div class="mt-3 text-center">
-        <button type="button" class="btn btn-link" onclick="window.history.back()">Voltar</button>
-        <button type="button" class="btn btn-link" onclick="window.location.href = 'cadastroUsuario.php';">Criar Usuário</button>
-      </div>
-    </div>
-  </div>
-</div>
-<script>
-  function hideSidebar() {
-    document.getElementById('sidebar').classList.add('hidden');
-    document.getElementById('showSidebarBtn').style.display = 'block';
-  }
-  function showSidebar() {
-    document.getElementById('sidebar').classList.remove('hidden');
-    document.getElementById('showSidebarBtn').style.display = 'none';
-  }
-</script>
 
-
-<!-- Modal de erro para usuário vazio -->
 <div class="modal fade" id="usuarioModal" tabindex="-1" role="dialog" aria-labelledby="usuarioModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -326,7 +421,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 </div>
 
-<!-- Modal de erro para senha vazia -->
 <div class="modal fade" id="senhaModal" tabindex="-1" role="dialog" aria-labelledby="senhaModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -346,7 +440,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 </div>
 
-<!-- Modal de falha no login -->
 <div class="modal fade" id="loginFalhouModal" tabindex="-1" role="dialog" aria-labelledby="loginFalhouModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -411,9 +504,6 @@ $(document).ready(function() {
         });
     });
 });
-
-
 </script>
-
 </body>
 </html>

@@ -65,6 +65,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <title>Criar um Empréstimo</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <?php include 'components/sidebar-style.php'; ?>
+  
   <style>
     body {
       background-color: rgb(238, 255, 235);
@@ -72,90 +75,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       overflow-x: hidden;
       padding-bottom: 100px;
     }
-    .wrapper {
-      display: flex;
-    }
-    .sidebar {
-      width: 250px;
+    .navbar {
       background: linear-gradient(180deg, #388e3c 60%, #e8f5e9 100%);
-      color: white;
-      min-height: 100vh;
-      transition: transform 0.3s ease;
-      position: fixed;
-      z-index: 999;
-      box-shadow: 2px 0 8px rgba(56,142,60,0.08);
+      margin-bottom: 0;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
     }
-    .sidebar.hidden {
-      transform: translateX(-100%);
+    .navbar-brand {
+      font-weight: bold;
+      color: white !important;
+    }
+    /* Sobrescrever o gradiente da sidebar para esta página */
+    .sidebar {
+      background: linear-gradient(180deg, #388e3c 60%, #e8f5e9 100%) !important;
     }
     .sidebar .sidebar-header {
-      padding: 1rem;
-      font-size: 1.5rem;
-      font-weight: bold;
-      background-color: #256029;
-      text-align: center;
-      letter-spacing: 1px;
-    }
-    .nav-links {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .nav-links li {
-      padding: 0.75rem 1rem;
-    }
-    .nav-links li a {
-      color: white;
-      font-weight: bold;
-      text-decoration: none;
-      display: block;
-      transition: color 0.2s;
-    }
-    .nav-links li a:hover {
-      color: #c8e6c9;
-      text-decoration: underline;
-    }
-    .toggle-btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.1rem;
-      padding: 0.5rem 1rem;
-      text-align: left;
-      width: 100%;
-      cursor: pointer;
-    }
-    .logout-btn {
-      position: absolute;
-      bottom: 1rem;
-      left: 1rem;
-      right: 1rem;
-    }
-    .show-sidebar-btn {
-      position: fixed;
-      top: 15px;
-      left: 15px;
-      z-index: 1000;
-      background-color: #1c0e3f;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 8px 12px;
-      font-size: 1.2rem;
-      display: none;
-    }
-    .sidebar.hidden ~ .show-sidebar-btn {
-      display: block;
-    }
-    .content {
-      margin-left: 250px;
-      padding: 2rem 0;
-      flex: 1;
-      transition: margin-left 0.3s;
-      min-height: 100vh;
-    }
-    .sidebar.hidden ~ .content {
-      margin-left: 0;
+      background-color: #2c6b29 !important;
     }
     .btn-info {
       background-color: #388e3c; 
@@ -180,9 +114,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       .content {
         margin-left: 0 !important;
       }
-      .sidebar {
-        width: 200px;
-      }
     }
     @media (max-width: 576px) {
       .container {
@@ -195,21 +126,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   </style>
 </head>
 
-<div class="wrapper">
-  <!-- Sidebar -->
-  <nav id="sidebar" class="sidebar">
-    <div class="sidebar-header"><a href="indexlogado.php" style="color: #fff; text-decoration: none;"><i class="fa-solid fa-book-open-reader" style="margin-right:8px;"></i><span style="letter-spacing:1px;">Bibliotech</span></a></div>
-    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()" style="font-weight: bold; font-size: 1rem;"><i class="fa-solid fa-angles-left mr-2"></i> Recolher Menu</button>
-    <ul class="nav-links">
-      <li><a href="cadastroCliente.php"><i class="fa-solid fa-user-plus mr-2"></i>Cadastrar Clientes</a></li>
-      <li><a href="cadastroLivro.php"><i class="fa-solid fa-book-medical mr-2"></i>Cadastrar Livro</a></li>
-      <li><a href="criaEmprestimo.php"><i class="fa-solid fa-arrow-right-arrow-left mr-2"></i>Criar Empréstimo</a></li>
-    </ul>
-    <div class="logout-btn">
-      <a href="logout.php" class="btn btn-danger w-100"><i class="fa-solid fa-right-from-bracket mr-2"></i> Sair</a>
-    </div>
-  </nav>
-  <button id="showSidebarBtn" class="show-sidebar-btn">☰</button>
+<?php include 'components/sidebar-logado.php'; ?>
+
+  <!-- Conteúdo principal -->
   <div class="content">
     <div class="container mt-5">
       <h2 class="mb-4">Criar Empréstimo</h2>
@@ -248,23 +167,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   </div>
 </div>
 
-<script>
-  function hideSidebar() {
-    document.getElementById('sidebar').classList.add('hidden');
-    document.getElementById('showSidebarBtn').style.display = 'block';
-  }
-  function showSidebar() {
-    document.getElementById('sidebar').classList.remove('hidden');
-    document.getElementById('showSidebarBtn').style.display = 'none';
-  }
-  document.getElementById('showSidebarBtn').addEventListener('click', showSidebar);
-</script>
-
-
+<?php include 'components/sidebar-script.php'; ?>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 </body>
 </html>
 
