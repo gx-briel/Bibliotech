@@ -61,14 +61,7 @@
   </style>
 </head>
 <body>
-
-<?php
-session_start();
-$mensagem = $_SESSION['mensagem'] ?? null;
-$tipo    = $_SESSION['tipo']    ?? null;
-unset($_SESSION['mensagem'], $_SESSION['tipo']);
-?>
-
+  
 <?php include 'components/sidebar-logoff.php'; ?>
 
   <!-- Conteúdo principal -->

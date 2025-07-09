@@ -57,9 +57,8 @@
   }
 
   .nav-links li {
-    padding: 0.75rem 1rem;
-    display: flex;
-    align-items: center;
+    padding: 0;
+    display: block;
   }
 
   .nav-links li a {
@@ -69,6 +68,7 @@
     display: flex;
     align-items: center;
     transition: color 0.2s;
+    padding: 0.75rem 1rem;
   }
 
   .nav-links li a i {
@@ -79,6 +79,140 @@
   .nav-links li a:hover {
     color: #ffcc00;
     text-decoration: underline;
+  }
+
+  /* Estilos para submenus */
+  .nav-item {
+    position: static;
+    width: 100%;
+  }
+
+  .nav-item .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-weight: bold;
+    width: 100%;
+  }
+
+  .nav-item .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+    color: #ffcc00;
+  }
+
+  .submenu {
+    display: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .submenu.show {
+    display: block;
+  }
+
+  .submenu li {
+    padding: 0;
+    width: 100%;
+  }
+
+  .submenu a {
+    display: block;
+    padding: 8px 20px 8px 40px;
+    color: #ddd;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-size: 0.85rem;
+    font-weight: normal;
+    width: 100%;
+  }
+
+  .submenu a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+    color: #ffcc00;
+  }
+
+  .submenu-arrow {
+    transition: transform 0.3s ease;
+    font-size: 0.8rem;
+    color: #fff;
+  }
+
+  .submenu-arrow.fa-chevron-up {
+    transform: rotate(360deg);
+  }
+
+  /* Submenu aninhado (Relatórios) */
+  .submenu .nav-item {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .submenu .nav-item .nav-link {
+    padding: 8px 20px 8px 40px;
+    background-color: transparent;
+    color: #ddd;
+    font-size: 0.85rem;
+    font-weight: normal;
+  }
+
+  .submenu .nav-item .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffcc00;
+  }
+
+  .submenu .nav-item .submenu a {
+    padding-left: 60px;
+    font-size: 0.8rem;
+    color: #ccc;
+  }
+
+  .submenu .nav-item .submenu a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffcc00;
+  }
+
+  /* Estilização para links de submenu que abrem outros submenus */
+  .submenu li > a[onclick] {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 20px 8px 40px;
+    color: #ddd;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    font-size: 0.85rem;
+    font-weight: normal;
+    width: 100%;
+  }
+
+  .submenu li > a[onclick]:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffcc00;
+  }
+
+  /* Submenu de terceiro nível */
+  .submenu .submenu {
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+
+  .submenu .submenu a {
+    padding-left: 60px;
+    font-size: 0.8rem;
+    color: #ccc;
+  }
+
+  .submenu .submenu a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffcc00;
   }
 
   .logout-btn {
