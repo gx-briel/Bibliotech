@@ -39,9 +39,7 @@ $totalVenc = $row3['totalVencido'] ?? 0;
       margin: 0;
       overflow-x: hidden;
     }
-      display: block;
-    }
-
+    
     .nav-links li a:hover {
       color: #ffcc00;
       text-decoration: underline;
@@ -120,7 +118,6 @@ $totalVenc = $row3['totalVencido'] ?? 0;
 
 <?php include 'components/sidebar-logado.php'; ?>
 
-  <!-- Conteúdo principal -->
   <div class="content">
     <div class="container-fluid">
       <div class="row text-center">
