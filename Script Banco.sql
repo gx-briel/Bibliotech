@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `clientes` (
   `endereco` VARCHAR(300) DEFAULT 'sem endereco',
   `telefone` VARCHAR(11) DEFAULT 'nao possui',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 
 -- Criação da tabela `livros`
 CREATE TABLE IF NOT EXISTS `livros` (
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS `livros` (
   `lancamento` DATE DEFAULT NULL,
   `disponivel` TINYINT(1) DEFAULT '1',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 
 -- Criação da tabela `emprestimo`
 CREATE TABLE IF NOT EXISTS `emprestimo` (
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `emprestimo` (
   KEY `idLivro` (`idLivro`),
   CONSTRAINT `emprestimo_ibfk_1` FOREIGN KEY (`idCliente`) REFERENCES `clientes` (`id`) ON DELETE SET NULL,
   CONSTRAINT `emprestimo_ibfk_2` FOREIGN KEY (`idLivro`) REFERENCES `livros` (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 
 -- Criação da tabela `usuarios`
 CREATE TABLE IF NOT EXISTS `usuarios` (
@@ -43,4 +43,4 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `nome` VARCHAR(300) NOT NULL,
   `senha` VARCHAR(20) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
