@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+  <?php include 'components/sidebar-style.php'; ?>
   <link rel="stylesheet" href="assets/css/theme.css">
   <style>
     .container-hero{ max-width:1100px; margin:2.5rem auto; padding:1rem; }
@@ -18,7 +18,7 @@
   </style>
 </head>
 <body>
-  
+  <?php include 'components/sidebar-logoff.php'; ?>
   <main class="container-hero content">
     <script>
       const mensagem = <?php echo json_encode($mensagem); ?>;
@@ -81,8 +81,44 @@
   </main>
 </div>
 
+<script>
+  // Salva o estado da sidebar no localStorage
+  function hideSidebar() {
+    document.getElementById('sidebar').classList.add('hidden');
+    document.getElementById('showSidebarBtn').style.display = 'block';
+    document.querySelector('.content').classList.add('sidebar-hidden');
+    localStorage.setItem('sidebarState', 'hidden');
+  }
+  
+  function showSidebar() {
+    document.getElementById('sidebar').classList.remove('hidden');
+    document.getElementById('showSidebarBtn').style.display = 'none';
+    document.querySelector('.content').classList.remove('sidebar-hidden');
+    localStorage.setItem('sidebarState', 'visible');
+  }
+
+  // Ao carregar a página, restaura o estado salvo
+  window.addEventListener('DOMContentLoaded', function() {
+    var sidebarState = localStorage.getItem('sidebarState');
+    if (sidebarState === 'hidden') {
+      document.getElementById('sidebar').classList.add('hidden');
+      document.getElementById('showSidebarBtn').style.display = 'block';
+      document.querySelector('.content').classList.add('sidebar-hidden');
+    } else {
+      document.getElementById('sidebar').classList.remove('hidden');
+      document.getElementById('showSidebarBtn').style.display = 'none';
+      document.querySelector('.content').classList.remove('sidebar-hidden');
+    }
+    
+    // Clique para abrir a sidebar
+    document.getElementById('showSidebarBtn').addEventListener('click', showSidebar);
+  });
+
+<?php include 'components/sidebar-script.php'; ?>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 </body>
 </html>
