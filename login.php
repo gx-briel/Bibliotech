@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     <style>
       body {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(to right, #ece9e6, #ffffff);
         margin: 0;
         padding: 0;
         overflow: hidden;
@@ -89,6 +89,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         transition: margin-left 0.3s ease, width 0.3s ease;
       }
       
+      .content { position: relative }
+
+      .content::before{
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: url('fxd2.jpg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        opacity: 0.07;
+        z-index: 0;
+        pointer-events: none;
+        filter: saturate(0.9) blur(0px);
+      }
+
       .login-card {
         background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
@@ -109,8 +125,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         left: 0;
         right: 0;
         height: 4px;
-        background: linear-gradient(90deg, #1c0e3f, #667eea, #764ba2);
+        /* remover tonalidade roxa: usar azul corporativo */
+        background: linear-gradient(90deg, #1c0e3f, #2b6ea3);
         border-radius: 20px 20px 0 0;
+        z-index: 1;
       }
       
       .login-card h1 {
@@ -247,6 +265,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       /* Animação de entrada */
       .login-card {
         animation: slideUp 0.6s ease-out;
+        position: relative; z-index: 1;
       }
       
       @keyframes slideUp {

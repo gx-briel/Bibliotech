@@ -2,19 +2,27 @@
 // Componente de estilos CSS para a sidebar
 ?>
 <style>
+  :root{
+    --accent: #00e5ff;
+    --sidebar-bg-start: #2e0101ff;
+    --sidebar-bg-end: #941e1eff;
+    --sidebar-header: #2e0101ff;
+    --muted: #d8eae9;
+  }
+
   .wrapper {
     display: flex;
   }
 
   .sidebar {
     width: 250px;
-    background: linear-gradient(180deg, #1c0e3f 60%, #e8f5e9 100%);
+    background: linear-gradient(180deg, var(--sidebar-bg-start) 50%, var(--sidebar-bg-end) 100%);
     color: white;
     min-height: 100vh;
     transition: transform 0.3s ease;
     position: fixed;
     z-index: 999;
-    box-shadow: 2px 0 8px rgba(28,14,63,0.08);
+    box-shadow: 2px 0 18px rgba(0,0,0,0.12);
   }
 
   .sidebar.hidden {
@@ -23,11 +31,12 @@
 
   .sidebar .sidebar-header {
     padding: 1rem;
-    font-size: 1.5rem;
-    font-weight: bold;
-    background-color: #150a2c;
+    font-size: 1.4rem;
+    font-weight: 700;
+    background-color: var(--sidebar-header);
     text-align: center;
-    letter-spacing: 1px;
+    letter-spacing: 0.6px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
   }
 
   .sidebar .sidebar-header a {
@@ -43,8 +52,8 @@
     background: none;
     border: none;
     color: white;
-    font-size: 1.1rem;
-    padding: 0.5rem 1rem;
+    font-size: 1.05rem;
+    padding: 0.6rem 1rem;
     text-align: left;
     width: 100%;
     cursor: pointer;
@@ -63,12 +72,14 @@
 
   .nav-links li a {
     color: white;
-    font-weight: bold;
+    font-weight: 600;
     text-decoration: none;
     display: flex;
     align-items: center;
-    transition: color 0.2s;
+    transition: color 0.15s, background-color 0.15s;
     padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin: 0.25rem 0;
   }
 
   .nav-links li a i {
@@ -77,8 +88,9 @@
   }
 
   .nav-links li a:hover {
-    color: #ffcc00;
-    text-decoration: underline;
+    color: var(--accent);
+    background-color: rgba(255,255,255,0.03);
+    text-decoration: none;
   }
 
   /* Estilos para submenus */
@@ -102,7 +114,7 @@
   .nav-item .nav-link:hover {
     background-color: rgba(255, 255, 255, 0.1);
     text-decoration: none;
-    color: #ffcc00;
+    color: #0bec61ff;
   }
 
   .submenu {
@@ -111,7 +123,8 @@
     padding: 0;
     margin: 0;
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(255, 255, 255, 0.02);
+    padding-bottom: 6px;
   }
 
   .submenu.show {
@@ -126,18 +139,18 @@
   .submenu a {
     display: block;
     padding: 8px 20px 8px 40px;
-    color: #ddd;
+    color: var(--muted);
     text-decoration: none;
-    transition: background-color 0.3s;
+    transition: background-color 0.15s, color 0.15s;
     font-size: 0.85rem;
-    font-weight: normal;
+    font-weight: 500;
     width: 100%;
   }
 
   .submenu a:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.04);
     text-decoration: none;
-    color: #ffcc00;
+    color: var(--accent);
   }
 
   .submenu-arrow {
@@ -166,7 +179,7 @@
 
   .submenu .nav-item .nav-link:hover {
     background-color: rgba(255, 255, 255, 0.1);
-    color: #ffcc00;
+    color: #0bec61ff;
   }
 
   .submenu .nav-item .submenu a {
@@ -177,7 +190,7 @@
 
   .submenu .nav-item .submenu a:hover {
     background-color: rgba(255, 255, 255, 0.1);
-    color: #ffcc00;
+    color: #0bec61ff;
   }
 
   /* Estilização para links de submenu que abrem outros submenus */
@@ -196,7 +209,7 @@
 
   .submenu li > a[onclick]:hover {
     background-color: rgba(255, 255, 255, 0.1);
-    color: #ffcc00;
+    color: #0bec61ff;
   }
 
   /* Submenu de terceiro nível */
@@ -212,7 +225,7 @@
 
   .submenu .submenu a:hover {
     background-color: rgba(255, 255, 255, 0.1);
-    color: #ffcc00;
+    color: #0bec61ff;
   }
 
   .logout-btn {
@@ -227,14 +240,15 @@
     top: 15px;
     left: 15px;
     z-index: 1000;
-    background-color: #1c0e3f;
+    background-color: var(--sidebar-bg-end);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     padding: 8px 12px;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     display: none;
     cursor: pointer;
+    box-shadow: 0 6px 18px rgba(161, 214, 245, 0.2);
   }
 
   .sidebar.hidden ~ .show-sidebar-btn {

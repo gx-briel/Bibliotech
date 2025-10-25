@@ -41,7 +41,7 @@ $totalVenc = $row3['totalVencido'] ?? 0;
     }
     
     .nav-links li a:hover {
-      color: #ffcc00;
+      color: #0bec61ff;
       text-decoration: underline;
     }
 
