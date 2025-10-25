@@ -1,6 +1,27 @@
 <?php
 // Componente sidebar para páginas não logadas
 ?>
+<style>
+  /* Texto colorido apenas ao passar o mouse — mantêm o fundo do item inalterado */
+  .nav-links li a.login-link{color:rgba(255,255,255,0.95);transition:color .14s ease, text-shadow .14s}
+  .nav-links li a.signup-link{color:rgba(255,255,255,0.95);transition:color .14s ease, text-shadow .14s}
+
+  .nav-links li a.login-link:hover{background:transparent !important}
+  .nav-links li a.login-link:hover span.text{color:#2b6ea3 !important; text-decoration:underline; text-decoration-thickness:2px}
+  .nav-links li a.login-link:hover i{color:#2b6ea3 !important}
+  .nav-links li a.login-link:hover{box-shadow: 0 6px 18px rgba(0,0,0,0.12); transform: translateY(-2px); border-radius:8px}
+
+  .nav-links li a.signup-link:hover{background:transparent !important}
+  .nav-links li a.signup-link:hover span.text{color:#2ca44b !important; text-decoration:underline; text-decoration-thickness:2px}
+  .nav-links li a.signup-link:hover i{color:#2ca44b !important}
+  .nav-links li a.signup-link:hover{box-shadow: 0 6px 18px rgba(0,0,0,0.12); transform: translateY(-2px); border-radius:8px}
+
+  /* foco por teclado — visível e altera texto e ícone */
+  .nav-links li a.login-link:focus span.text,
+  .nav-links li a.signup-link:focus span.text{outline: none}
+  .nav-links li a.login-link:focus i{color:#2b6ea3}
+  .nav-links li a.signup-link:focus i{color:#2ca44b}
+</style>
 <div class="wrapper">
   <!-- Sidebar -->
   <nav id="sidebar" class="sidebar">
@@ -14,8 +35,8 @@
       <i class="fa-solid fa-angles-left mr-2"></i> Recolher Menu
     </button>
     <ul class="nav-links">
-      <li><a href="login.php"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
-      <li><a href="cadastroUsuario.php"><i class="fa-solid fa-user-plus"></i> Cadastrar Usuário</a></li>
+      <li><a class="login-link" href="login.php"><i class="fa-solid fa-right-to-bracket"></i> <span class="text">Login</span></a></li>
+      <li><a class="signup-link" href="cadastroUsuario.php"><i class="fa-solid fa-user-plus"></i> <span class="text">Cadastrar Usuário</span></a></li>
     </ul>
   </nav>
 

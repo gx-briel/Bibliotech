@@ -26,7 +26,7 @@ $novoUsuario = str_pad($ultimoUsuario + 1, 4, '0', STR_PAD_LEFT); // Gera o pró
   
   <style>
     body {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(to right, #ece9e6, #ffffff);
       margin: 0;
       padding: 0;
       overflow: hidden;
@@ -34,7 +34,7 @@ $novoUsuario = str_pad($ultimoUsuario + 1, 4, '0', STR_PAD_LEFT); // Gera o pró
       height: 100vh;
     }
     
-    .content {
+    .content { position: relative;
       margin-left: 250px;
       padding: 2rem;
       flex: 1;
@@ -45,6 +45,20 @@ $novoUsuario = str_pad($ultimoUsuario + 1, 4, '0', STR_PAD_LEFT); // Gera o pró
       height: 100vh;
       width: calc(100vw - 250px);
       overflow-y: auto;
+    }
+
+    .content::before{
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('fxd2.jpg');
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      opacity: 0.07;
+      z-index: 0;
+      pointer-events: none;
+      filter: saturate(0.9) blur(0px);
     }
     
     .content.sidebar-hidden {
@@ -76,8 +90,10 @@ $novoUsuario = str_pad($ultimoUsuario + 1, 4, '0', STR_PAD_LEFT); // Gera o pró
       left: 0;
       right: 0;
       height: 4px;
-      background: linear-gradient(90deg, #1c0e3f, #667eea, #764ba2);
+      /* remover tonalidade roxa: usar azul corporativo */
+      background: linear-gradient(90deg, #1c0e3f, #2b6ea3);
       border-radius: 20px 20px 0 0;
+      z-index: 1;
     }
     
     .cadastro-card h2 {
@@ -228,6 +244,7 @@ $novoUsuario = str_pad($ultimoUsuario + 1, 4, '0', STR_PAD_LEFT); // Gera o pró
     /* Animação de entrada */
     .cadastro-card {
       animation: slideUp 0.6s ease-out;
+      position: relative; z-index: 1;
     }
     
     @keyframes slideUp {
