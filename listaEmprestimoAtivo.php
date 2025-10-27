@@ -125,45 +125,12 @@ $executaConsulta = mysqli_query($conexao, $consulta);
       background-color: rgba(0, 0, 0, 0.05);
     }
 
-    .wrapper {
-      display: flex;
-    }
-    .sidebar {
-      width: 250px;
-      background: linear-gradient(180deg, #1c0e3f 60%, #e8f5e9 100%);
-      color: white;
-      min-height: 100vh;
-      transition: transform 0.3s ease;
-      position: fixed;
-      z-index: 999;
-    }
-    .sidebar.hidden {
-      transform: translateX(-100%);
-    }
-      left: 1rem;
-      right: 1rem;
-    }
-    .show-sidebar-btn {
-      position: fixed;
-      top: 15px;
-      left: 15px;
-      z-index: 1000;
-      background-color: #1c0e3f;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 8px 12px;
-      font-size: 1.2rem;
-      display: none;
-    }
-    .sidebar.hidden ~ .show-sidebar-btn {
-      display: block;
-    }
     .content {
       margin-left: 250px;
-      flex: 1;
+      padding: 2rem;
       transition: margin-left 0.3s;
     }
+
     .sidebar.hidden ~ .content {
       margin-left: 0;
     }
@@ -175,11 +142,7 @@ $executaConsulta = mysqli_query($conexao, $consulta);
     @media (max-width: 768px) {
       .content {
         margin-left: 0 !important;
-      }
-      .sidebar {
-        position: fixed;
-        min-height: 100vh;
-        z-index: 999;
+        padding: 1rem;
       }
     }
 
@@ -298,6 +261,8 @@ $executaConsulta = mysqli_query($conexao, $consulta);
   </div>
 </div>
 
+<?php include 'components/sidebar-script.php'; ?>
+
 <div class="modal fade" id="modalDevolucao" tabindex="-1" role="dialog" aria-labelledby="modalDevolucaoLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -374,7 +339,6 @@ $executaConsulta = mysqli_query($conexao, $consulta);
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-<?php include 'components/sidebar-script.php'; ?>
 <script>
   $(document).ready(function() {
     $(document).on('click', '#mostrarMais50', function() {

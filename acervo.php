@@ -84,6 +84,16 @@ $resultado = mysqli_stmt_get_result($stmt);
       background-color: #343a40;
       color: white;
     }
+    .content {
+      margin-left: 250px;
+      padding: 2rem;
+      transition: margin-left 0.3s;
+    }
+
+    .sidebar.hidden ~ .content {
+      margin-left: 0;
+    }
+
     @media (max-width: 768px) {
       .content {
         margin-left: 0 !important;
@@ -181,6 +191,7 @@ $resultado = mysqli_stmt_get_result($stmt);
       </div>
     </div>
   </div>
+</div>
 
 <?php include 'components/sidebar-script.php'; ?>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

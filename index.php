@@ -237,6 +237,7 @@
     <p class="tagline">Seu portal para descobrir e gerenciar livros com facilidade.</p>
   </div>
   </div>
+</div>
 
 <?php include 'components/sidebar-script.php'; ?>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">

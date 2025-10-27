@@ -53,16 +53,12 @@ $resultado = mysqli_stmt_get_result($stmt);
       overflow-x: hidden;
       padding-bottom: 100px;
     }
-    .wrapper {
-      display: flex;
-    }
     .content {
       margin-left: 250px;
-      padding: 2rem 0;
-      flex: 1;
+      padding: 2rem;
       transition: margin-left 0.3s;
-      min-height: 100vh;
     }
+
     .sidebar.hidden ~ .content {
       margin-left: 0;
     }
@@ -138,6 +134,7 @@ $resultado = mysqli_stmt_get_result($stmt);
     @media (max-width: 768px) {
       .content {
         margin-left: 0 !important;
+        padding: 1rem;
       }
       .table-responsive {
         overflow-x: auto;
@@ -259,6 +256,7 @@ $resultado = mysqli_stmt_get_result($stmt);
       </div>
     </div>
   </div>
+</div>
 </div>
 
 <?php include 'components/sidebar-script.php'; ?>

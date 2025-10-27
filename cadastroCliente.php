@@ -27,6 +27,22 @@ if (!isset($_SESSION['id'])) {
     margin: 0;
     overflow-x: hidden;
   }
+
+  .content {
+    margin-left: 250px;
+    padding: 2rem;
+    transition: margin-left 0.3s;
+  }
+
+  .sidebar.hidden ~ .content {
+    margin-left: 0;
+  }
+
+  @media (max-width: 768px) {
+    .content {
+      margin-left: 0 !important;
+    }
+  }
 </style>
 </head>
 <body>
@@ -84,7 +100,6 @@ if (!isset($_SESSION['id'])) {
     </div>
   </div>
 </div>
-
 
 <script>
   function formatarTelefone(input) {

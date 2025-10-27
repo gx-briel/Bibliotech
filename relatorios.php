@@ -117,7 +117,7 @@ if (!isset($_SESSION['id'])) {
 <body>
 
 <?php include 'components/sidebar-logado.php'; ?>
-<div class="wrapper">
+
   <div class="content">
     <div class="container">
       <div class="row">
@@ -200,6 +200,7 @@ if (!isset($_SESSION['id'])) {
     </div>
   </div>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
