@@ -34,10 +34,17 @@ $totalVenc = $row3['totalVencido'] ?? 0;
   <?php include 'components/sidebar-style.php'; ?>
   
   <style>
+    :root {
+      --card: #ffffff;
+      --muted: #6b6f73;
+      --accent: #b33a3a;
+    }
+
     body {
-      background-color: rgb(238, 255, 235);
+      background: linear-gradient(to right, #ece9e6, #ffffff);
       margin: 0;
       overflow-x: hidden;
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
     .nav-links li a:hover {
@@ -81,37 +88,124 @@ $totalVenc = $row3['totalVencido'] ?? 0;
       display: block;
     }
 
+    /* Background image effect similar to index.php */
+    .content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1.25rem;
+      min-height: 100vh;
+      position: relative;
+      margin-left: 250px;
+      padding: 2rem;
+      transition: margin-left 0.3s;
+    }
+
+    /* Quando a sidebar está escondida, o conteúdo expande */
+    .sidebar.hidden ~ .content {
+      margin-left: 0;
+    }
+
+    .content::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('fxd2.jpg');
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      opacity: 0.07;
+      z-index: 0;
+      pointer-events: none;
+      filter: saturate(0.9) blur(0px);
+    }
+
+    /* Ensure content is above background */
+    .container-fluid {
+      position: relative;
+      z-index: 1;
+    }
+
     .card {
       border: none;
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      z-index: 1;
     }
 
-    /* Estilo harmonizado para a imagem */
-    .img-harmonizada {
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      padding: 1rem;
-      background-color: #fff;
-      max-width: 900px;
-      width: 100%;
-      transition: transform 0.3s ease;
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
     }
 
-    /* Ajuste responsivo para a imagem não ficar muito para baixo em mobile */
-    .img-container-mobile-fix {
-      min-height: 70vh;
+    /* Gradients for dashboard cards */
+    .card.bg-primary {
+      background: linear-gradient(135deg,rgb(59, 154, 255) 0%, #0056b3 100%) !important;
     }
-    @media (max-width: 768px) {
-      .img-container-mobile-fix {
-        min-height: 0;
-        margin-top: 1.5rem;
-        margin-bottom: 2rem;
-        align-items: flex-start !important;
+
+    .card.bg-success {
+      background: linear-gradient(135deg,rgb(91, 206, 118) 0%, #1e7e34 100%) !important;
+    }
+
+    .card.bg-danger {
+      background: linear-gradient(135deg,rgb(233, 98, 111) 0%, #c82333 100%) !important;
+    }
+
+    .card.bg-light {
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+    }
+
+    .card-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      letter-spacing: 0.3px;
+    }
+
+    .card-text {
+      font-weight: 700;
+      font-size: 2.5rem;
+      margin-top: 0.5rem;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
+
+    .card {
+      animation: fadeIn 0.6s ease-in-out both;
     }
-    
+
+    .col-md-4:nth-child(1) .card {
+      animation-delay: 0.1s;
+    }
+
+    .col-md-4:nth-child(2) .card {
+      animation-delay: 0.2s;
+    }
+
+    .col-md-4:nth-child(3) .card {
+      animation-delay: 0.3s;
+    }
+
+    @media (max-width: 768px) {
+      .content {
+        margin-left: 0 !important;
+        padding: 1rem;
+      }
+      .card-text {
+        font-size: 2rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -120,10 +214,31 @@ $totalVenc = $row3['totalVencido'] ?? 0;
 
   <div class="content">
     <div class="container-fluid">
+      <!-- Welcome section -->
+      <div class="row">
+        <div class="col-12 mb-3">
+          <div class="card bg-light">
+            <div class="card-body text-center p-3">
+              <h3 class="mb-2" style="color: #062c2a; font-weight: 600;">
+                <i class="fas fa-user-circle"></i> Bem-vindo, <?= htmlspecialchars($_SESSION['nome'] ?? 'Usuário'); ?>!
+              </h3>
+              <p class="mb-0" style="color: var(--muted);">
+                Gerencie sua biblioteca de forma eficiente e moderna.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="text-center mb-4" style="font-weight: 600; color: #062c2a; font-size: 2rem;">
+        <i class="fas fa-tachometer-alt"></i> Dashboard
+      </h2>
+      
       <div class="row text-center">
         <div class="col-md-4 mb-4">
           <div class="card bg-primary text-white" style="cursor: pointer;" onclick="window.location.href='acervo.php'">
             <div class="card-body">
+              <i class="fas fa-book fa-2x mb-3"></i>
               <h5 class="card-title">Total de Livros</h5>
               <p class="card-text display-4"><?= $totalLivros; ?></p>
             </div>
@@ -132,6 +247,7 @@ $totalVenc = $row3['totalVencido'] ?? 0;
         <div class="col-md-4 mb-4">
           <div class="card bg-success text-white" style="cursor: pointer;" onclick="window.location.href='listaEmprestimoAtivo.php'">
             <div class="card-body">
+              <i class="fas fa-book-reader fa-2x mb-3"></i>
               <h5 class="card-title">Empréstimos Ativos</h5>
               <p class="card-text display-4"><?= $totalEmp; ?></p>
             </div>
@@ -140,30 +256,19 @@ $totalVenc = $row3['totalVencido'] ?? 0;
         <div class="col-md-4 mb-4">
           <div class="card bg-danger text-white" style="cursor: pointer;" onclick="window.location.href='emprestimoVencido.php'">
             <div class="card-body">
+              <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
               <h5 class="card-title">Vencidos</h5>
               <p class="card-text display-4"><?= $totalVenc; ?></p>
             </div>
           </div>
         </div>
       </div>
-
-      <div class="row justify-content-center mt-0">
-        <div class="d-flex justify-content-center align-items-center img-container-mobile-fix">
-          <img
-            src="fxd2.jpg"
-            alt="Logo Bibliotech"
-            class="img-fluid img-harmonizada"
-            onmouseenter="document.getElementById('audioHover').play()"
-          >
-        </div>
-        </div>
-      </div>
     </div>
   </div>
-</div>
 
 <!-- Scripts -->
 <?php include 'components/sidebar-script.php'; ?>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

@@ -23,6 +23,24 @@ if (!isset($_SESSION['id'])) {
       margin: 0;
       overflow-x: hidden;
       padding-bottom: 60px;
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .content {
+      margin-left: 250px;
+      padding: 2rem;
+      transition: margin-left 0.3s;
+    }
+
+    .sidebar.hidden ~ .content {
+      margin-left: 0;
+    }
+
+    @media (max-width: 768px) {
+      .content {
+        margin-left: 0 !important;
+        padding: 1rem;
+      }
     }
   </style>
 </head>
@@ -63,18 +81,7 @@ if (!isset($_SESSION['id'])) {
     </div>
   </div>
 </div>
-
-<script>
-  function hideSidebar() {
-    document.getElementById('sidebar').classList.add('hidden');
-    document.getElementById('showSidebarBtn').style.display = 'block';
-  }
-  function showSidebar() {
-    document.getElementById('sidebar').classList.remove('hidden');
-    document.getElementById('showSidebarBtn').style.display = 'none';
-  }
-  document.getElementById('showSidebarBtn').addEventListener('click', showSidebar);
-</script>
+</div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
@@ -129,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <?php include 'components/sidebar-script.php'; ?>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>

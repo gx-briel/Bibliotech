@@ -74,6 +74,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       margin: 0;
       overflow-x: hidden;
       padding-bottom: 100px;
+Baby font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .content {
+      margin-left: 250px;
+      padding: 2rem;
+      transition: margin-left 0.3s;
+    }
+
+    .sidebar.hidden ~ .content {
+      margin-left: 0;
     }
     .navbar {
       background: linear-gradient(180deg, #388e3c 60%, #e8f5e9 100%);
@@ -113,6 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     @media (max-width: 768px) {
       .content {
         margin-left: 0 !important;
+        padding: 1rem;
       }
     }
     @media (max-width: 576px) {
@@ -166,8 +178,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
   </div>
 </div>
+</div>
 
 <?php include 'components/sidebar-script.php'; ?>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
