@@ -26,6 +26,7 @@ if (!isset($_SESSION['id'])) {
     background-color: rgb(238, 255, 235);
     margin: 0;
     overflow-x: hidden;
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
 
   .content {

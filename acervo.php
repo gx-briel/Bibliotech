@@ -52,6 +52,7 @@ $resultado = mysqli_stmt_get_result($stmt);
       margin: 0;
       overflow-x: hidden;
       padding-bottom: 100px;
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
     .form-control {
