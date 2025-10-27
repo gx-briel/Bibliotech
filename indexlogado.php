@@ -47,11 +47,6 @@ $totalVenc = $row3['totalVencido'] ?? 0;
       font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
-    .nav-links li a:hover {
-      color: #0bec61ff;
-      text-decoration: underline;
-    }
-
     .toggle-btn {
       background: none;
       border: none;
@@ -70,23 +65,7 @@ $totalVenc = $row3['totalVencido'] ?? 0;
       right: 1rem;
     }
 
-    .show-sidebar-btn {
-      position: fixed;
-      top: 15px;
-      left: 15px;
-      z-index: 1000;
-      background-color: #1c0e3f;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 8px 12px;
-      font-size: 1.2rem;
-      display: none;
-    }
 
-    .sidebar.hidden ~ .show-sidebar-btn {
-      display: block;
-    }
 
     /* Background image effect similar to index.php */
     .content {
@@ -102,10 +81,6 @@ $totalVenc = $row3['totalVencido'] ?? 0;
       transition: margin-left 0.3s;
     }
 
-    /* Quando a sidebar está escondida, o conteúdo expande */
-    .sidebar.hidden ~ .content {
-      margin-left: 0;
-    }
 
     .content::before {
       content: '';
@@ -206,6 +181,39 @@ $totalVenc = $row3['totalVencido'] ?? 0;
         font-size: 2rem;
       }
     }
+.welcome-bump {
+  position: relative;
+  top: 0; /* mobile: não desloca */
+}
+
+@media (min-width: 768px) {
+  .welcome-bump {
+    top: -190px; /* tablets/desktop: sobe */
+  }
+}
+
+.botaodash{
+  position: relative;
+  top: 0; /* mobile: não desloca */
+}
+
+@media (min-width: 768px) {
+  .botaodash {
+    top: -220px; /* tablets/desktop: sobe */
+  }
+}
+
+.cards-dashboard{
+  position: relative;
+  top: 0; /* mobile: não desloca */
+}
+
+@media (min-width: 768px) {
+  .cards-dashboard {
+    top: -100px; /* tablets/desktop: sobe */
+  }
+}
+
   </style>
 </head>
 <body>
@@ -214,9 +222,14 @@ $totalVenc = $row3['totalVencido'] ?? 0;
 
   <div class="content">
     <div class="container-fluid">
+
+      <h2 class="text-center mb-4 botaodash" style="font-weight: 600; color: #062c2a; font-size: 2rem;">
+        <i class="fas fa-tachometer-alt"></i> Dashboard
+      </h2>
+
       <!-- Welcome section -->
       <div class="row">
-        <div class="col-12 mb-3">
+        <div class="col-12 mb-3 welcome-bump">
           <div class="card bg-light">
             <div class="card-body text-center p-3">
               <h3 class="mb-2" style="color: #062c2a; font-weight: 600;">
@@ -229,12 +242,8 @@ $totalVenc = $row3['totalVencido'] ?? 0;
           </div>
         </div>
       </div>
-
-      <h2 class="text-center mb-4" style="font-weight: 600; color: #062c2a; font-size: 2rem;">
-        <i class="fas fa-tachometer-alt"></i> Dashboard
-      </h2>
       
-      <div class="row text-center">
+      <div class="row text-center cards-dashboard">
         <div class="col-md-4 mb-4">
           <div class="card bg-primary text-white" style="cursor: pointer;" onclick="window.location.href='acervo.php'">
             <div class="card-body">
