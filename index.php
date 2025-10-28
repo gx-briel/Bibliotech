@@ -7,12 +7,14 @@
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <?php include 'components/sidebar-style.php'; ?>
   
   <style>
-    :root{--card:#ffffff;--muted:#6b6f73;--accent:#b33a3a}
+    :root{--card:#ffffff;--muted:#6b6f73;}
+    
     body {
         background: linear-gradient(to right, #ece9e6, #ffffff);
         margin: 0;

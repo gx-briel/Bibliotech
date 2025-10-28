@@ -40,17 +40,21 @@
 
       <!-- Menu Empréstimos -->
       <li class="nav-item">
+
         <a href="#" class="nav-link" onclick="toggleSubmenu('emprestimos')">
           <i class="fa-solid fa-arrow-right-arrow-left"></i> Empréstimos
           <i class="fa-solid fa-chevron-down submenu-arrow"></i>
         </a>
+
         <ul class="submenu" id="emprestimos">
           <li><a href="criaEmprestimo.php"><i class="fa-solid fa-arrow-right-arrow-left"></i> Criar Empréstimo</a></li>
           <li>
-            <a href="#" onclick="toggleSubmenu('relatorios')">
+
+            <a href="#" class="nav-link" onclick="toggleSubmenu('relatorios')">
               <i class="fa-solid fa-chart-bar"></i> Relatórios
               <i class="fa-solid fa-chevron-down submenu-arrow"></i>
             </a>
+            
             <ul class="submenu" id="relatorios">
               <li><a href="relatorios.php"><i class="fa-solid fa-chart-simple"></i> Dashboard</a></li>
               <li><a href="todosEmprestimos.php"><i class="fa-solid fa-list"></i> Todos os Empréstimos</a></li>
@@ -60,7 +64,9 @@
             </ul>
           </li>
         </ul>
+
       </li>
+
     </ul>
 
     <!-- Botão de logout no rodapé -->

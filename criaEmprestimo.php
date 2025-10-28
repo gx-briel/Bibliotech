@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <title>Criar um Empréstimo</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <?php include 'components/sidebar-style.php'; ?>
   
   <style>
@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       margin: 0;
       overflow-x: hidden;
       padding-bottom: 100px;
-Baby font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     .content {
@@ -86,21 +86,12 @@ Baby font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     .sidebar.hidden ~ .content {
       margin-left: 0;
     }
-    .navbar {
-      background: linear-gradient(180deg, #388e3c 60%, #e8f5e9 100%);
-      margin-bottom: 0;
-      border-bottom: 1px solid rgba(0,0,0,0.1);
-    }
-    .navbar-brand {
-      font-weight: bold;
-      color: white !important;
-    }
     /* Sobrescrever o gradiente da sidebar para esta página */
     .sidebar {
-      background: linear-gradient(180deg, #388e3c 60%, #e8f5e9 100%) !important;
+      background: linear-gradient(170deg,rgb(21, 83, 24) 40%,rgb(94, 252, 107) 100%);
     }
     .sidebar .sidebar-header {
-      background-color: #2c6b29 !important;
+      background-color: rgb(21, 83, 24);
     }
     .btn-info {
       background-color: #388e3c; 

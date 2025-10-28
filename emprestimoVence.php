@@ -94,7 +94,7 @@ $executaConsulta = mysqli_query($conexao, $consulta);
   <title>Empréstimos à Vencer</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <?php include 'components/sidebar-style.php'; ?>
   
   <style>
@@ -103,6 +103,7 @@ $executaConsulta = mysqli_query($conexao, $consulta);
       padding-bottom: 100px;
       margin: 0;
       overflow-x: hidden;
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     .container, .container-fluid {
       max-width: 1100px;
