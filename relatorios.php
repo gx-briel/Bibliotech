@@ -55,7 +55,6 @@ if (!isset($_SESSION['id'])) {
       box-shadow: 0 2px 12px rgba(0,0,0,0.18);
       margin-bottom: 25px;
       width: 100%;
-      margin-left: 25px;
       margin-right: 25px;
     }
     .dashboard-card-title {
