@@ -113,6 +113,7 @@
 
 
 
+
   /* primeiro nivel */
   .nav-item .nav-link:hover {
     background-color: rgba(255, 255, 255, 0.1);
@@ -166,6 +167,10 @@
   transition: transform 0.6s ease;
 }
 
+
+
+
+
   /* Submenu aninhado (Relatórios) */
   .submenu .nav-item {
     margin-left: 0;
@@ -199,6 +204,9 @@
     color: #00e5ff;
   }
 
+
+
+
   /* Estilização para links de submenu que abrem outros submenus */
   .submenu li > a[onclick] {
     display: flex;
@@ -212,6 +220,9 @@
     color: #00e5ff;
   }
 
+
+
+  
   /* Submenu de terceiro nível */
 
   .submenu .submenu a {

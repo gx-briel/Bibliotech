@@ -30,42 +30,22 @@ $totalVenc = $row3['totalVencido'] ?? 0;
   <title>Dashboard - Bibliotech</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <?php include 'components/sidebar-style.php'; ?>
   
   <style>
     :root {
       --card: #ffffff;
       --muted: #6b6f73;
-      --accent: #b33a3a;
     }
 
     body {
       background: linear-gradient(to right, #ece9e6, #ffffff);
-      margin: 0;
       overflow-x: hidden;
       font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
-    .toggle-btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.1rem;
-      padding: 0.5rem 1rem;
-      text-align: left;
-      width: 100%;
-      cursor: pointer;
-    }
 
-    .logout-btn {
-      position: absolute;
-      bottom: 1rem;
-      left: 1rem;
-      right: 1rem;
-    }
-
-    /* Background image effect similar to index.php */
     .content {
       display: flex;
       flex-direction: column;
@@ -179,6 +159,7 @@ $totalVenc = $row3['totalVencido'] ?? 0;
         font-size: 2rem;
       }
     }
+
 .welcome-bump {
   position: relative;
   top: 0; /* mobile: não desloca */
