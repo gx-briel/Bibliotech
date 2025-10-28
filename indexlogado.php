@@ -41,10 +41,28 @@ $totalVenc = $row3['totalVencido'] ?? 0;
 
     body {
       background: linear-gradient(to right, #ece9e6, #ffffff);
+      margin: 0;
       overflow-x: hidden;
       font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     
+    .toggle-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.1rem;
+      padding: 0.5rem 1rem;
+      text-align: left;
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .logout-btn {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      right: 1rem;
+    }
 
     .content {
       display: flex;
@@ -167,20 +185,10 @@ $totalVenc = $row3['totalVencido'] ?? 0;
 
 @media (min-width: 768px) {
   .welcome-bump {
-    top: -190px; /* tablets/desktop: sobe */
+    top: -16rem; /* tablets/desktop: sobe */
   }
 }
 
-.botaodash{
-  position: relative;
-  top: 0; /* mobile: não desloca */
-}
-
-@media (min-width: 768px) {
-  .botaodash {
-    top: -220px; /* tablets/desktop: sobe */
-  }
-}
 
 .cards-dashboard{
   position: relative;
@@ -193,6 +201,9 @@ $totalVenc = $row3['totalVencido'] ?? 0;
   }
 }
 
+
+
+
   </style>
 </head>
 <body>
@@ -201,10 +212,6 @@ $totalVenc = $row3['totalVencido'] ?? 0;
 
   <div class="content">
     <div class="container-fluid">
-
-      <h2 class="text-center mb-4 botaodash" style="font-weight: 600; color: #062c2a; font-size: 2rem;">
-        <i class="fas fa-tachometer-alt"></i> Dashboard
-      </h2>
 
       <!-- Welcome section -->
       <div class="row">

@@ -1,4 +1,3 @@
-
 <?php
 session_start(); 
 if (!isset($_SESSION['id'])) {
@@ -17,6 +16,18 @@ if (!isset($_SESSION['id'])) {
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <?php include 'components/sidebar-style.php'; ?>
   <style>
+
+    @keyframes fadeInUpSmooth {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in-up {
+      opacity: 0;                    /* garante estado inicial consistente */
+      animation: fadeInUpSmooth 0.6s ease-in-out both; /* both = mantém estado final */
+      will-change: opacity, transform;
+    }
+
     body {
       background-color: rgb(238, 255, 235);
       margin: 0;
@@ -32,17 +43,20 @@ if (!isset($_SESSION['id'])) {
       padding: 2rem;
       flex: 1;
       transition: margin-left 0.3s;
+      display: flex;            /* ativa flexbox */
+      align-items: center;      /* centra verticalmente (eixo cruzado) */
+      justify-content: center;  /* centra horizontalmente (opcional) */
+      min-height: 100vh;        /* ocupa a altura inteira da viewport */
     }
 
     .card {
       border: none;
       border-radius: 16px;
       box-shadow: 0 2px 12px rgba(0,0,0,0.18);
-      margin-bottom: 6px;
+      margin-bottom: 25px;
       width: 100%;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
+      margin-left: 25px;
+      margin-right: 25px;
     }
     .dashboard-card-title {
       font-size: 2rem;
@@ -76,91 +90,117 @@ if (!isset($_SESSION['id'])) {
         padding: 1.2rem 0.5rem !important;
       }
     }
+
+
+    .bg-danger{
+      background: linear-gradient(135deg, #e7737eff 0%, #c82333 100%) !important;
+    }
+    .bg-warning{
+      background: linear-gradient(135deg, #daba5dff 0%, #FFC107 100%) !important;
+    }
+    .bg-success{
+      background: linear-gradient(135deg, #72ca87ff 0%, #1e7e34 100%) !important;
+    }
+    .bg-primary{
+      background: linear-gradient(135deg, #56a4f8ff 0%, #0056b3 100%) !important;
+    }
+
+
   </style>
 </head>
 <body>
 
 <?php include 'components/sidebar-logado.php'; ?>
 
-  <div class="content">
-    <div class="container">
-      <div class="row">
-        <?php
-        require_once 'conexao.php';
-        // Usa a variável $conexao definida em conexao.php
-        // Total de empréstimos
-        $sqlTodos = "SELECT COUNT(*) as total FROM emprestimo";
-        $resTodos = mysqli_query($conexao, $sqlTodos);
-        $qtdTodos = ($resTodos && $row = mysqli_fetch_assoc($resTodos)) ? $row['total'] : 0;
+<div class="content">
+  <div class="container">
+    <div class="row">
+      <?php
+      require_once 'conexao.php';
+      // Total de empréstimos
+      $sqlTodos = "SELECT COUNT(*) as total FROM emprestimo";
+      $resTodos = mysqli_query($conexao, $sqlTodos);
+      $qtdTodos = ($resTodos && $row = mysqli_fetch_assoc($resTodos)) ? $row['total'] : 0;
 
-        // Empréstimos ativos
-        $sqlAtivos = "SELECT COUNT(*) as total FROM emprestimo WHERE ativo = '1'";
-        $resAtivos = mysqli_query($conexao, $sqlAtivos);
-        $qtdAtivos = ($resAtivos && $row = mysqli_fetch_assoc($resAtivos)) ? $row['total'] : 0;
+      // Empréstimos ativos
+      $sqlAtivos = "SELECT COUNT(*) as total FROM emprestimo WHERE ativo = '1'";
+      $resAtivos = mysqli_query($conexao, $sqlAtivos);
+      $qtdAtivos = ($resAtivos && $row = mysqli_fetch_assoc($resAtivos)) ? $row['total'] : 0;
 
-        // Empréstimos à vencer
-        $sqlVencer = "SELECT COUNT(*) as total FROM emprestimo WHERE ativo = '1' AND vencimento BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 5 DAY)";
-        $resVencer = mysqli_query($conexao, $sqlVencer);
-        $qtdVencer = ($resVencer && $row = mysqli_fetch_assoc($resVencer)) ? $row['total'] : 0;
+      // Empréstimos à vencer (até 5 dias)
+      $sqlVencer = "SELECT COUNT(*) as total FROM emprestimo WHERE ativo = '1' AND vencimento BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 5 DAY)";
+      $resVencer = mysqli_query($conexao, $sqlVencer);
+      $qtdVencer = ($resVencer && $row = mysqli_fetch_assoc($resVencer)) ? $row['total'] : 0;
 
-        // Empréstimos atrasados
-        $sqlAtrasados = "SELECT COUNT(*) as total FROM emprestimo WHERE ativo = '1' AND vencimento < CURDATE()";
-        $resAtrasados = mysqli_query($conexao, $sqlAtrasados);
-        $qtdAtrasados = ($resAtrasados && $row = mysqli_fetch_assoc($resAtrasados)) ? $row['total'] : 0;
-        ?>
-        <div class="col-12" style="margin-bottom: 6px;">
-          <div class="card text-white bg-primary">
-            <a href="todosEmprestimos.php" style="text-decoration:none;display:block;width:100%;">
-              <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
-                <h5 class="card-title dashboard-card-title">Todos Empréstimos</h5>
-                <span class="dashboard-card-value">
-                  <?= $qtdTodos ?>
-                </span>
-                <small class="dashboard-card-desc">Total de registros</small>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-12" style="margin-bottom: 6px;">
-          <div class="card text-white bg-success">
-            <a href="listaEmprestimoAtivo.php" style="text-decoration:none;display:block;width:100%;">
-              <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
-                <h5 class="card-title dashboard-card-title">Empréstimos Ativos</h5>
-                <span class="dashboard-card-value">
-                  <?= $qtdAtivos ?>
-                </span>
-                <small class="dashboard-card-desc">Atualmente em aberto</small>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-12" style="margin-bottom: 6px;">
-          <div class="card text-white bg-warning">
-            <a href="emprestimoVence.php" style="text-decoration:none;display:block;width:100%;">
-              <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
-                <h5 class="card-title dashboard-card-title">À Vencer</h5>
-                <span class="dashboard-card-value">
-                  <?= $qtdVencer ?>
-                </span>
-                <small class="dashboard-card-desc">Vencem em até 5 dias</small>
-              </div>
-            </a>
-          </div>
-        </div>
-        <div class="col-12" style="margin-bottom: 6px;">
-          <div class="card text-white bg-danger">
-            <a href="emprestimoVencido.php" style="text-decoration:none;display:block;width:100%;">
-              <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
-                <h5 class="card-title dashboard-card-title">Atrasados</h5>
-                <span class="dashboard-card-value">
-                  <?= $qtdAtrasados ?>
-                </span>
-                <small class="dashboard-card-desc">Já passaram do prazo</small>
-              </div>
-            </a>
-          </div>
+      // Empréstimos atrasados
+      $sqlAtrasados = "SELECT COUNT(*) as total FROM emprestimo WHERE ativo = '1' AND vencimento < CURDATE()";
+      $resAtrasados = mysqli_query($conexao, $sqlAtrasados);
+      $qtdAtrasados = ($resAtrasados && $row = mysqli_fetch_assoc($resAtrasados)) ? $row['total'] : 0;
+      ?>
+
+      <div class="col-12 mb-2">
+        <h2 class="text-center mb-4 botaodash fade-in-up" style="font-weight: 600; color: #062c2a; font-size: 2rem;">
+          <i class="fas fa-tachometer-alt"></i> Dashboard
+        </h2>
+      </div>
+
+      <!-- 2x2: cada card ocupa 12 no mobile e 6 a partir de md -->
+      <div class="col-12 col-md-6 mb-2 fade-in-up">
+        <div class="card text-white bg-primary">
+          <a href="todosEmprestimos.php" style="text-decoration:none;display:block;width:100%;">
+            <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
+              <h5 class="card-title dashboard-card-title">Todos Empréstimos</h5>
+              <span class="dashboard-card-value">
+                <?= $qtdTodos ?>
+              </span>
+              <small class="dashboard-card-desc">Total de registros</small>
+            </div>
+          </a>
         </div>
       </div>
+
+      <div class="col-12 col-md-6 mb-2 fade-in-up">
+        <div class="card text-white bg-success">
+          <a href="listaEmprestimoAtivo.php" style="text-decoration:none;display:block;width:100%;">
+            <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
+              <h5 class="card-title dashboard-card-title">Empréstimos Ativos</h5>
+              <span class="dashboard-card-value">
+                <?= $qtdAtivos ?>
+              </span>
+              <small class="dashboard-card-desc">Atualmente em aberto</small>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 mb-2 fade-in-up">
+        <div class="card text-white bg-warning">
+          <a href="emprestimoVence.php" style="text-decoration:none;display:block;width:100%;">
+            <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
+              <h5 class="card-title dashboard-card-title">À Vencer</h5>
+              <span class="dashboard-card-value">
+                <?= $qtdVencer ?>
+              </span>
+              <small class="dashboard-card-desc">Vencem em até 5 dias</small>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 mb-2 fade-in-up">
+        <div class="card text-white bg-danger">
+          <a href="emprestimoVencido.php" style="text-decoration:none;display:block;width:100%;">
+            <div class="card-body d-flex flex-column justify-content-center align-items-center p-4">
+              <h5 class="card-title dashboard-card-title">Atrasados</h5>
+              <span class="dashboard-card-value">
+                <?= $qtdAtrasados ?>
+              </span>
+              <small class="dashboard-card-desc">Já passaram do prazo</small>
+            </div>
+          </a>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>

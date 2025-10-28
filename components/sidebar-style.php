@@ -242,6 +242,7 @@
     right: 1rem;
   }
 
+
   .show-sidebar-btn {
     position: fixed;
     top: 15px;
