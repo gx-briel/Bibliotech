@@ -1,52 +1,62 @@
 <?php
-session_start(); // Inicia a sessão
+session_start();
 
-// Apenas processar se o formulário foi enviado via POST
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+// Processa apenas requisições POST (AJAX do seu formulário)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    include('conexao.php'); // Inclui a conexão com o banco
+    require_once 'conexao.php';
 
+    // Resposta padrão
     $response = ['status' => 'success'];
 
-    if (isset($_POST['usuario']) && isset($_POST['senha'])) {
-        $usuario = trim($_POST['usuario']); // Remove espaços extras
-        $senha = trim($_POST['senha']); // Remove espaços extras
+    // Coleta e normaliza entradas
+    $usuario = isset($_POST['usuario']) ? trim($_POST['usuario']) : '';
+    $senha   = isset($_POST['senha'])   ? trim($_POST['senha'])   : '';
 
-        if (strlen($usuario) == 0) {
-            $response = ['status' => 'usuario_vazio'];
-        } else if (strlen($senha) == 0) {
-            $response = ['status' => 'senha_vazio'];
-        } else {
-            // Verifica no banco se o usuário existe
-            $sql_code = "SELECT * FROM usuarios WHERE usuario = ?";
-            $stmt = $conexao->prepare($sql_code);
-            $stmt->bind_param("s", $usuario);
-            $stmt->execute();
-            $sql_query = $stmt->get_result();
+    // Validações simples
+    if ($usuario === '') {
+        $response = ['status' => 'usuario_vazio'];
+    } elseif ($senha === '') {
+        $response = ['status' => 'senha_vazio'];
+    } else {
+        // Busca apenas os campos necessários (inclui nome)
+        $sql  = "SELECT ID, usuario, senha, nome FROM usuarios WHERE usuario = ?";
+        $stmt = $conexao->prepare($sql);
+        $stmt->bind_param("s", $usuario);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-            if ($sql_query->num_rows == 1) {
-                $usuario_data = $sql_query->fetch_assoc();
+        if ($result && $result->num_rows === 1) {
+            $usuario_data = $result->fetch_assoc();
 
-                // Verifica se a senha fornecida é igual à senha armazenada (comparação simples, pois a senha está em texto simples)
-                if ($senha == $usuario_data['senha']) {
-                    // Inicia a sessão e guarda o ID do usuário
-                    $_SESSION['id'] = $usuario_data['ID'];
-                    $_SESSION['usuario'] = $usuario_data['usuario']; // Armazenar o nome de usuário também, se necessário
+            // Comparação simples de senha (igual ao seu código atual)
+            if ($senha === $usuario_data['senha']) {
 
-                    $response = ['status' => 'login_ok'];
-                } else {
-                    $response = ['status' => 'login_falhou'];
-                }
+                // Extrai primeiro nome com segurança
+                $nomeCompleto = (string)($usuario_data['nome'] ?? '');
+                // remove espaços duplicados e trim
+                $nomeCompleto = trim(preg_replace('/\s+/', ' ', $nomeCompleto));
+                // primeiro token antes do primeiro espaço
+                $primeiroNome = $nomeCompleto !== '' ? explode(' ', $nomeCompleto, 2)[0] : $usuario_data['usuario'];
+
+                // Seta sessão
+                $_SESSION['id']      = $usuario_data['ID'];
+                $_SESSION['usuario'] = $usuario_data['usuario'];
+                $_SESSION['nome']    = $primeiroNome;
+
+                $response = ['status' => 'login_ok'];
             } else {
                 $response = ['status' => 'login_falhou'];
             }
+        } else {
+            $response = ['status' => 'login_falhou'];
         }
     }
 
-    // Retorna a resposta como JSON
+    // Retorna JSON e encerra
     header('Content-Type: application/json');
     echo json_encode($response);
-    die();  // Certifique-se de que o script pare aqui, evitando qualquer saída extra
+    exit;
 }
 ?>
 <!DOCTYPE html>

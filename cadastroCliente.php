@@ -23,7 +23,7 @@ if (!isset($_SESSION['id'])) {
 
 <style>
   body {
-    background-color: rgb(238, 255, 235);
+    background: linear-gradient(#eeffebff, #ffffff);
     margin: 0;
     overflow-x: hidden;
     font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -33,10 +33,6 @@ if (!isset($_SESSION['id'])) {
     margin-left: 250px;
     padding: 2rem;
     transition: margin-left 0.3s;
-  }
-
-  .sidebar.hidden ~ .content {
-    margin-left: 0;
   }
 
   @media (max-width: 768px) {

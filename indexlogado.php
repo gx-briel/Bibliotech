@@ -30,14 +30,13 @@ $totalVenc = $row3['totalVencido'] ?? 0;
   <title>Dashboard - Bibliotech</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <?php include 'components/sidebar-style.php'; ?>
   
   <style>
     :root {
       --card: #ffffff;
       --muted: #6b6f73;
-      --accent: #b33a3a;
     }
 
     body {
@@ -65,7 +64,6 @@ $totalVenc = $row3['totalVencido'] ?? 0;
       right: 1rem;
     }
 
-    /* Background image effect similar to index.php */
     .content {
       display: flex;
       flex-direction: column;
@@ -179,6 +177,7 @@ $totalVenc = $row3['totalVencido'] ?? 0;
         font-size: 2rem;
       }
     }
+
 .welcome-bump {
   position: relative;
   top: 0; /* mobile: não desloca */
@@ -186,20 +185,10 @@ $totalVenc = $row3['totalVencido'] ?? 0;
 
 @media (min-width: 768px) {
   .welcome-bump {
-    top: -190px; /* tablets/desktop: sobe */
+    top: -16rem; /* tablets/desktop: sobe */
   }
 }
 
-.botaodash{
-  position: relative;
-  top: 0; /* mobile: não desloca */
-}
-
-@media (min-width: 768px) {
-  .botaodash {
-    top: -220px; /* tablets/desktop: sobe */
-  }
-}
 
 .cards-dashboard{
   position: relative;
@@ -212,6 +201,9 @@ $totalVenc = $row3['totalVencido'] ?? 0;
   }
 }
 
+
+
+
   </style>
 </head>
 <body>
@@ -220,10 +212,6 @@ $totalVenc = $row3['totalVencido'] ?? 0;
 
   <div class="content">
     <div class="container-fluid">
-
-      <h2 class="text-center mb-4 botaodash" style="font-weight: 600; color: #062c2a; font-size: 2rem;">
-        <i class="fas fa-tachometer-alt"></i> Dashboard
-      </h2>
 
       <!-- Welcome section -->
       <div class="row">
