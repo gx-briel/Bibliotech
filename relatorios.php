@@ -14,62 +14,26 @@ if (!isset($_SESSION['id'])) {
   <title>Relatórios</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <?php include 'components/sidebar-style.php'; ?>
   <style>
     body {
       background-color: rgb(238, 255, 235);
       margin: 0;
       overflow-x: hidden;
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
     .wrapper {
       display: flex;
     }
 
-    .nav-links li a:hover {
-      color: #ffcc00;
-      text-decoration: underline;
-    }
-    .toggle-btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.1rem;
-      padding: 0.5rem 1rem;
-      text-align: left;
-      width: 100%;
-      cursor: pointer;
-    }
-    .logout-btn {
-      position: absolute;
-      bottom: 1rem;
-      left: 1rem;
-      right: 1rem;
-    }
-    .show-sidebar-btn {
-      position: fixed;
-      top: 15px;
-      left: 15px;
-      z-index: 1000;
-      background-color: #1c0e3f;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 8px 12px;
-      font-size: 1.2rem;
-      display: none;
-    }
-    .sidebar.hidden ~ .show-sidebar-btn {
-      display: block;
-    }
     .content {
       margin-left: 250px;
       padding: 2rem;
       flex: 1;
       transition: margin-left 0.3s;
     }
-    .sidebar.hidden ~ .content {
-      margin-left: 0;
-    }
+
     .card {
       border: none;
       border-radius: 16px;

@@ -7,20 +7,20 @@
   .nav-links li a.signup-link{color:rgba(255,255,255,0.95);transition:color .14s ease, text-shadow .14s}
 
   .nav-links li a.login-link:hover{background:transparent !important}
-  .nav-links li a.login-link:hover span.text{color:#2b6ea3 !important; text-decoration:underline; text-decoration-thickness:2px}
-  .nav-links li a.login-link:hover i{color:#2b6ea3 !important}
+  .nav-links li a.login-link:hover span.text{color:#0bec61ff !important; text-decoration-thickness:2px}
+  .nav-links li a.login-link:hover i{color:#0bec61ff !important}
   .nav-links li a.login-link:hover{box-shadow: 0 6px 18px rgba(0,0,0,0.12); transform: translateY(-2px); border-radius:8px}
 
   .nav-links li a.signup-link:hover{background:transparent !important}
-  .nav-links li a.signup-link:hover span.text{color:#2ca44b !important; text-decoration:underline; text-decoration-thickness:2px}
-  .nav-links li a.signup-link:hover i{color:#2ca44b !important}
+  .nav-links li a.signup-link:hover span.text{color:#00e5ff !important; text-decoration-thickness:2px}
+  .nav-links li a.signup-link:hover i{color:#00e5ff !important}
   .nav-links li a.signup-link:hover{box-shadow: 0 6px 18px rgba(0,0,0,0.12); transform: translateY(-2px); border-radius:8px}
 
   /* foco por teclado — visível e altera texto e ícone */
   .nav-links li a.login-link:focus span.text,
   .nav-links li a.signup-link:focus span.text{outline: none}
-  .nav-links li a.login-link:focus i{color:#2b6ea3}
-  .nav-links li a.signup-link:focus i{color:#2ca44b}
+  .nav-links li a.login-link:focus i{color:#0bec61ff}
+  .nav-links li a.signup-link:focus i{color:#00e5ff}
 </style>
 <div class="wrapper">
   <!-- Sidebar -->

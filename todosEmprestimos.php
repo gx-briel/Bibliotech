@@ -91,7 +91,7 @@ $executaConsulta = mysqli_query($conexao, $consulta);
   <title>Listagem de Empréstimos</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <?php include 'components/sidebar-style.php'; ?>
   
   <style>
@@ -99,18 +99,9 @@ $executaConsulta = mysqli_query($conexao, $consulta);
       background-color: rgb(238, 255, 235);
       margin: 0;
       overflow-x: hidden;
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-      background-color: #1c0e3f;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 8px 12px;
-      font-size: 1.2rem;
-      display: none;
-    }
-    .sidebar.hidden ~ .show-sidebar-btn {
-      display: block;
-    }
+
     .content {
       margin-left: 250px;
       flex: 1;

@@ -97,70 +97,34 @@ $executaConsulta = mysqli_query($conexao, $consulta);
   <title>Empréstimos Atrasados</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <?php include 'components/sidebar-style.php'; ?>
   
   <style>
+
     body {
       background-color: rgb(238, 255, 235);
       padding-bottom: 80px;
       margin: 0;
       overflow-x: hidden;
+      font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+
     .container, .container-fluid {
       max-width: 100vw;
       margin: 40px auto 0 auto;
       padding-left: 8px;
       padding-right: 8px;
     }
-    h2, h2.text-center {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-      display: block;
-    }
-    .nav-links li a:hover {
-      color: #ffcc00;
-      text-decoration: underline;
-    }
-    .toggle-btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.1rem;
-      padding: 0.5rem 1rem;
-      text-align: left;
-      width: 100%;
-      cursor: pointer;
-    }
-    .logout-btn {
-      position: absolute;
-      bottom: 1rem;
-      left: 1rem;
-      right: 1rem;
-    }
-    .show-sidebar-btn {
-      position: fixed;
-      top: 15px;
-      left: 15px;
-      z-index: 1000;
-      background-color: #1c0e3f;
-      color: white;
-      border: none;
-    .btn-info, .btn-warning, .btn-danger {
-      color: white;
-    }
-    .ff2 {
-      color: #212529;
-    }
 
-    /* Delimitador vertical para cada coluna da tabela */
     .tabela-delimitada th, .tabela-delimitada td {
-      border-right: 2px solid #555;
+      border-right: 0.5px solid #555;
     }
+    
     .tabela-delimitada th:last-child, .tabela-delimitada td:last-child {
       border-right: none;
     }
+
   </style>
 </head>
 <body>

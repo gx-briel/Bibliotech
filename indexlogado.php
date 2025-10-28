@@ -65,8 +65,6 @@ $totalVenc = $row3['totalVencido'] ?? 0;
       right: 1rem;
     }
 
-
-
     /* Background image effect similar to index.php */
     .content {
       display: flex;
