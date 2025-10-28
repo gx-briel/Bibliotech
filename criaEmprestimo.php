@@ -88,30 +88,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     /* Sobrescrever o gradiente da sidebar para esta página */
     .sidebar {
-      background: linear-gradient(170deg,rgb(21, 83, 24) 40%,rgb(94, 252, 107) 100%);
+      background: linear-gradient(170deg, #08470bff 40%, #3fac48ff 100%);
     }
     .sidebar .sidebar-header {
-      background-color: rgb(21, 83, 24);
+      background-color: #08470bff;
     }
+
+    /*Botao de criar*/
     .btn-info {
-      background-color: #388e3c; 
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(170deg, #08470bff 40%, #3fac48ff 100%);
       border: none;
-      width: 100%; 
+      width: 100%;
+    }
+    .btn-info::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+    .btn-info:hover::before { 
+      left: 100%; 
     }
     .btn-info:hover {
-      background-color: #2c6b29; 
+      background: linear-gradient(170deg, #3fac48ff 0%, #08470bff 100%);
+      color: #fff;
     }
-    .form-control.is-invalid {
-      border-color: #dc3545;
-      padding-right: calc(1.5em + .75rem);
-      background-image: url('https://cdn-icons-png.flaticon.com/512/198/198622.png');
-      background-repeat: no-repeat;
-      background-position: right calc(.375em + .1875rem) center;
-      background-size: calc(.75em + .375rem) calc(.75em + .375rem);
-    }
-    .invalid-feedback {
-      display: block;
-    }
+
     @media (max-width: 768px) {
       .content {
         margin-left: 0 !important;
@@ -178,4 +186,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-

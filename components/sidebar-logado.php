@@ -4,15 +4,18 @@
 <div class="wrapper">
   <!-- Sidebar -->
   <nav id="sidebar" class="sidebar">
-    <div class="sidebar-header">
+
+    <div class="sidebar-header mb-0" style="border-bottom:0;">
       <a href="indexlogado.php">
         <i class="fa-solid fa-book-open-reader"></i>
         <span>Bibliotech</span>
       </a>
     </div>
-    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2" onclick="hideSidebar()" style="font-weight: bold; font-size: 1rem;">
+
+    <button class="toggle-btn btn btn-sm btn-warning w-100 mb-2 mt-0" onclick="hideSidebar()" style="font-weight: bold; font-size: 1rem;">
       <i class="fa-solid fa-angles-left mr-2"></i> Recolher Menu
     </button>
+
     <ul class="nav-links">
       <!-- Menu Clientes -->
       <li class="nav-item">
