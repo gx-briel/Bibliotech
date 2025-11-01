@@ -233,7 +233,7 @@
 
   <div class="main-card">
     <div class="hero-icon" aria-hidden="true">
-      <i class="fa-solid fa-book-open-reader" style="font-size:4.5rem;color:var(--accent);"></i>
+      <i class="fa-solid fa-book-open-reader" style="font-size:4.5rem;color:#941e1eff;"></i>
     </div>
     <h1 class="hero-title">Bibliotech</h1>
     <p class="tagline">Seu portal para descobrir e gerenciar livros com facilidade.</p>
