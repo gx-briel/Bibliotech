@@ -14,7 +14,7 @@ $resClientes = mysqli_query($conexao, $sqlClientes);
 $qtdClientes = ($resClientes && $row = mysqli_fetch_assoc($resClientes)) ? $row['total'] : 0;
 
 // Clientes com empréstimos ativos
-$sqlClientesAtivos = "SELECT COUNT(DISTINCT idCliente) as total FROM emprestimo WHERE ativo = '1'";
+$sqlClientesAtivos = "SELECT COUNT(ID) AS total FROM clientes WHERE ID IN (SELECT idCliente FROM emprestimo WHERE ativo = 1 group by idCliente) and removidoEm IS NULL";
 $resClientesAtivos = mysqli_query($conexao, $sqlClientesAtivos);
 $qtdClientesAtivos = ($resClientesAtivos && $row = mysqli_fetch_assoc($resClientesAtivos)) ? $row['total'] : 0;
 
@@ -306,7 +306,7 @@ $qtdFinalizados = ($resFinalizados && $row = mysqli_fetch_assoc($resFinalizados)
 
         <div class="col-12 col-md-6 col-lg-6 mb-3 fade-in-up" style="animation-delay: 0.2s;">
           <div class="card text-white bg-primary">
-            <a href="listaEmprestimoAtivo.php" style="text-decoration:none;display:block;width:100%;">
+            <a href="clientesComEmprestimo.php" style="text-decoration:none;display:block;width:100%;">
               <div class="card-body d-flex flex-column justify-content-center align-items-center">
                 <div class="icon-wrapper">
                   <i class="fas fa-user-check"></i>
