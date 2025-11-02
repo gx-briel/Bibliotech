@@ -11,7 +11,7 @@ if (!isset($_SESSION['id'])) {
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    $query = "UPDATE livros SET removidoEm = CURDATE() WHERE ID = $id";
+    $query = "UPDATE livros SET removidoEm = CURDATE(), disponivel = 0 WHERE ID = $id";
     if (mysqli_query($conexao, $query)) {
 
         header("Location: acervo.php");
