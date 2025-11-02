@@ -23,16 +23,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             WHERE id = $emprestimoId AND ativo = 1"; 
 
         if (mysqli_query($conexao, $queryEmprestimo)) {
-
-            header("Location: listaEmprestimoAtivo.php");
+            // Retornar JSON para AJAX
+            header('Content-Type: application/json');
+            echo json_encode(['success' => true, 'message' => 'Empréstimo renovado com sucesso!']);
             exit();
         } else {
-            echo "Erro ao renovar o empréstimo: " . mysqli_error($conexao);
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'message' => 'Erro ao renovar o empréstimo: ' . mysqli_error($conexao)]);
+            exit();
         }
     } else {
-        echo "Empréstimo não encontrado ou data de renovação não informada.";
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'message' => 'Empréstimo não encontrado ou data de renovação não informada.']);
+        exit();
     }
 } else {
-    echo "Método de requisição inválido.";
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => 'Método de requisição inválido.']);
+    exit();
 }
 ?>

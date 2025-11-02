@@ -84,6 +84,7 @@ if (isset($_POST['export_excel'])) {
 }
 
 $executaConsulta = mysqli_query($conexao, $consulta);
+$numRows = mysqli_num_rows($executaConsulta);
 ?>
 
 <!DOCTYPE html>
@@ -98,240 +99,742 @@ $executaConsulta = mysqli_query($conexao, $consulta);
   <?php include 'components/sidebar-style.php'; ?>
   
   <style>
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     body {
-      background-color: rgb(238, 255, 235);
-      padding-bottom: 60px;
+      background: linear-gradient(to right, #ece9e6, #ffffff);
+      margin: 0;
+      overflow-x: hidden;
+      padding-bottom: 0;
       font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+    
+    .page-header-card {
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      margin-bottom: 2rem;
+      animation: fadeInUp 0.4s ease-out;
+    }
+
+    .page-header-card .card-header {
+      background: linear-gradient(135deg, #062c2a 0%, #08470b 100%);
+      color: white;
+      padding: 1.5rem 2rem;
+      border: none;
+      position: relative;
+    }
+
+    .page-header-card .card-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    }
+
+    .page-header-card .card-header h2 {
+      margin: 0;
+      font-size: 1.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .page-header-card .card-header h2 i {
+      font-size: 1.5rem;
+    }
+
+    .page-header-card .card-body {
+      padding: 1.5rem 2rem;
+    }
+
+    .search-form .input-group {
+      display: flex;
+      width: 100%;
+      gap: 0.5rem;
+      align-items: stretch;
+    }
+
+    .search-form .form-control {
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      flex: 1;
+      height: auto;
+    }
+
+    .search-form .form-control:focus {
+      border-color: #08470b;
+      box-shadow: 0 0 0 0.2rem rgba(8, 71, 11, 0.15);
+      outline: none;
+    }
+
+    .search-form .btn-info {
+      background: linear-gradient(135deg, #08470b 0%, #062c2a 100%);
+      border: 2px solid #08470b;
+      border-radius: 10px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(8, 71, 11, 0.3);
+      color: white;
+      height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-form .btn-info:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(8, 71, 11, 0.4);
+      background: linear-gradient(135deg, #062c2a 0%, #08470b 100%);
+      border-color: #062c2a;
+    }
+
+    .search-form .btn-info:focus {
+      border-color: #08470b;
+      outline: none;
+      box-shadow: 0 0 0 0.2rem rgba(8, 71, 11, 0.25);
+    }
+
+    .table-wrapper {
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      animation: fadeInUp 0.4s ease-out 0.15s both;
+    }
+
     .table-container {
+      position: relative;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
+      z-index: 1;
     }
+
+    .table-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('bg1.jpg');
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      opacity: 0.05;
+      z-index: 0;
+      pointer-events: none;
+      filter: saturate(0.9) blur(0px);
+    }
+
+    .table-container table {
+      position: relative;
+      z-index: 1;
+      background-color: rgba(255, 255, 255, 0.95);
+      margin-bottom: 0;
+    }
+
     table {
       width: 100%;
     }
-    .container, .container-fluid {
-      max-width: 1100px;
-      margin: 40px auto 0 auto;
-      padding-left: 24px;
-      padding-right: 24px;
-    }
-    h2, h2.text-center {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
 
     .table-striped tbody tr:nth-of-type(odd) {
-      background-color: rgba(0, 0, 0, 0.05);
+      background-color: rgba(6, 44, 42, 0.03);
+    }
+
+    .table-striped tbody tr:hover {
+      background-color: rgba(8, 71, 11, 0.08);
+      transition: background-color 0.2s ease;
+    }
+
+    .table th, .table td {
+      border: 1px solid #ccc !important;
+      vertical-align: middle;
+      padding: 12px 15px;
+    }
+
+    .table thead th {
+      background: linear-gradient(135deg, #062c2a 0%, #08470b 100%);
+      color: white;
+      font-weight: 600;
+      border: none !important;
+      padding: 1rem 15px;
+      white-space: nowrap;
+    }
+
+    .table tbody td {
+      border-color: #e0e0e0 !important;
+      padding: 1rem 15px;
+    }
+
+    .table th:nth-child(1), .table td:nth-child(1) { width: 5%; }
+    .table th:nth-child(2), .table td:nth-child(2) { width: 20%; }
+    .table th:nth-child(3), .table td:nth-child(3) { width: 20%; }
+    .table th:nth-child(4), .table td:nth-child(4) { width: 15%; }
+    .table th:nth-child(5), .table td:nth-child(5) { width: 18%; }
+    .table th:nth-child(6), .table td:nth-child(6) { width: 12%; }
+    .table th:nth-child(7), .table td:nth-child(7) { width: 10%; }
+
+    .btn-danger {
+      background-color: #dc3545;
+      border-color: #dc3545;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #c82333;
+      border-color: #bd2130;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+      color: white;
+    }
+
+    .btn-warning {
+      background: linear-gradient(135deg, #ffcc00 0%, #e0a800 100%);
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      color: #062c2a !important;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(255, 204, 0, 0.3);
+    }
+
+    .btn-warning:hover {
+      background: linear-gradient(135deg, #e0a800 0%, #ffcc00 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 204, 0, 0.4);
+      color: #062c2a !important;
+    }
+
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: linear-gradient(135deg, #20c997 0%, #28a745 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+      color: white;
+    }
+
+    .pagination-buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 10px;
+    }
+
+    .btn-show-more, .btn-show-less {
+      background: linear-gradient(135deg, #08470b 0%, #062c2a 100%);
+      border: none;
+      border-radius: 10px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      color: white;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(8, 71, 11, 0.3);
+    }
+
+    .btn-show-more:hover, .btn-show-less:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(8, 71, 11, 0.4);
+      background: linear-gradient(135deg, #062c2a 0%, #08470b 100%);
+      color: white;
     }
 
     .content {
       margin-left: 250px;
       padding: 2rem;
+      padding-bottom: 4rem;
       transition: margin-left 0.3s;
+      position: relative;
+      min-height: 100vh;
+      background: transparent;
+    }
+
+    .content::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 250px;
+      right: 0;
+      bottom: 0;
+      width: calc(100% - 250px);
+      height: 100vh;
+      background-image: url('bg1.jpg');
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      opacity: 0.15;
+      z-index: 0;
+      pointer-events: none;
+      filter: saturate(0.9) blur(0px);
+      transition: left 0.3s ease, width 0.3s ease;
+    }
+
+    .sidebar.hidden ~ .content::before {
+      left: 0;
+      width: 100%;
+    }
+
+    .content > * {
+      position: relative;
+      z-index: 1;
     }
 
     .sidebar.hidden ~ .content {
       margin-left: 0;
     }
-    .card {
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+
+    .table thead th a {
+      color: white;
+      text-decoration: none;
     }
+
+    .table thead th a:hover {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: underline;
+    }
+
+    /* Estilos dos Modais */
+    .modal-backdrop {
+      z-index: 1050 !important;
+      background-color: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-backdrop.fade {
+      opacity: 0;
+    }
+
+    .modal-backdrop.show {
+      opacity: 0.6;
+    }
+
+    .modal {
+      z-index: 1060 !important;
+    }
+
+    .modal-content {
+      border-radius: 16px;
+      border: none;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+      padding: 0;
+    }
+
+    .modal-content .modal-header {
+      background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+      color: white;
+      border: none;
+      border-radius: 16px 16px 0 0;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .modal-content .modal-header .close {
+      color: white;
+      opacity: 0.9;
+      text-shadow: none;
+      font-size: 1.5rem;
+    }
+
+    .modal-content .modal-header .close:hover {
+      opacity: 1;
+      color: white;
+    }
+
+    .modal-content .modal-header .modal-title {
+      font-weight: 700;
+      font-size: 1.5rem;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .modal-content .modal-body {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .modal-content .modal-body .modal-icon {
+      font-size: 4rem;
+      color: #dc3545;
+      margin-bottom: 1rem;
+    }
+
+    .modal-content .modal-body p {
+      font-size: 1.1rem;
+      margin-bottom: 0;
+    }
+
+    .modal-content .modal-footer {
+      padding: 1.5rem;
+      border-top: 1px solid #e9ecef;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .modal-content .modal-footer .btn {
+      border-radius: 8px;
+      font-weight: 600;
+      padding: 0.5rem 1.5rem;
+    }
+
+    /* Modal de sucesso com background verde */
+    .modal-content.success-modal .modal-header {
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+    }
+
+    .modal-content.success-modal .modal-body .modal-icon {
+      color: #28a745 !important;
+    }
+
+    /* Modal de renovação com background laranja/amarelo */
+    .modal-content.renovacao-modal .modal-header {
+      background: linear-gradient(135deg, #ffcc00 0%, #e0a800 100%) !important;
+    }
+
+    .modal-content.renovacao-modal .modal-body .modal-icon {
+      color: #ffcc00 !important;
+    }
+
+    /* Ajustar modal de sucesso da devolução */
+    #modalDevolucaoSucesso .modal-header {
+      background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+    }
+
     @media (max-width: 768px) {
+      .content::before {
+        left: 0;
+        width: 100%;
+      }
       .content {
         margin-left: 0 !important;
         padding: 1rem;
       }
+      .table-container {
+        width: 100vw;
+        min-width: 600px;
+        overflow-x: auto;
+      }
+      .table {
+        min-width: 600px;
+      }
+      .search-form .input-group {
+        flex-direction: column;
+      }
     }
 
+    @media (max-width: 576px) {
+      .btn {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
 
 <?php include 'components/sidebar-logado.php'; ?>
 
+  <!-- Conteúdo principal -->
   <div class="content">
-
-
     <div class="container mt-5">
-      <h2 class="text-center mb-4">Empréstimos Ativos</h2>
-      <form method="GET" action="" class="form-row">
-        <div class="form-group col-md-4">
-          <input type="text" class="form-control" name="cliente" placeholder="Buscar Cliente">
+      <!-- Header Card -->
+      <div class="page-header-card">
+        <div class="card-header">
+          <h2>
+            <i class="fas fa-check-circle"></i>
+            Empréstimos Ativos
+          </h2>
         </div>
-        <div class="form-group col-md-4">
-          <input type="text" class="form-control" name="livro" placeholder="Buscar Livro">
-        </div>
-        <div class="form-group col-md-4">
-          <button type="submit" class="btn btn-primary btn-block">Buscar</button>
-        </div>
-      </form>
-      <div class="table-responsive mt-4">
-        <table class="table table-striped mb-0">
-          <thead class="thead-dark">
-            <tr>
-              <?php
-                function sortLink($label, $col, $order, $dir) {
-                  $nextDir = 'asc';
-                  $icon = '';
-                  if ($order === $col) {
-                    if ($dir === 'asc') {
-                      $nextDir = 'desc';
-                      $icon = ' ▲';
-                    } elseif ($dir === 'desc') {
-                      $nextDir = '';
-                      $icon = ' ▼';
-                    }
-                  }
-                  $params = $_GET;
-                  if ($order === $col && $dir === 'desc') {
-                    unset($params['order'], $params['dir']);
-                    $url = '?' . http_build_query($params);
-                  } else {
-                    $params['order'] = $col;
-                    $params['dir'] = $nextDir;
-                    $url = '?' . http_build_query($params);
-                  }
-                  return "<a href='$url' style='color:inherit;text-decoration:none;'>$label$icon</a>";
-                }
-              ?>
-              <th><?= sortLink('ID', 'empId', $order, $dir) ?></th>
-              <th><?= sortLink('Cliente', 'nomeCliente', $order, $dir) ?></th>
-              <th><?= sortLink('Livro', 'titulo', $order, $dir) ?></th>
-              <th><?= sortLink('Data de Criação', 'criadoEm', $order, $dir) ?></th>
-              <th><?= sortLink('Data para Devolução', 'vencimento', $order, $dir) ?></th>
-              <th><?= sortLink('Ativo', 'ativo', $order, $dir) ?></th>
-              <th>Devolver</th>
-              <th>Renovar</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            $numRows = mysqli_num_rows($executaConsulta);
-            if ($numRows > 0) {
-                while ($emprestimos = mysqli_fetch_assoc($executaConsulta)) {
-            ?>
-              <tr>
-                <td><?= $emprestimos['empId']; ?></td>
-                <td><?= $emprestimos['nomeCliente']; ?></td>
-                <td><?= $emprestimos['titulo']; ?></td>
-                <td class="data-criacao"><?= date('d/m/Y', strtotime($emprestimos['criadoEm'])); ?></td>
-                <td class="data-vencimento"><?= date('d/m/Y', strtotime($emprestimos['vencimento'])); ?></td>
-                <td><?= $emprestimos['ativo'] == 0 ? 'Não' : 'Sim'; ?></td>
-                <td>
-                  <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalDevolucao" data-empid="<?= $emprestimos['empId']; ?>">Devolver</button>
-                </td>
-                <td>
-                  <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalRenovacao" data-empid="<?= $emprestimos['empId']; ?>">Renovar</button>
-                </td>
-              </tr>
-            <?php
-                }
-            } else {
-                echo "<tr><td colspan='8' class='text-center'>Nenhum Empréstimo Ativo Encontrado.</td></tr>";
-            }
-            ?>
-          </tbody>
-        </table>
-        <div class="d-flex justify-content-between align-items-center mt-2 mb-4">
-          <form method="post" action="" class="mb-0">
-            <button type="submit" name="export_excel" class="btn btn-success">Exportar Excel</button>
+        <div class="card-body">
+          <form method="GET" action="" class="search-form">
+            <div class="input-group">
+              <input type="text" class="form-control" name="cliente" placeholder="Buscar por Cliente..." value="<?= htmlspecialchars($clienteBusca) ?>">
+              <input type="text" class="form-control" name="livro" placeholder="Buscar por Livro..." value="<?= htmlspecialchars($livroBusca) ?>">
+              <button type="submit" class="btn btn-info">
+                <i class="fas fa-search mr-2"></i>Buscar
+              </button>
+            </div>
           </form>
+        </div>
+      </div>
+
+      <!-- Table Card -->
+      <div class="table-wrapper">
+        <div class="table-container table-responsive">
+          <table class="table table-striped mb-0">
+            <thead>
+              <tr>
+                <?php
+                  function sortLink($label, $col, $order, $dir) {
+                    $nextDir = 'asc';
+                    $icon = '';
+                    if ($order === $col) {
+                      if ($dir === 'asc') {
+                        $nextDir = 'desc';
+                        $icon = ' ▲';
+                      } elseif ($dir === 'desc') {
+                        $nextDir = '';
+                        $icon = ' ▼';
+                      }
+                    }
+                    $params = $_GET;
+                    if ($order === $col && $dir === 'desc') {
+                      unset($params['order'], $params['dir']);
+                      $url = '?' . http_build_query($params);
+                    } else {
+                      $params['order'] = $col;
+                      $params['dir'] = $nextDir;
+                      $url = '?' . http_build_query($params);
+                    }
+                    return "<a href='$url'>$label$icon</a>";
+                  }
+                ?>
+                <th><?= sortLink('ID', 'empId', $order, $dir) ?></th>
+                <th><?= sortLink('Cliente', 'nomeCliente', $order, $dir) ?></th>
+                <th><?= sortLink('Livro', 'titulo', $order, $dir) ?></th>
+                <th><?= sortLink('Data de Criação', 'criadoEm', $order, $dir) ?></th>
+                <th><?= sortLink('Data para Devolução', 'vencimento', $order, $dir) ?></th>
+                <th>Devolver</th>
+                <th>Renovar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              if ($numRows > 0) {
+                  while ($emprestimos = mysqli_fetch_assoc($executaConsulta)) {
+              ?>
+                <tr>
+                  <td><?= $emprestimos['empId']; ?></td>
+                  <td><?= $emprestimos['nomeCliente']; ?></td>
+                  <td><?= $emprestimos['titulo']; ?></td>
+                  <td><?= date('d/m/Y', strtotime($emprestimos['criadoEm'])); ?></td>
+                  <td><?= date('d/m/Y', strtotime($emprestimos['vencimento'])); ?></td>
+                  <td>
+                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalDevolucao" data-empid="<?= $emprestimos['empId']; ?>">
+                      <i class="fas fa-undo mr-1"></i>Devolver
+                    </button>
+                  </td>
+                  <td>
+                    <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalRenovacao" data-empid="<?= $emprestimos['empId']; ?>">
+                      <i class="fas fa-redo mr-1"></i>Renovar
+                    </button>
+                  </td>
+                </tr>
+              <?php
+                  }
+              } else {
+                  echo "<tr><td colspan='7' class='text-center py-4'><i class='fas fa-inbox mr-2'></i>Nenhum Empréstimo Ativo Encontrado.</td></tr>";
+              }
+              ?>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination Buttons -->
+        <div class="pagination-buttons">
           <div>
-          <?php
+            <form method="post" action="" class="mb-0">
+              <button type="submit" name="export_excel" class="btn btn-success">
+                <i class="fas fa-file-excel mr-2"></i>Exportar CSV
+              </button>
+            </form>
+          </div>
+          <div>
+            <?php
             if ($numRows === $limit) {
               $params = $_GET;
               $params['limit'] = $limit + $defaultLimit;
               $url = '?' . http_build_query($params) . '#tabela';
-              echo '<a href="' . $url . '" class="btn btn-primary mr-2" id="mostrarMais50">Mostrar mais 50</a>';
+              echo '<a href="' . $url . '" class="btn btn-show-more mr-2" id="mostrarMais50">
+                      <i class="fas fa-chevron-down mr-2"></i>Mostrar mais 50
+                    </a>';
             }
             if ($limit > $defaultLimit) {
               $params = $_GET;
               $params['limit'] = $defaultLimit;
               $url = '?' . http_build_query($params) . '#tabela';
-              echo '<a href="' . $url . '" class="btn btn-secondary" id="mostrarMenos">Mostrar menos</a>';
+              echo '<a href="' . $url . '" class="btn btn-show-less" id="mostrarMenos">
+                      <i class="fas fa-chevron-up mr-2"></i>Mostrar menos
+                    </a>';
             }
-          ?>
+            ?>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
 <?php include 'components/sidebar-script.php'; ?>
 
+<!-- Modal de Devolução -->
 <div class="modal fade" id="modalDevolucao" tabindex="-1" role="dialog" aria-labelledby="modalDevolucaoLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalDevolucaoLabel">Confirmação de Devolução</h5>
+        <h5 class="modal-title" id="modalDevolucaoLabel">
+          <i class="fas fa-exclamation-triangle"></i>
+          Confirmação de Devolução
+        </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <form id="formDevolucao" autocomplete="off">
         <div class="modal-body">
+          <div class="modal-icon">
+            <i class="fas fa-undo"></i>
+          </div>
           <p>Tem certeza que deseja devolver o empréstimo?</p>
+          <p style="color: #dc3545; font-weight: 600; margin-top: 1rem;">Esta ação registrará a devolução do livro.</p>
         </div>
         <div class="modal-footer">
           <input type="hidden" name="emprestimoId" id="emprestimoIdDevolucao">
-          <button type="submit" class="btn btn-danger">Confirmar Devolução</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            <i class="fas fa-times mr-2"></i>Cancelar
+          </button>
+          <button type="submit" class="btn btn-danger">
+            <i class="fas fa-check mr-2"></i>Confirmar Devolução
+          </button>
         </div>
       </form>
     </div>
   </div>
 </div>
-<!-- Fim do modal de devolução -->
-<!-- Modal de sucesso da devolução -->
+
+<!-- Modal de Sucesso da Devolução -->
 <div class="modal fade" id="modalDevolucaoSucesso" tabindex="-1" role="dialog" aria-labelledby="modalDevolucaoSucessoLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header bg-success text-white">
-        <h5 class="modal-title" id="modalDevolucaoSucessoLabel">Devolução realizada</h5>
-        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Fechar">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p id="msgDevolucaoSucesso">O livro foi devolvido com sucesso!</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.reload()">OK</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
-<div class="modal fade" id="modalRenovacao" tabindex="-1" role="dialog" aria-labelledby="modalRenovacaoLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content success-modal">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalRenovacaoLabel">Confirmação de Renovação</h5>
+        <h5 class="modal-title" id="modalDevolucaoSucessoLabel">
+          <i class="fas fa-check-circle"></i>
+          Devolução Realizada!
+        </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <p>Informe a nova data de devolução:</p>
+        <div class="modal-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <h4 style="color: #28a745; margin-bottom: 1rem;">Devolução realizada com sucesso!</h4>
+        <p id="msgDevolucaoSucesso" style="color: #666;">O livro foi devolvido e está disponível para novos empréstimos.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; border: none;" data-dismiss="modal" onclick="window.location.reload()">
+          <i class="fas fa-check mr-2"></i>OK
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Renovação -->
+<div class="modal fade" id="modalRenovacao" tabindex="-1" role="dialog" aria-labelledby="modalRenovacaoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content renovacao-modal">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalRenovacaoLabel">
+          <i class="fas fa-clock"></i>
+          Renovar Empréstimo
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-icon">
+          <i class="fas fa-redo"></i>
+        </div>
+        <p style="font-weight: 600; color: #062c2a; margin-bottom: 1.5rem;">Informe a nova data de devolução:</p>
         <form method="POST" action="renovaEmprestimo.php" id="formRenovacao">
           <input type="hidden" name="emprestimoId" id="emprestimoIdRenovacao">
-          <div class="input-group">
-            <input type="date" name="novaDataRenovacao" class="form-control" required id="novaDataRenovacao">
-            <div class="input-group-append">
-              <button type="submit" class="btn btn-warning">Confirmar Renovação</button>
-            </div>
-          </div>
+          <input type="date" name="novaDataRenovacao" class="form-control mb-3" required id="novaDataRenovacao" style="border-radius: 10px; padding: 0.75rem; border: 2px solid #e0e0e0;">
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          <i class="fas fa-times mr-2"></i>Cancelar
+        </button>
+        <button type="submit" form="formRenovacao" class="btn" style="background: linear-gradient(135deg, #ffcc00 0%, #e0a800 100%); color: #062c2a; border: none;">
+          <i class="fas fa-check mr-2"></i>Confirmar Renovação
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Sucesso da Renovação -->
+<div class="modal fade" id="modalRenovacaoSucesso" tabindex="-1" role="dialog" aria-labelledby="modalRenovacaoSucessoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content success-modal">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalRenovacaoSucessoLabel">
+          <i class="fas fa-check-circle"></i>
+          Renovação Realizada!
+        </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <h4 style="color: #28a745; margin-bottom: 1rem;">Empréstimo renovado com sucesso!</h4>
+        <p id="msgRenovacaoSucesso" style="color: #666;">O prazo de devolução foi atualizado.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; border: none;" data-dismiss="modal" onclick="window.location.reload()">
+          <i class="fas fa-check mr-2"></i>OK
+        </button>
       </div>
     </div>
   </div>
@@ -341,21 +844,27 @@ $executaConsulta = mysqli_query($conexao, $consulta);
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
   $(document).ready(function() {
-    $(document).on('click', '#mostrarMais50', function() {
+    // Scroll restoration
+    $(document).on('click', '#mostrarMais50, #mostrarMenos', function() {
       sessionStorage.setItem('scrollPosEmpAtivo', window.scrollY);
+      sessionStorage.setItem('shouldRestoreScroll', 'true');
     });
-    if (sessionStorage.getItem('scrollPosEmpAtivo')) {
+    
+    if (sessionStorage.getItem('shouldRestoreScroll') === 'true') {
       var pos = parseInt(sessionStorage.getItem('scrollPosEmpAtivo'), 10);
-      setTimeout(function() {
-        window.scrollTo({top: pos, behavior: 'auto'});
-        sessionStorage.removeItem('scrollPosEmpAtivo');
-      }, 100);
+      if (pos > 0) {
+        setTimeout(function() {
+          window.scrollTo({top: pos, behavior: 'auto'});
+          sessionStorage.removeItem('scrollPosEmpAtivo');
+          sessionStorage.removeItem('shouldRestoreScroll');
+        }, 100);
+      }
+    } else {
+      sessionStorage.removeItem('scrollPosEmpAtivo');
+      sessionStorage.removeItem('shouldRestoreScroll');
     }
-  });
-</script>
 
-<script>
-  $(document).ready(function() {
+    // Modal de Renovação
     $('#modalRenovacao').on('show.bs.modal', function(event) {
       var button = $(event.relatedTarget);
       var empId = button.data('empid');
@@ -363,14 +872,12 @@ $executaConsulta = mysqli_query($conexao, $consulta);
       modal.find('#emprestimoIdRenovacao').val(empId);
       console.log('Abrindo modal de renovação para emprestimoId:', empId);
     });
+    
     $('#modalRenovacao').on('hidden.bs.modal', function(event) {
       $(this).find('#emprestimoIdRenovacao').val('');
     });
-  });
-</script>
 
-<script>
-  $(document).ready(function() {
+    // Modal de Devolução
     $('#modalDevolucao').on('show.bs.modal', function(event) {
       var button = $(event.relatedTarget);
       var empId = button.data('empid');
@@ -378,10 +885,12 @@ $executaConsulta = mysqli_query($conexao, $consulta);
       modal.find('#emprestimoIdDevolucao').val(empId);
       console.log('Abrindo modal de devolução para emprestimoId:', empId);
     });
+    
     $('#modalDevolucao').on('hidden.bs.modal', function(event) {
       $(this).find('#emprestimoIdDevolucao').val('');
     });
-    // Envio AJAX robusto do formulário de devolução
+
+    // Envio AJAX do formulário de devolução
     $(document).off('submit', '#formDevolucao');
     $(document).on('submit', '#formDevolucao', function(e) {
       e.preventDefault();
@@ -437,13 +946,55 @@ $executaConsulta = mysqli_query($conexao, $consulta);
       });
       return false;
     });
-    // Log global para qualquer submit
+
     $(document).on('submit', 'form', function(e) {
       console.log('Form submetido:', this.action, $(this).serialize());
     });
-    // Log extra no botão de submit do modal
+
     $(document).on('click', '#formDevolucao button[type="submit"]', function() {
       console.log('Botão Confirmar Devolução clicado!');
+    });
+
+    // Envio AJAX do formulário de renovação
+    $('#formRenovacao').on('submit', function(e) {
+      e.preventDefault();
+      var empId = $('#emprestimoIdRenovacao').val();
+      var novaData = $('#novaDataRenovacao').val();
+      
+      if (!empId || !novaData) {
+        alert('Por favor, preencha todos os campos.');
+        return false;
+      }
+      
+      var $btn = $(this).find('button[type="submit"]');
+      if ($btn.prop('disabled')) return false;
+      $btn.prop('disabled', true);
+      
+      $.ajax({
+        url: 'renovaEmprestimo.php',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          emprestimoId: empId,
+          novaDataRenovacao: novaData
+        },
+        success: function(response) {
+          if (response && response.success !== undefined && response.success) {
+            $('#modalRenovacao').modal('hide');
+            $('#modalRenovacaoSucesso').modal('show');
+          } else {
+            alert(response && response.message ? response.message : 'Erro ao renovar empréstimo. Por favor, tente novamente.');
+          }
+        },
+        error: function(xhr) {
+          alert('Erro ao processar renovação. Por favor, tente novamente.');
+        },
+        complete: function() {
+          $btn.prop('disabled', false);
+        }
+      });
+      
+      return false;
     });
   });
 </script>
