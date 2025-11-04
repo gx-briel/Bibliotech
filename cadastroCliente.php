@@ -260,6 +260,50 @@ if (!isset($_SESSION['id'])) {
       font-size: 1.5rem;
     }
   }
+
+  /* Modal sem animação */
+  #modalSucesso,
+  #modalSucesso .modal-dialog,
+  #modalSucesso .modal-backdrop {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  #modalSucesso .modal-dialog {
+    transform: none !important;
+  }
+  
+  .modal-backdrop {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  /* Botões do modal sem efeitos de animação */
+  #modalSucesso .btn-info,
+  #modalSucesso .btn-secondary {
+    opacity: 1 !important;
+    animation: none !important;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out !important;
+    transform: none !important;
+    overflow: visible !important;
+    position: static !important;
+  }
+
+  #modalSucesso .btn-info::before,
+  #modalSucesso .btn-secondary::before {
+    display: none !important;
+  }
+
+  #modalSucesso .btn-info:hover,
+  #modalSucesso .btn-secondary:hover {
+    transform: none !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  #modalSucesso .btn-info:active,
+  #modalSucesso .btn-secondary:active {
+    transform: none !important;
+  }
 </style>
 </head>
 <body>
@@ -388,6 +432,35 @@ if (!isset($_SESSION['id'])) {
     </div>
   </div>
 
+  <!-- Modal de Confirmação de Sucesso -->
+  <div class="modal" id="modalSucesso" tabindex="-1" role="dialog" aria-labelledby="modalSucessoLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content" style="border-radius: 16px; border: none; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);">
+        <div class="modal-body text-center p-4">
+          <div class="mb-3">
+            <i class="fas fa-check-circle" style="font-size: 4rem; color: #28a745;"></i>
+          </div>
+          <h4 class="modal-title mb-3" id="modalSucessoLabel" style="color: #062c2a; font-weight: 700;">
+            Cliente Cadastrado com Sucesso!
+          </h4>
+          <p class="mb-4" style="color: #666;">
+            O cliente foi cadastrado no sistema com sucesso.
+          </p>
+          <div class="d-flex flex-column flex-sm-row justify-content-center gap-2 gap-sm-3">
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='cadastroCliente.php'" style="border-radius: 10px; padding: 0.5rem 1.25rem; font-size: 0.9rem;">
+              <i class="fas fa-plus mr-2"></i>
+              Cadastrar Outro
+            </button>
+            <button type="button" class="btn btn-info" onclick="window.location.href='listaCliente.php'" style="border-radius: 10px; padding: 0.5rem 1.25rem; font-size: 0.9rem; background: linear-gradient(135deg, #08470b 0%, #062c2a 100%); border: none; color: white;">
+              <i class="fas fa-list mr-2"></i>
+              Ver Lista de Clientes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <script>
   function formatarTelefone(input) {
     let telefone = input.value.replace(/\D/g, '');
@@ -435,8 +508,26 @@ if (!isset($_SESSION['id'])) {
 </script>
 
 <?php include 'components/sidebar-script.php'; ?>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+  // Verificar se deve exibir o modal de sucesso
+  <?php if (isset($_GET['sucesso']) && $_GET['sucesso'] == '1'): ?>
+    $(document).ready(function() {
+      // Mostrar modal sem animação (sem fade)
+      $('#modalSucesso').modal({show: true, backdrop: true});
+      
+      // Limpar parâmetro da URL quando o modal for fechado
+      $('#modalSucesso').on('hidden.bs.modal', function () {
+        if (window.history.replaceState) {
+          window.history.replaceState(null, null, window.location.pathname);
+        }
+      });
+    });
+  <?php endif; ?>
+</script>
+
 </body>
 </html>

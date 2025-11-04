@@ -33,7 +33,7 @@ $operacaoSQL = mysqli_query($conexao, $insereCliente);
 
 if ($operacaoSQL) {
 
-    header("Location: listaCliente.php");
+    header("Location: cadastroCliente.php?sucesso=1");
     exit; 
 } else {
 
