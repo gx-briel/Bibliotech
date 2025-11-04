@@ -16,7 +16,14 @@ $pesquisa_limpa = preg_replace('/[^0-9]/', '', $pesquisa);
 
 // Paginação
 $defaultLimit = 50;
-$limit = isset($_GET['limit']) && is_numeric($_GET['limit']) && $_GET['limit'] > 0 ? (int)$_GET['limit'] : $defaultLimit;
+$mobileLimit = 15;
+
+// Detectar se é mobile
+$isMobile = isset($_SERVER['HTTP_USER_AGENT']) &&
+            preg_match('/(android|iphone|ipad|mobile)/i', $_SERVER['HTTP_USER_AGENT']);
+
+// Limite baseado no dispositivo
+$limit = isset($_GET['limit']) && is_numeric($_GET['limit']) && $_GET['limit'] > 0 ? (int)$_GET['limit'] : ($isMobile ? $mobileLimit : $defaultLimit);
 $offset = 0; // Sempre começa do início para paginação acumulativa
 
 if ($pesquisa != '') {
@@ -142,12 +149,20 @@ $numRows = mysqli_num_rows($resultado);
 
     .search-form .form-control {
       border: 2px solid #e0e0e0;
-      border-radius: 10px 0 0 10px;
+      border-radius: 12px !important;
       border-right: none;
       padding: 0.75rem 1rem;
       font-size: 0.95rem;
       transition: all 0.3s ease;
       flex: 1;
+    }
+
+    .search-form .input-group .form-control {
+      border-radius: 12px !important;
+    }
+
+    .search-form .input-group .form-control:first-child {
+      border-radius: 12px !important;
     }
 
     .search-form .form-control:focus {
@@ -172,7 +187,7 @@ $numRows = mysqli_num_rows($resultado);
       background: linear-gradient(135deg, #08470b 0%, #062c2a 100%);
       border: 2px solid #08470b;
       border-left: none;
-      border-radius: 0 10px 10px 0;
+      border-radius: 12px;
       padding: 0.75rem 1.5rem;
       font-weight: 600;
       transition: all 0.3s ease;
@@ -466,13 +481,223 @@ $numRows = mysqli_num_rows($resultado);
       padding: 1.5rem;
       border-top: 1px solid #e9ecef;
     }
+    /* Visualização em cards para mobile */
+    .mobile-card-view {
+      display: none;
+    }
+
+    .mobile-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-left: 4px solid #08470b;
+    }
+
+    .mobile-card-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .mobile-card-row:last-child {
+      border-bottom: none;
+    }
+
+    .mobile-card-label {
+      font-weight: 600;
+      color: #062c2a;
+      font-size: 0.85rem;
+      margin-right: 0.5rem;
+      min-width: 120px;
+    }
+
+    .mobile-card-value {
+      color: #333;
+      font-size: 0.9rem;
+      text-align: right;
+      flex: 1;
+      word-break: break-word;
+    }
+
+    .mobile-card-header {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #08470b;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #08470b;
+    }
+
+    .mobile-card-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .mobile-card-actions .btn {
+      flex: 1;
+      font-size: 0.85rem;
+      padding: 0.5rem;
+    }
+
+    /* Botão flutuante voltar ao topo */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #08470b 0%, #062c2a 100%);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(8, 71, 11, 0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      opacity: 0;
+    }
+
+    .back-to-top.show {
+      display: flex;
+      opacity: 1;
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px rgba(8, 71, 11, 0.6);
+      background: linear-gradient(135deg, #062c2a 0%, #08470b 100%);
+    }
+
+    .back-to-top:active {
+      transform: translateY(-2px);
+    }
+
     @media (max-width: 768px) {
       .content {
         margin-left: 0 !important;
         padding: 1rem;
       }
-      .table-responsive {
+      
+      /* Ocultar tabela no mobile */
+      .table-wrapper {
+        display: none;
+      }
+      
+      /* Mostrar visualização em cards */
+      .mobile-card-view {
+        display: block;
+      }
+      
+      .page-header-card .card-header {
+        padding: 1rem 1.5rem;
+      }
+      
+      .page-header-card .card-header h2 {
+        font-size: 1.4rem;
+      }
+      
+      .page-header-card .card-body {
+        padding: 1rem 1.5rem;
+      }
+      
+      .search-form .input-group {
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      
+      .search-form .form-control {
+        border-radius: 12px !important;
+        border-right: 2px solid #e0e0e0 !important;
+        width: 100%;
+      }
+      
+      .search-form .input-group-append {
+        width: 100%;
+      }
+      
+      .search-form .btn-info {
+        border-radius: 12px !important;
+        border-left: 2px solid #08470b !important;
+        width: 100%;
+      }
+      
+      .pagination-buttons {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+        flex-wrap: wrap;
+      }
+      
+      .pagination-buttons > div {
+        width: 100%;
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+      
+      .pagination-buttons .btn {
+        width: 100%;
+        margin: 0;
+      }
+      
+      .mobile-card {
+        padding: 0.75rem;
+      }
+      
+      .mobile-card-label {
+        font-size: 0.8rem;
+        min-width: 100px;
+      }
+      
+      .mobile-card-value {
+        font-size: 0.85rem;
+      }
+      
+      .back-to-top {
+        bottom: 1rem;
+        right: 1rem;
+        width: 45px;
+        height: 45px;
+        font-size: 1rem;
+      }
+    }
+    
+    /* Scroll horizontal melhorado para desktop */
+    @media (min-width: 769px) {
+      .table-container {
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: #08470b rgba(0,0,0,0.1);
+      }
+      
+      .table-container::-webkit-scrollbar {
+        height: 8px;
+      }
+      
+      .table-container::-webkit-scrollbar-track {
+        background: rgba(0,0,0,0.1);
+        border-radius: 4px;
+      }
+      
+      .table-container::-webkit-scrollbar-thumb {
+        background: #08470b;
+        border-radius: 4px;
+      }
+      
+      .table-container::-webkit-scrollbar-thumb:hover {
+        background: #062c2a;
       }
     }
   </style>
@@ -606,26 +831,27 @@ $numRows = mysqli_num_rows($resultado);
           <div></div>
           <div>
             <?php
-            // Botão mostrar mais 50
+            $increment = $isMobile ? $mobileLimit : $defaultLimit;
+            $minLimit = $isMobile ? $mobileLimit : $defaultLimit;
+            
             if ($numRows === $limit) {
               $params = $_GET;
               if ($pesquisa) {
                 $params['pesquisa'] = $pesquisa;
               }
-              $params['limit'] = $limit + $defaultLimit;
+              $params['limit'] = $limit + $increment;
               $url = '?' . http_build_query($params);
               echo '<a href="' . $url . '" class="btn btn-show-more mr-2" id="mostrarMais50">
                       <i class="fas fa-chevron-down mr-2"></i>
-                      Mostrar mais 50
+                      Mostrar mais ' . $increment . '
                     </a>';
             }
-            // Botão mostrar menos
-            if ($limit > $defaultLimit) {
+            if ($limit > $minLimit) {
               $params = $_GET;
               if ($pesquisa) {
                 $params['pesquisa'] = $pesquisa;
               }
-              $params['limit'] = $defaultLimit;
+              $params['limit'] = $minLimit;
               $url = '?' . http_build_query($params);
               echo '<a href="' . $url . '" class="btn btn-show-less" id="mostrarMenos">
                       <i class="fas fa-chevron-up mr-2"></i>
@@ -636,8 +862,105 @@ $numRows = mysqli_num_rows($resultado);
           </div>
         </div>
       </div>
+
+      <!-- Mobile Card View -->
+      <div class="mobile-card-view">
+        <?php
+        if ($numRows > 0) {
+          mysqli_data_seek($resultado, 0); // Reset pointer
+          while ($clientes = mysqli_fetch_assoc($resultado)) {
+        ?>
+          <div class="mobile-card">
+            <div class="mobile-card-header">
+              <i class="fas fa-chart-line mr-2"></i>Cliente #<?= $clientes['id']; ?>
+            </div>
+            <div class="mobile-card-row">
+              <span class="mobile-card-label"><i class="fas fa-user mr-1"></i>Nome:</span>
+              <span class="mobile-card-value"><?= htmlspecialchars($clientes['nomeCliente']); ?></span>
+            </div>
+            <div class="mobile-card-row">
+              <span class="mobile-card-label"><i class="fas fa-id-card mr-1"></i>CPF:</span>
+              <span class="mobile-card-value cpf"><?= $clientes['cpf']; ?></span>
+            </div>
+            <div class="mobile-card-row">
+              <span class="mobile-card-label"><i class="fas fa-phone mr-1"></i>Telefone:</span>
+              <span class="mobile-card-value telefone"><?= $clientes['telefone']; ?></span>
+            </div>
+            <div class="mobile-card-row">
+              <span class="mobile-card-label"><i class="fas fa-map-marker-alt mr-1"></i>Endereço:</span>
+              <span class="mobile-card-value" style="text-align: left;">
+                <?= htmlspecialchars($clientes['rua']); ?>, Nº <?= htmlspecialchars($clientes['numero']); ?><br>
+                <?= htmlspecialchars($clientes['bairro']); ?><br>
+                <?= htmlspecialchars($clientes['cidade']); ?> - <?= htmlspecialchars($clientes['estado']); ?><br>
+                CEP: <?= htmlspecialchars($clientes['cep']); ?>
+              </span>
+            </div>
+            <div class="mobile-card-actions">
+              <a href="editarCliente.php?id=<?= $clientes['id']; ?>" class="btn btn-primary btn-sm">
+                <i class="fas fa-edit mr-1"></i>Editar
+              </a>
+              <button type="button" class="btn btn-danger btn-sm" onclick="mostrarModal(<?= $clientes['id']; ?>)">
+                <i class="fas fa-trash mr-1"></i>Remover
+              </button>
+            </div>
+          </div>
+        <?php
+          }
+        } else {
+        ?>
+          <div class="mobile-card">
+            <div class="text-center py-4">
+              <i class="fas fa-inbox fa-3x mb-3" style="color: #ccc;"></i>
+              <p style="color: #666; margin: 0;">Nenhum Cliente Cadastrado.</p>
+            </div>
+          </div>
+        <?php
+        }
+        ?>
+        
+        <!-- Pagination Buttons (Mobile) -->
+        <div class="pagination-buttons">
+          <div></div>
+          <div>
+            <?php
+            $increment = $isMobile ? $mobileLimit : $defaultLimit;
+            $minLimit = $isMobile ? $mobileLimit : $defaultLimit;
+            
+            if ($numRows === $limit) {
+              $params = $_GET;
+              if ($pesquisa) {
+                $params['pesquisa'] = $pesquisa;
+              }
+              $params['limit'] = $limit + $increment;
+              $url = '?' . http_build_query($params);
+              echo '<a href="' . $url . '" class="btn btn-show-more" id="mostrarMais50Mobile">
+                      <i class="fas fa-chevron-down mr-2"></i>
+                      Mostrar mais ' . $increment . '
+                    </a>';
+            }
+            if ($limit > $minLimit) {
+              $params = $_GET;
+              if ($pesquisa) {
+                $params['pesquisa'] = $pesquisa;
+              }
+              $params['limit'] = $minLimit;
+              $url = '?' . http_build_query($params);
+              echo '<a href="' . $url . '" class="btn btn-show-less" id="mostrarMenosMobile">
+                      <i class="fas fa-chevron-up mr-2"></i>
+                      Mostrar menos
+                    </a>';
+            }
+            ?>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- Botão flutuante voltar ao topo -->
+  <button class="back-to-top" id="backToTop" aria-label="Voltar ao topo">
+    <i class="fas fa-arrow-up"></i>
+  </button>
 
 <?php include 'components/sidebar-script.php'; ?>
 
@@ -671,29 +994,49 @@ $numRows = mysqli_num_rows($resultado);
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-  $(document).ready(function() {
-    // Preservar posição de scroll apenas ao clicar em "mostrar mais/menos"
-    $(document).on('click', '#mostrarMais50, #mostrarMenos', function() {
-      sessionStorage.setItem('scrollPosCliente', window.scrollY);
-      sessionStorage.setItem('shouldRestoreScroll', 'true');
-    });
-    
-    // Restaurar posição apenas se veio de um clique, não de um refresh
-    if (sessionStorage.getItem('shouldRestoreScroll') === 'true') {
-      var pos = parseInt(sessionStorage.getItem('scrollPosCliente'), 10);
-      if (pos > 0) {
-        setTimeout(function() {
-          window.scrollTo({top: pos, behavior: 'auto'});
-          sessionStorage.removeItem('scrollPosCliente');
-          sessionStorage.removeItem('shouldRestoreScroll');
-        }, 100);
+    $(document).ready(function() {
+      // Preservar posição de scroll apenas ao clicar em "mostrar mais/menos"
+      $(document).on('click', '#mostrarMais50, #mostrarMenos, #mostrarMais50Mobile, #mostrarMenosMobile', function() {
+        sessionStorage.setItem('scrollPosCliente', window.scrollY);
+        sessionStorage.setItem('shouldRestoreScroll', 'true');
+      });
+      
+      // Restaurar posição apenas se veio de um clique, não de um refresh
+      if (sessionStorage.getItem('shouldRestoreScroll') === 'true') {
+        var pos = parseInt(sessionStorage.getItem('scrollPosCliente'), 10);
+        if (pos > 0) {
+          setTimeout(function() {
+            window.scrollTo({top: pos, behavior: 'auto'});
+            sessionStorage.removeItem('scrollPosCliente');
+            sessionStorage.removeItem('shouldRestoreScroll');
+          }, 100);
+        }
+      } else {
+        // Limpar qualquer posição salva se for um refresh normal
+        sessionStorage.removeItem('scrollPosCliente');
+        sessionStorage.removeItem('shouldRestoreScroll');
       }
-    } else {
-      // Limpar qualquer posição salva se for um refresh normal
-      sessionStorage.removeItem('scrollPosCliente');
-      sessionStorage.removeItem('shouldRestoreScroll');
-    }
-  });
+
+      // Botão voltar ao topo
+      var backToTopBtn = $('#backToTop');
+
+      $(window).scroll(function() {
+        if ($(window).scrollTop() > 300) {
+          backToTopBtn.addClass('show');
+        } else {
+          backToTopBtn.removeClass('show');
+        }
+      });
+
+      backToTopBtn.on('click', function() {
+        $('html, body').animate({
+          scrollTop: 0
+        }, 600);
+      });
+
+      // Format table após carregar cards mobile
+      formatarTabela();
+    });
 </script>
 
 </body>

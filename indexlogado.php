@@ -486,7 +486,52 @@ $qtdFinalizados = ($resFinalizados && $row = mysqli_fetch_assoc($resFinalizados)
       display: none !important;
     }
 
+    /* Botão flutuante voltar ao topo */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #08470b 0%, #062c2a 100%);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(8, 71, 11, 0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      opacity: 0;
+    }
 
+    .back-to-top.show {
+      display: flex;
+      opacity: 1;
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px rgba(8, 71, 11, 0.6);
+      background: linear-gradient(135deg, #062c2a 0%, #08470b 100%);
+    }
+
+    .back-to-top:active {
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .back-to-top {
+        bottom: 1rem;
+        right: 1rem;
+        width: 45px;
+        height: 45px;
+        font-size: 1rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -976,6 +1021,32 @@ $qtdFinalizados = ($resFinalizados && $row = mysqli_fetch_assoc($resFinalizados)
       }
     });
   }
+</script>
+
+<!-- Botão flutuante voltar ao topo -->
+<button class="back-to-top" id="backToTop" aria-label="Voltar ao topo">
+  <i class="fas fa-arrow-up"></i>
+</button>
+
+<script>
+  $(document).ready(function() {
+    // Botão voltar ao topo
+    var backToTopBtn = $('#backToTop');
+
+    $(window).scroll(function() {
+      if ($(window).scrollTop() > 300) {
+        backToTopBtn.addClass('show');
+      } else {
+        backToTopBtn.removeClass('show');
+      }
+    });
+
+    backToTopBtn.on('click', function() {
+      $('html, body').animate({
+        scrollTop: 0
+      }, 600);
+    });
+  });
 </script>
 
 </body>

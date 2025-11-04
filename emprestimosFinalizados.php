@@ -33,7 +33,14 @@ $dir = isset($_GET['dir']) && in_array(strtolower($_GET['dir']), ['asc', 'desc']
 
 // Paginação
 $defaultLimit = 50;
-$limit = isset($_GET['limit']) && is_numeric($_GET['limit']) && $_GET['limit'] > 0 ? (int)$_GET['limit'] : $defaultLimit;
+$mobileLimit = 15;
+
+// Detectar se é mobile
+$isMobile = isset($_SERVER['HTTP_USER_AGENT']) &&
+            preg_match('/(android|iphone|ipad|mobile)/i', $_SERVER['HTTP_USER_AGENT']);
+
+// Limite baseado no dispositivo
+$limit = isset($_GET['limit']) && is_numeric($_GET['limit']) && $_GET['limit'] > 0 ? (int)$_GET['limit'] : ($isMobile ? $mobileLimit : $defaultLimit);
 $offset = 0; // Sempre começa do início para paginação acumulativa
 
 $consulta = "SELECT emp.id as empId, cli.nomeCliente as nomeCliente, li.titulo, emp.criadoEm, li.ID as livroId, emp.ativo, emp.vencimento
@@ -170,12 +177,20 @@ $numRows = mysqli_num_rows($executaConsulta);
 
     .search-form .form-control {
       border: 2px solid #e0e0e0;
-      border-radius: 10px;
+      border-radius: 12px !important;
       padding: 0.75rem 1rem;
       font-size: 0.95rem;
       transition: all 0.3s ease;
       flex: 1;
       height: auto;
+    }
+
+    .search-form .input-group .form-control {
+      border-radius: 12px !important;
+    }
+
+    .search-form .input-group .form-control:first-child {
+      border-radius: 12px !important;
     }
 
     .search-form .form-control:focus {
@@ -187,7 +202,7 @@ $numRows = mysqli_num_rows($executaConsulta);
     .search-form .btn-info {
       background: linear-gradient(135deg, #08470b 0%, #062c2a 100%);
       border: 2px solid #08470b;
-      border-radius: 10px;
+      border-radius: 12px;
       padding: 0.75rem 1.5rem;
       font-weight: 600;
       transition: all 0.3s ease;
@@ -386,6 +401,94 @@ $numRows = mysqli_num_rows($executaConsulta);
       text-decoration: underline;
     }
 
+    /* Visualização em cards para mobile */
+    .mobile-card-view {
+      display: none;
+    }
+
+    .mobile-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-left: 4px solid #08470b;
+    }
+
+    .mobile-card-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .mobile-card-row:last-child {
+      border-bottom: none;
+    }
+
+    .mobile-card-label {
+      font-weight: 600;
+      color: #062c2a;
+      font-size: 0.85rem;
+      margin-right: 0.5rem;
+      min-width: 120px;
+    }
+
+    .mobile-card-value {
+      color: #333;
+      font-size: 0.9rem;
+      text-align: right;
+      flex: 1;
+      word-break: break-word;
+    }
+
+    .mobile-card-header {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #08470b;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #08470b;
+    }
+
+    /* Botão flutuante voltar ao topo */
+    .back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #08470b 0%, #062c2a 100%);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(8, 71, 11, 0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      opacity: 0;
+    }
+
+    .back-to-top.show {
+      display: flex;
+      opacity: 1;
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 20px rgba(8, 71, 11, 0.6);
+      background: linear-gradient(135deg, #062c2a 0%, #08470b 100%);
+    }
+
+    .back-to-top:active {
+      transform: translateY(-2px);
+    }
+
     @media (max-width: 768px) {
       .content::before {
         left: 0;
@@ -395,16 +498,110 @@ $numRows = mysqli_num_rows($executaConsulta);
         margin-left: 0 !important;
         padding: 1rem;
       }
-      .table-container {
-        width: 100vw;
-        min-width: 600px;
-        overflow-x: auto;
+      
+      /* Ocultar tabela no mobile */
+      .table-wrapper {
+        display: none;
       }
-      .table {
-        min-width: 600px;
+      
+      /* Mostrar visualização em cards */
+      .mobile-card-view {
+        display: block;
       }
+      
+      .page-header-card .card-header {
+        padding: 1rem 1.5rem;
+      }
+      
+      .page-header-card .card-header h2 {
+        font-size: 1.4rem;
+      }
+      
+      .page-header-card .card-body {
+        padding: 1rem 1.5rem;
+      }
+      
       .search-form .input-group {
         flex-direction: column;
+        gap: 0.75rem;
+      }
+      
+      .search-form .form-control {
+        border-radius: 12px !important;
+        width: 100%;
+      }
+      
+      .search-form .btn-info {
+        border-radius: 12px !important;
+        width: 100%;
+      }
+      
+      .pagination-buttons {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+        flex-wrap: wrap;
+      }
+      
+      .pagination-buttons > div {
+        width: 100%;
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+      
+      .pagination-buttons .btn {
+        width: 100%;
+        margin: 0;
+      }
+      
+      .mobile-card {
+        padding: 0.75rem;
+      }
+      
+      .mobile-card-label {
+        font-size: 0.8rem;
+        min-width: 100px;
+      }
+      
+      .mobile-card-value {
+        font-size: 0.85rem;
+      }
+      
+      .back-to-top {
+        bottom: 1rem;
+        right: 1rem;
+        width: 45px;
+        height: 45px;
+        font-size: 1rem;
+      }
+    }
+    
+    /* Scroll horizontal melhorado para desktop */
+    @media (min-width: 769px) {
+      .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        scrollbar-color: #08470b rgba(0,0,0,0.1);
+      }
+      
+      .table-container::-webkit-scrollbar {
+        height: 8px;
+      }
+      
+      .table-container::-webkit-scrollbar-track {
+        background: rgba(0,0,0,0.1);
+        border-radius: 4px;
+      }
+      
+      .table-container::-webkit-scrollbar-thumb {
+        background: #08470b;
+        border-radius: 4px;
+      }
+      
+      .table-container::-webkit-scrollbar-thumb:hover {
+        background: #062c2a;
       }
     }
 
@@ -517,22 +714,114 @@ $numRows = mysqli_num_rows($executaConsulta);
           </div>
           <div>
             <?php
-            // Botão mostrar mais 50
+            $increment = $isMobile ? $mobileLimit : $defaultLimit;
+            $minLimit = $isMobile ? $mobileLimit : $defaultLimit;
+            
             if ($numRows === $limit) {
               $params = $_GET;
-              $params['limit'] = $limit + $defaultLimit;
+              $params['limit'] = $limit + $increment;
               $url = '?' . http_build_query($params) . '#tabela';
               echo '<a href="' . $url . '" class="btn btn-show-more mr-2" id="mostrarMais50">
-                      <i class="fas fa-chevron-down mr-2"></i>Mostrar mais 50
+                      <i class="fas fa-chevron-down mr-2"></i>
+                      Mostrar mais ' . $increment . '
                     </a>';
             }
-            // Botão mostrar menos
-            if ($limit > $defaultLimit) {
+            if ($limit > $minLimit) {
               $params = $_GET;
-              $params['limit'] = $defaultLimit;
+              $params['limit'] = $minLimit;
               $url = '?' . http_build_query($params) . '#tabela';
               echo '<a href="' . $url . '" class="btn btn-show-less" id="mostrarMenos">
-                      <i class="fas fa-chevron-up mr-2"></i>Mostrar menos
+                      <i class="fas fa-chevron-up mr-2"></i>
+                      Mostrar menos
+                    </a>';
+            }
+            ?>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Card View -->
+      <div class="mobile-card-view">
+        <?php
+        if ($numRows > 0) {
+          mysqli_data_seek($executaConsulta, 0); // Reset pointer
+          while ($emprestimos = mysqli_fetch_assoc($executaConsulta)) {
+        ?>
+          <div class="mobile-card">
+            <div class="mobile-card-header">
+              <i class="fas fa-check-circle mr-2"></i>Empréstimo #<?= $emprestimos['empId']; ?>
+            </div>
+            <div class="mobile-card-row">
+              <span class="mobile-card-label"><i class="fas fa-user mr-1"></i>Cliente:</span>
+              <span class="mobile-card-value"><?= htmlspecialchars($emprestimos['nomeCliente']); ?></span>
+            </div>
+            <div class="mobile-card-row">
+              <span class="mobile-card-label"><i class="fas fa-book mr-1"></i>Livro:</span>
+              <span class="mobile-card-value"><?= htmlspecialchars($emprestimos['titulo']); ?></span>
+            </div>
+            <div class="mobile-card-row">
+              <span class="mobile-card-label"><i class="fas fa-calendar-plus mr-1"></i>Criação:</span>
+              <span class="mobile-card-value"><?= date('d/m/Y', strtotime($emprestimos['criadoEm'])); ?></span>
+            </div>
+            <div class="mobile-card-row">
+              <span class="mobile-card-label"><i class="fas fa-calendar-check mr-1"></i>Vencimento:</span>
+              <span class="mobile-card-value"><?= date('d/m/Y', strtotime($emprestimos['vencimento'])); ?></span>
+            </div>
+            <div class="mobile-card-row">
+              <span class="mobile-card-label"><i class="fas fa-info-circle mr-1"></i>Ativo:</span>
+              <span class="mobile-card-value">
+                <?php if ($emprestimos['ativo'] == 0): ?>
+                  <span style="color: #6c757d; font-weight: 600;"><i class="fas fa-times mr-1"></i>Não</span>
+                <?php else: ?>
+                  <span style="color: #28a745; font-weight: 600;"><i class="fas fa-check mr-1"></i>Sim</span>
+                <?php endif; ?>
+              </span>
+            </div>
+          </div>
+        <?php
+          }
+        } else {
+        ?>
+          <div class="mobile-card">
+            <div class="text-center py-4">
+              <i class="fas fa-inbox fa-3x mb-3" style="color: #ccc;"></i>
+              <p style="color: #666; margin: 0;">Nenhum Empréstimo encontrado.</p>
+            </div>
+          </div>
+        <?php
+        }
+        ?>
+        
+        <!-- Pagination Buttons (Mobile) -->
+        <div class="pagination-buttons">
+          <div>
+            <form method="post" action="" style="margin-bottom:0;">
+              <button type="submit" name="export_excel" class="btn btn-success">
+                <i class="fas fa-file-excel mr-2"></i>Exportar CSV
+              </button>
+            </form>
+          </div>
+          <div>
+            <?php
+            $increment = $isMobile ? $mobileLimit : $defaultLimit;
+            $minLimit = $isMobile ? $mobileLimit : $defaultLimit;
+            
+            if ($numRows === $limit) {
+              $params = $_GET;
+              $params['limit'] = $limit + $increment;
+              $url = '?' . http_build_query($params) . '#tabela';
+              echo '<a href="' . $url . '" class="btn btn-show-more" id="mostrarMais50Mobile">
+                      <i class="fas fa-chevron-down mr-2"></i>
+                      Mostrar mais ' . $increment . '
+                    </a>';
+            }
+            if ($limit > $minLimit) {
+              $params = $_GET;
+              $params['limit'] = $minLimit;
+              $url = '?' . http_build_query($params) . '#tabela';
+              echo '<a href="' . $url . '" class="btn btn-show-less" id="mostrarMenosMobile">
+                      <i class="fas fa-chevron-up mr-2"></i>
+                      Mostrar menos
                     </a>';
             }
             ?>
@@ -542,11 +831,16 @@ $numRows = mysqli_num_rows($executaConsulta);
     </div>
   </div>
 
+  <!-- Botão flutuante voltar ao topo -->
+  <button class="back-to-top" id="backToTop" aria-label="Voltar ao topo">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
   $(document).ready(function() {
-    $(document).on('click', '#mostrarMais50, #mostrarMenos', function() {
+    $(document).on('click', '#mostrarMais50, #mostrarMenos, #mostrarMais50Mobile, #mostrarMenosMobile', function() {
       sessionStorage.setItem('scrollPosEmpTodos', window.scrollY);
       sessionStorage.setItem('shouldRestoreScroll', 'true');
     });
@@ -564,6 +858,23 @@ $numRows = mysqli_num_rows($executaConsulta);
       sessionStorage.removeItem('scrollPosEmpTodos');
       sessionStorage.removeItem('shouldRestoreScroll');
     }
+
+    // Botão voltar ao topo
+    var backToTopBtn = $('#backToTop');
+
+    $(window).scroll(function() {
+      if ($(window).scrollTop() > 300) {
+        backToTopBtn.addClass('show');
+      } else {
+        backToTopBtn.removeClass('show');
+      }
+    });
+
+    backToTopBtn.on('click', function() {
+      $('html, body').animate({
+        scrollTop: 0
+      }, 600);
+    });
   });
 </script>
 

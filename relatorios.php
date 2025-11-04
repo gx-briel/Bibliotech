@@ -129,22 +129,68 @@ $qtdFinalizados = ($resFinalizados && $row = mysqli_fetch_assoc($resFinalizados)
     .page-header {
       text-align: center;
       margin-bottom: 2rem;
-      padding: 2rem 0;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 3rem 2rem;
+      background: linear-gradient(135deg, #062c2a 0%, #08470b 100%);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(8, 71, 11, 0.25);
       backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+      opacity: 0.5;
+    }
+
+    .page-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
     }
 
     .page-header h1 {
       font-size: 2.5rem;
       font-weight: 700;
-      color: #062c2a;
+      color: #ffffff;
       margin: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 1rem;
+      position: relative;
+      z-index: 1;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .page-header h1 i {
+      font-size: 2.5rem;
+      opacity: 0.95;
+    }
+
+    @media (max-width: 768px) {
+      .page-header {
+        padding: 2rem 1.5rem;
+        border-radius: 16px;
+      }
+      .page-header h1 {
+        font-size: 1.75rem;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .page-header h1 i {
+        font-size: 2rem;
+      }
     }
 
     .card {
@@ -240,9 +286,6 @@ $qtdFinalizados = ($resFinalizados && $row = mysqli_fetch_assoc($resFinalizados)
       .content::before {
         left: 0;
         width: 100%;
-      }
-      .page-header h1 {
-        font-size: 2rem;
       }
       .dashboard-card-value {
         font-size: 2rem;
